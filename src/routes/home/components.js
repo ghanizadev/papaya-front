@@ -1,4 +1,6 @@
+import React, {useState, useContext} from 'react';
 import styled from 'styled-components';
+import {Context, Consumer} from './context';
 
 import logo from '../../assets/logo.png';
 
@@ -40,7 +42,7 @@ export const Header = styled.div`
     flex-direction: row;
     align-items: center;
     margin: 0 0 0 18vw;
-    justify-content: flex-end;
+    justify-content: space-between;
 `;
 
 export const SubHeader = styled.div`
@@ -90,3 +92,46 @@ export const Container = styled.div`
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
 `;
+
+const OverlayBackground = styled.div`
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const OverlayBox = styled.div`
+    width: 30%;
+    height: min-content;
+    border-radius: 7px;
+    background-color: #fff;
+    border: none;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
+
+export const Overlay = (props) => {
+    const {message, callback} = props;
+
+    return (
+        <Context.Consumer>
+            {({overlay, setOverlay}) =>
+            <OverlayBackground style={{display: overlay.visible ? 'flex' : 'none'}}>
+                <OverlayBox>
+                    <span>{message}</span>
+                    <button onClick={() => {
+                        setOverlay({...overlay, visible: false});
+                        if (typeof callback == 'function') callback();
+                    }}>Fechar</button>
+                </OverlayBox>
+            </OverlayBackground>}
+        </Context.Consumer>
+    );
+}
