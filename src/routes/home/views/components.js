@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
-import {Context, Consumer} from '../context';
+import {Context, Consumer} from '../../../context';
 
 export const Tables = styled.div`
     padding: 65px 25px 25px 25px;

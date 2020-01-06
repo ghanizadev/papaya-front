@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 const config = {
 	overlay:{
 		visible: false,
-		message: "MENSAGEM",
+		component: null,
 		callback: ()=> {}
     },
     setOverlay: () => {}

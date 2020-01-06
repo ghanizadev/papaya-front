@@ -6,6 +6,8 @@ import Home from './routes/home';
 import {BrowserRouter, Switch, Route, useHistory} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 
+
+
 const ProtectedHome = () => {
 	const [cookies, setCookie] = useCookies('authorization');
 	let history = useHistory();

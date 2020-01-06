@@ -44,7 +44,7 @@ export default (username = '', password = '', handler = () => {}) => {
 			}
 		}).catch((error) => {
 			return handler({
-				status: error.response.status,
+				status: error.response && error.response.status ? error.response.status : 500,
 				isLoading: false,
 			});
 		})

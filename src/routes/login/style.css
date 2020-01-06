@@ -23,14 +23,11 @@ body{
   justify-content: center;
   align-items: center;
 }
-
-input{
+input[type=text], input[type=number], input[type=password], input[type=email]{
   height: 30px;
   color: #333;
   border-radius: 5px;
-  width: 75%;
   border: 0.5px solid #ccc;
-  margin: 5px;
   padding: 0 10px;
 }
 
