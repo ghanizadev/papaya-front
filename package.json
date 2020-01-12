@@ -10,8 +10,6 @@
     "babel-loader": "^8.0.6",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.7.2",
-    "pusher": "^3.0.0",
-    "pusher-js": "^5.0.3",
     "qs": "^6.9.1",
     "react": "^16.12.0",
     "react-cookie": "^4.0.1",
@@ -25,8 +23,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron ."
   },
+  "main": "src/electron.main.js",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "electron": "^7.1.7",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.19.1",

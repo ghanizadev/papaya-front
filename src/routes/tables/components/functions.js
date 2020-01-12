@@ -19,7 +19,7 @@ export const addProduct = (token, orderId, body) =>
 	);
 
 export const findFlavor = (token, name = ' ') =>
-	axios.get(`${process.env.REACT_APP_DATABASE}/api/v1/flavor?name=${name}`,
+	axios.get(`${process.env.REACT_APP_DATABASE}/api/v1/flavor?q=${name}`,
 		{
 			headers: {
 				'Authorization': `Bearer ${token}`,

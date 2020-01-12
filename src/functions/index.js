@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import qs from 'qs';
 
 export const getUserData = (email, token) => {
 	return Axios.get(`${process.env.REACT_APP_DATABASE}/api/v1/user?email=${email}`, {
@@ -47,5 +48,5 @@ export default (username = '', password = '', handler = () => {}) => {
 				status: error.response && error.response.status ? error.response.status : 500,
 				isLoading: false,
 			});
-		})
-}
+		});
+};

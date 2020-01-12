@@ -142,17 +142,17 @@ const FieldBox = styled.button`
 `;
 
 const Field = ({item}) => {
-    return(
-        <FieldBox style={{fontSize: '10pt', color:'#888'}}>
-            <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-                <span style={{fontSize: '16pt', fontWeight: 'bold', color: '#333'}}>{`${item.code} - ${item.name}`}</span>
-                <span >{item.variation}</span>
-                <span>Grupo {item.group}/Subgrupo {item.subgroup}</span>
-            </div>
-            <span style={{fontSize: '18pt', width: '100%', textAlign:"right",color: '#333'}}>R$ {item.price.toFixed(2).replace(".", ',')}</span>
-        </FieldBox>
-    );
-}
+	return(
+		<FieldBox style={{fontSize: '10pt', color:'#888'}}>
+			<div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+				<span style={{fontSize: '16pt', fontWeight: 'bold', color: '#333'}}>{`${item.code} - ${item.name}`}</span>
+				<span >{item.variation}</span>
+				<span>Grupo {item.group}/Subgrupo {item.subgroup}</span>
+			</div>
+			<span style={{fontSize: '18pt', width: '100%', textAlign:'right',color: '#333'}}>R$ {item.price.toFixed(2).replace('.', ',')}</span>
+		</FieldBox>
+	);
+};
 
 const FieldContainer = styled.div`
     border-radius: 5px;
@@ -167,52 +167,52 @@ const FieldContainer = styled.div`
 
 
 export const ResultField = (props) => {
-    const {data} = props;
-    return (
-        <FieldContainer>
-            {data.map((item, index) => 
-                <Field key={index} item ={item} />
-            )}
-        </FieldContainer>
-    );
-}
+	const {data} = props;
+	return (
+		<FieldContainer>
+			{data.map((item, index) => 
+				<Field key={index} item ={item} />
+			)}
+		</FieldContainer>
+	);
+};
 
 const BusyTable = props => {
-    const { number, status } = props;
-    const name = status ? status : "Mesa livre"
+	const { number, status } = props;
+	const name = status ? status : 'Mesa livre';
 
-    const state = useContext(Context);
+	const state = useContext(Context);
 
-    return (
-        <div style={{boxSizing: 'border-box', width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-            <h2 style={{color: '#888', height: 'min-content'}}>{number}. {name}</h2>
-            <BusyTableProductContainer style={{flexGrow: 1}}>
-                <BusyTableProduct><span>1x Produto A</span><span>R$ 0,00</span></BusyTableProduct>
-                <BusyTableProduct><span>2x Produto B</span><span>R$ 0,00</span></BusyTableProduct>
-                <BusyTableProduct><span>1x Produto C</span><span>R$ 0,00</span></BusyTableProduct>
-                <BusyTableProduct><span>3x Produto D</span><span>R$ 0,00</span></BusyTableProduct>
-            </BusyTableProductContainer>
-            <div style={{minWidth: '100%', height: 'min-content'}}>
-                <BusyTableAddProduct onClick={() => {state.setOverlay({visible: true, message: "Produtos", callback: () => console.log("Ok")})}}>Adicionar</BusyTableAddProduct>
-                <BusyTableDetails>Detalhes</BusyTableDetails>
-                <BusyTableCheckout>Fechar</BusyTableCheckout>
-            </div>
-        </div>
-    );
-}
+	return (
+		<div style={{boxSizing: 'border-box', width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+			<h2 style={{color: '#888', height: 'min-content'}}>{number}. {name}</h2>
+			<BusyTableProductContainer style={{flexGrow: 1}}>
+				<BusyTableProduct><span>1x Produto A</span><span>R$ 0,00</span></BusyTableProduct>
+				<BusyTableProduct><span>2x Produto B</span><span>R$ 0,00</span></BusyTableProduct>
+				<BusyTableProduct><span>1x Produto C</span><span>R$ 0,00</span></BusyTableProduct>
+				<BusyTableProduct><span>3x Produto D</span><span>R$ 0,00</span></BusyTableProduct>
+			</BusyTableProductContainer>
+			<div style={{minWidth: '100%', height: 'min-content'}}>
+				<BusyTableAddProduct onClick={() => {state.setOverlay({visible: true, message: 'Produtos', callback: () => console.log('Ok')});}}>Adicionar</BusyTableAddProduct>
+				<BusyTableDetails>Detalhes</BusyTableDetails>
+				<BusyTableCheckout>Fechar</BusyTableCheckout>
+			</div>
+		</div>
+	);
+};
 
 const FreeTable = props => {
-    return (
-        <FreeTableContainer>
-            <FreeTableButtom > Abrir Mesa </FreeTableButtom>
-        </FreeTableContainer>
-    );
-}
+	return (
+		<FreeTableContainer>
+			<FreeTableButtom > Abrir Mesa </FreeTableButtom>
+		</FreeTableContainer>
+	);
+};
 
 export const Table = props => {
-    return (
-        <TableContainer>
-            <BusyTable {...props} />
-        </TableContainer>
-    );
-}
+	return (
+		<TableContainer>
+			<BusyTable {...props} />
+		</TableContainer>
+	);
+};
