@@ -1,8 +1,6 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Tables, Header, Table, ScrollView} from './components';
 import {findAllTables} from './components/functions';
-import { useCookies } from 'react-cookie';
-import { useHistory } from 'react-router';
 
 const TablesContainer = () => {
 	const [tables, setTables] = useState(null);

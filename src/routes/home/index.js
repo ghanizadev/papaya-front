@@ -9,7 +9,7 @@ import {
 	Container,
 	Overlay
 } from './components';
-import { ProductInterface } from './views';
+import ProductInterface from './products';
 import Tables from '../tables';
 import { Context, Provider } from '../../context';
 import { useCookies } from 'react-cookie';

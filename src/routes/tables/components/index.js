@@ -1,10 +1,9 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
-import { Context, Consumer } from '../../../context';
+import { Context} from '../../../context';
 import { findFlavor, addProduct } from './functions';
-import qs from 'qs';
 
 export const Tables = styled.div`
 	padding: 65px 25px 25px 25px;
