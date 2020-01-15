@@ -46,10 +46,10 @@ const Home = props =>{
 		<div className="App">
 			<form id="login-holder">
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
-				<input type="email" ref={username} placeholder="e-mail" onKeyPress={e=>{
+				<input defaultValue="jf.melo6@gmail.com" type="email" ref={username} placeholder="e-mail" onKeyPress={e=>{
 					if (e.key === 'Enter') password.current.focus();
 				}}/>
-				<input type="password" ref={password} placeholder="senha" onKeyPress={e=>{
+				<input defaultValue="tr4df2g5wp" type="password" ref={password} placeholder="senha" onKeyPress={e=>{
 					if (e.key === 'Enter') {
 						e.preventDefault();
 						login(username.current.value, password.current.value, e => {

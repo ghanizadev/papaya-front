@@ -4,6 +4,9 @@ import { Tables, Header, Table, ScrollView, Background, ResultField} from './com
 import {findAllProducts} from './functions';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
+import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 
 export const TablesOrders = props => {
 	return (
@@ -65,10 +68,31 @@ export const ProductInterface = props => {
 		<Background>
 			<Header>Produtos</Header>
 			<Tables>
-				<span>Pesquisa</span>
-				<input placeholder="Digite algo para pesquisar" />
-				<ResultField data={data}/>
+				<Tabs>
+					<TabList>
+						<Tab>Pesquisar</Tab>
+						<Tab>Title 2</Tab>
+					</TabList>
+	
+					<TabPanel>
+						<span>Pesquisa</span>
+						<input placeholder="Digite algo para pesquisar" />
+						<ResultField data={data}/>
+					</TabPanel>
+					<TabPanel>
+						<div>
+							<h3>Adicionar produtos</h3>
+							<input placeholder="Código" />
+							<input placeholder="Nome" />
+							<input placeholder="Referência" />
+							<input placeholder="Descrição" />
+							
+						</div>
+					</TabPanel>
+				</Tabs>
 			</Tables>
 		</Background>
+		
+		
 	);
 };
