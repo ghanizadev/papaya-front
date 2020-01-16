@@ -24,30 +24,33 @@ const Home = props =>{
 		setIsLoading(false);
 		if(handler.status){
 			switch(handler.status){
-				case 200:
-					setCookie('authorization', handler.load, { path: '/', maxAge: 300 });
-					setIsShowing(false);
-					history.push("/home");
-					break;
-				case 403:
-					setMessage("Usuário ou senha incorretos, por favor, tente novamente");
-					break;
-				default: 
-					setMessage("Erro desconhecido, por favor, entre em contato com o administrador");
-					break;
+			case 200:
+				setCookie('authorization', handler.load, { path: '/', maxAge: handler.load.exp /1000 });
+				global.auth = handler.load;
+				setIsShowing(false);
+				history.push('/home');
+				break;
+			case 403:
+				closeButton.current.focus();
+				setMessage('Usuário ou senha incorretos, por favor, tente novamente');
+				break;
+			default: 
+				closeButton.current.focus();
+				setMessage('Erro desconhecido, por favor, entre em contato com o administrador');
+				break;
 			}
 		}
 	}, [handler, history, setCookie]);
 
 	return (
 		<div className="App">
-			<div id="login-holder">
+			<form id="login-holder">
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
-				<input type="email" ref={username} placeholder="e-mail" onKeyPress={e=>{
-					if (e.key === "Enter") password.current.focus();
+				<input defaultValue="jf.melo6@gmail.com" type="email" ref={username} placeholder="e-mail" onKeyPress={e=>{
+					if (e.key === 'Enter') password.current.focus();
 				}}/>
-				<input type="password" ref={password} placeholder="senha" onKeyPress={e=>{
-					if (e.key === "Enter") {
+				<input defaultValue="tr4df2g5wp" type="password" ref={password} placeholder="senha" onKeyPress={e=>{
+					if (e.key === 'Enter') {
 						e.preventDefault();
 						login(username.current.value, password.current.value, e => {
 							setHandler(e);
@@ -56,7 +59,7 @@ const Home = props =>{
 						setIsLoading(true);
 					}
 				}}/>
-				<input type="button" value="Entrar" onClick={(e) => {
+				<input type="submit" value="Entrar" onClick={(e) => {
 					e.preventDefault();
 					login(username.current.value, password.current.value, e => {
 						setHandler(e);
@@ -64,7 +67,7 @@ const Home = props =>{
 					setIsShowing(true);
 					setIsLoading(true);
 				}}/>
-			</div>
+			</form>
 			<div id="loading" style={{display: isShowing ? 'flex' : 'none'}}>
 				<div id="message-box">
 					<span id="loading-message">{message}</span>

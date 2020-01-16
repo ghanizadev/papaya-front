@@ -24,26 +24,6 @@ body{
   align-items: center;
 }
 
-input{
-  height: 30px;
-  color: #333;
-  border-radius: 5px;
-  width: 75%;
-  border: 0.5px solid #ccc;
-  margin: 5px;
-  padding: 0 10px;
-}
-
-input[type=button], input[type=submit], input[type=reset]{
-  box-sizing: unset; 
-  height: 'min-content';
-  background-color: #ff8838;
-  color: #f2f2f2;
-  font-weight: bold;
-  padding: 7px 12px;
-  margin: 7px;
-}
-
 #loading{
   position: absolute;
   width: 100vw;
