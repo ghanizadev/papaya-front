@@ -1,10 +1,15 @@
 import Axios from 'axios';
 
 export const getUserData = (email, token) => {
-	return Axios.get(`${process.env.REACT_APP_DATABASE}/api/v1/user?email=${email}`, {
-		headers:{
-			'Authorization': 'Bearer ' + token
-		}
+	console.log(email, token) ; 
+	const headers = {
+		'Authorization': `Bearer ${token}`,
+		'Content-Type': 'application/json'
+	};
+
+	return Axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
+		headers,
+		withCredentials: true
 	});
 };
 
@@ -14,7 +19,7 @@ export default (username = '', password = '', handler = () => {}) => {
 	body.append('password', password);
 	body.append('grant_type', 'password');
         
-	Axios.post(`${process.env.REACT_APP_DATABASE}/oauth/token`,
+	Axios.post(`${process.env.REACT_APP_API}/oauth/token`,
 		body,
 		{
 			headers:{
@@ -25,16 +30,14 @@ export default (username = '', password = '', handler = () => {}) => {
 				password: process.env.REACT_APP_SECRET
 			}
 		})
-		.then(async (responseToken, deny) => {
-			if(responseToken.status === 200){                
-				getUserData(username, responseToken.data.access_token).then(responseUser =>{
-					global.load = responseToken.data;
-
-					return handler({
-						status: responseUser.status,
-						load: responseToken.data,
-						user: responseUser.data
-					});
+		.then((responseToken, deny) => {
+			if(responseToken.status === 200){ 
+				global.token = responseToken.data.access_token;
+				   
+				return handler({
+					status: responseToken.status,
+					load: responseToken.data,
+					user: {email: username}
 				});
 			}else if(deny) {
 				return handler({
@@ -44,8 +47,8 @@ export default (username = '', password = '', handler = () => {}) => {
 			}
 		}).catch((error) => {
 			return handler({
-				status: error.response.status,
+				status: error.response && error.response.status ? error.response.status : 500,
 				isLoading: false,
 			});
-		})
-}
+		});
+};
