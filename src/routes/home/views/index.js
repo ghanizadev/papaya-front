@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Context} from '../context';
+import {Context} from '../../../context';
 import { Tables, Header, Table, ScrollView, Background, ResultField} from "./components";
 import {findAllProducts} from './functions';
 import { useCookies } from 'react-cookie';
