@@ -1,50 +1,44 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Tables, Header, Table, ScrollView} from './components';
 import {findAllTables} from './components/functions';
+import {Context, Consumer} from '../../context';
+import io from 'socket.io-client';
 
 const TablesContainer = () => {
-	const [tables, setTables] = useState(null);
-	const [timer, setTimer] = useState(null);
+
+	const state = useContext(Context);
 
 	useEffect(() => {
 		findAllTables('')
 			.then(result => {
-				setTables(result.data);
+				state.setContext({...state.context, serverData: result.data });
 			})
 			.catch(error => {
-				window.alert(error.message);
+				console(error);
 			});
-            
-		keepUpdate();
-		return clearInterval(timer);
-	}, []);
 
-	const keepUpdate = () => {
-		const t = setInterval(() => {
+		const socket = io.connect(process.env.REACT_APP_API);
+		socket.on('update', () => {
 			findAllTables('')
 				.then(result => {
-					setTables(result.data);
+					state.setContext({...state.context, serverData: result.data });
 				})
 				.catch(error => {
-					window.alert(error.message);
+					console.log(error);
 				});
-		}, 2000);
-		setTimer(t);
-	};
-
-	const dataCallback = data => {
-		setTables(data);
-	};
-
+		});
+	}, []);
 
 	return (
-		<Tables>
-			<Header>Mesas</Header>
-			<ScrollView>
-				{tables && tables.map(table => <Table key={tables.indexOf(table)} load={table} callback={dataCallback} />) }
-				<div style={{minWidth: 7}} />
-			</ScrollView>
-		</Tables>
+		<Consumer>
+			{({context}) => (<Tables>
+				<Header>Mesas</Header>
+				<ScrollView>
+					{context.serverData && context.serverData.map((table, index) => <Table key={index} load={table} />) }
+					<div style={{minWidth: 7}} />
+				</ScrollView>
+			</Tables>)}
+		</Consumer>
 	);
 };
 
