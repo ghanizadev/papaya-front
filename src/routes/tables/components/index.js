@@ -1,10 +1,9 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
-import { Context, Consumer } from '../../../context';
+import { Context} from '../../../context';
 import { findFlavor, addProduct } from './functions';
-import qs from 'qs';
 
 export const Tables = styled.div`
 	padding: 65px 25px 25px 25px;
@@ -197,6 +196,44 @@ const CloseButton = styled.button`
 	top: 0;
 	right: 0;
 `;
+
+const ProductDescription = props => {
+	const {product} = props;
+
+	const state = useContext(Context);
+	return (
+		<div style={{width: '100%', position: 'relative'}}>
+			<h1>{product.title}</h1>
+			<div style={{display: 'flex', flexDirection: 'column'}}>
+				<span>código: {product.code}</span>
+				<span>grupo: {product.group}</span>
+				<span>variação: {product.variation}</span>
+				<span>descrição: {product.description.toString()}</span>
+				<span>adicionais: {product.aditionals}</span>
+				<span>preço: {product.price}</span>
+			</div>
+			<CloseButton onClick={()=>{state.setOverlay({...state.overlay, visible: false});}}>&times;</CloseButton>
+		</div>
+	);
+};
+
+const TableDescription = props => {
+	const {order} = props;
+
+	const state = useContext(Context);
+	return (
+		<div style={{width: '100%', position: 'relative'}}>
+			<h1>{order.tableNumber}.{order.costumer}</h1>
+			<div style={{display: 'flex', flexDirection: 'column'}}>
+				<span>código: {order.orderId}</span>
+				<span>entrega: {order.deliver}</span>
+				<span>data de entrada: {new Date(order.createdAt).toLocaleDateString()}</span>
+				<span>última atualização: {new Date(order.updatedAt).toLocaleTimeString()}</span>
+			</div>
+			<CloseButton onClick={()=>{state.setOverlay({...state.overlay, visible: false});}}>&times;</CloseButton>
+		</div>
+	);
+};
 
 
 const AddComponent = props => {
@@ -742,9 +779,14 @@ const BusyTableProduct = props => {
 	const { quantity, title, price, subtotal } = props.product;
 	const minus = /(REMOVIDO)/gi.test(title);
 
+	const state = useContext(Context);
+
 	return (
 		<BusyTableProductButton
 			style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
+			onClick={() => {
+				state.setOverlay({visible: true, component: <ProductDescription {...props} />});
+			}}
 		>
 			<span
 				style={{
@@ -799,9 +841,9 @@ const BusyTable = props => {
 				{load.number}.{load.order.costumer}
 			</h2>
 			<BusyTableProductContainer>
-				{load.order.items.map(product => (
+				{load.order.items.map((product, index) => (
 					<BusyTableProduct
-						key={load.order.items.indexOf(product)}
+						key={index}
 						product={product}
 					/>
 				))}
@@ -848,7 +890,9 @@ const BusyTable = props => {
 				>
 					Adicionar
 				</BusyTableAddProduct>
-				<BusyTableDetails>Detalhes</BusyTableDetails>
+				<BusyTableDetails
+					onClick={()=>{state.setOverlay({visible: true, component: <TableDescription order={load.order} />});}}
+				>Detalhes</BusyTableDetails>
 				<BusyTableCheckout>Fechar</BusyTableCheckout>
 			</div>
 		</div>

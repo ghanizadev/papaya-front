@@ -5,28 +5,28 @@ const config = {
 		visible: false,
 		component: null,
 		callback: ()=> {}
-    },
-    setOverlay: () => {}
-}
+	},
+	setOverlay: () => {}
+};
 
 const Context = React.createContext(config);
 
 const Provider = props =>{
-    const setOverlay = (newConfig) => {
-        setState({...state, overlay: newConfig})
-    }
+	const setOverlay = (newConfig) => {
+		setState({...state, overlay: newConfig});
+	};
     
-    const [state, setState] = useState({...config, setOverlay});
+	const [state, setState] = useState({...config, setOverlay});
 
-    return (
-    <Context.Provider value={state}>
-        {props.children}
-    </Context.Provider>)
-}
+	return (
+		<Context.Provider value={state}>
+			{props.children}
+		</Context.Provider>);
+};
 
 const Consumer = props => 
-    <Context.Consumer>
-        {props.children}
-    </Context.Consumer>
+	<Context.Consumer>
+		{props.children}
+	</Context.Consumer>;
 
-export {Context, Provider, Consumer}
+export {Context, Provider, Consumer};

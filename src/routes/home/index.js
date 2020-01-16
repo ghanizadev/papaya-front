@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	Background,
 	Logo,
@@ -9,12 +9,13 @@ import {
 	Container,
 	Overlay
 } from './components';
-import { ProductInterface } from './views';
+import ProductInterface from './products';
 import Tables from '../tables';
 import { Context, Provider } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
+import Axios from 'axios';
 
 const Home = props => {
 	const [user, setUser] = useState('Jean');
@@ -22,14 +23,32 @@ const Home = props => {
 	const [cookies, setCookies, removeCookies] = useCookies('authorization');
 	const history = useHistory();
 
-	const state = useContext(Context);
+	const updateUser = () => {
+		if (cookies.authorization) {
+			//TODO pegar info do usuario no banco
+			const decoded = jwtDecode(cookies.authorization.access_token);
+			const email = decoded.email;
 
-	if (cookies.authorization) {
-		//TODO pegar info do usuario no banco
-		const decoded = jwtDecode(cookies.authorization.access_token);
-		const email = decoded.email;
-		if (user !== email) setUser(email);
-	}
+			const headers = {
+				'Authorization': `Bearer ${global.token}`,
+				'Content-Type': 'application/json'
+			};
+		
+			Axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
+				headers
+			})
+				.then(({data}) => {
+					setUser(data[0].name);
+				})
+				.catch(error => console.log(error));
+		}
+	};
+
+	useEffect(()=> {
+		updateUser();
+	}, []);
+
+	const state = useContext(Context);
 
 	const getCurrentPage = () => {
 		switch (page) {
