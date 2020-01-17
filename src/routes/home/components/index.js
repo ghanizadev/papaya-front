@@ -148,6 +148,19 @@ const InputContainer = styled.div`
     margin: 5px;
 `;
 
+const TextAreaContainer = styled.div`
+    height: 100px;
+    border: .5px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 5px;
+`;
+
 const InputLabel = styled.span`
     color: gray;
     white-space: nowrap
@@ -170,6 +183,16 @@ const InputComponent = styled.input`
     width: 100%;
     margin: 0 0 0 5px;
     background-color: transparent;
+`;
+
+const TextAreaComponent = styled.textarea`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+	background-color: transparent;
+	padding: 3px;
+	resize: none;
 `;
 
 const SelectComponent = styled.select`
@@ -256,21 +279,42 @@ export const Results = props => {
 };
 
 export const Input = props => {
-	const {label, containerStyle, disabled} = props;
+	const {label, containerStyle, disabled, proportion, multiline} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+	if (multiline) currentContainerStyle = {...currentContainerStyle, minHeight: 100, justifyContent: 'flex-start'};
     
 	return (
-		<InputContainer style={containerStyle}>
+		<InputContainer style={currentContainerStyle}>
 			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
 			<InputComponent {...props} />
 		</InputContainer>
 	);
 };
 
-export const Select = props => {
-	const {label, children, containerStyle} = props;
+export const TextArea = props => {
+	const {label, containerStyle, disabled, proportion} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
     
 	return (
-		<InputContainer style={containerStyle}>
+		<TextAreaContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<TextAreaComponent draggable={false} {...props} />
+		</TextAreaContainer>
+	);
+};
+
+export const Select = props => {
+	const {label, children, containerStyle, proportion} = props;
+
+	const currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
 			<InputLabel>{label}</InputLabel>
 			<SelectComponent {...props}>{children}</SelectComponent>
 		</InputContainer>
@@ -291,7 +335,14 @@ Input.propTypes = {
 	label: PropTypes.string.isRequired,
 	containerStyle: PropTypes.object,
 	disabled: PropTypes.bool,
+	proportion: PropTypes.number,
+	multiline: PropTypes.bool
 };
+
+Input.defaultProps = {
+	proportion: 0,
+	multiline: false,
+}
 
 Select.propTypes = {
 	label: PropTypes.string.isRequired,

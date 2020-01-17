@@ -10,6 +10,7 @@ import {
 	Overlay
 } from './components';
 import ProductInterface from './products';
+import ProviderInterface from './providers';
 import Tables from '../tables';
 import { Context, Provider } from '../../context';
 import { useCookies } from 'react-cookie';
@@ -55,6 +56,8 @@ const Home = props => {
 			return <Tables />;
 		case 'products':
 			return <ProductInterface />;
+		case 'providers':
+			return <ProviderInterface />;
 		default:
 			return <Tables />;
 		}
@@ -88,7 +91,7 @@ const Home = props => {
 					<SidebarButton onClick={() => setPage('orders')}>Pedidos</SidebarButton>
 					<SidebarButton>Clientes</SidebarButton>
 					<SidebarButton onClick={() => setPage('products')}>Produtos</SidebarButton>
-					<SidebarButton>Fornecedores</SidebarButton>
+					<SidebarButton onClick={() => setPage('providers')}>Fornecedores</SidebarButton>
 					<SidebarButton>Gerenciamento</SidebarButton>
 					<SidebarButton>Configurações</SidebarButton>
 				</SideBar>
