@@ -212,7 +212,7 @@ const ProductDescription = props => {
 				<span>adicionais: {product.aditionals}</span>
 				<span>preço: {product.price}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setOverlay({...state.overlay, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -230,7 +230,7 @@ const TableDescription = props => {
 				<span>data de entrada: {new Date(order.createdAt).toLocaleDateString()}</span>
 				<span>última atualização: {new Date(order.updatedAt).toLocaleTimeString()}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setOverlay({...state.overlay, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -241,9 +241,9 @@ const AddComponent = props => {
 
 	return (
 		<div style={{position: 'relative', width: '100%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row'}}>
-			<AddPizza onClick={()=> state.setOverlay({...state.overlay, component: <AddPizzaComponent {...props} />}) } />
-			<AddProduct onClick={()=> state.setOverlay({...state.overlay, component: <AddProductComponent {...props} />}) } />
-			<CloseButton onClick={() => state.setOverlay({...state.overlay, visible: false})}>&times;</CloseButton>
+			<AddPizza onClick={()=> state.setContext({...state.context, overlay: { visible: true, component: <AddPizzaComponent {...props} />}}) } />
+			<AddProduct onClick={()=> state.setContext({...state.context, overlay: { visible: true, component: <AddProductComponent {...props} />}}) } />
+			<CloseButton onClick={() => state.setContext({...state.context, overlay: {visible: false}})}>&times;</CloseButton>
 		</div>
 	);
 
@@ -324,7 +324,7 @@ const AddProductComponent = props => {
 					borderRadius: 5,
 					color: '#fdfdfd'
 				}}>Adicionar</button>
-			<CloseButton onClick={() => state.setOverlay({...state.overlay, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
 
 		</div>
 	);
@@ -383,7 +383,7 @@ const AddPizzaComponent = props => {
 				setAditionalsItems([]);
 				setCurrentAditional('');
 
-				state.setOverlay({ ...state.overlay, visible: false });
+				state.setContext({ ...state.context,  overlay: { visible: false } });
 			})
 			.catch(error => {
 				window.alert(`Error: \n${error}`);
@@ -402,7 +402,7 @@ const AddPizzaComponent = props => {
 				position: 'relative'
 			}}
 		>
-			<CloseButton onClick={() => state.setOverlay({...state.overlay, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
 			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 				<h1>Pizza</h1>
 				<div
@@ -762,7 +762,7 @@ const AddPizzaComponent = props => {
 			</AddProductSubmit>
 			<AddProductClose
 				onClick={() => {
-					state.setOverlay({ ...state.overlay, visible: false });
+					state.setContext({ ...state.context,  overlay: { visible: false } });
 				}}
 			>
 				Fechar
@@ -785,7 +785,7 @@ const BusyTableProduct = props => {
 		<BusyTableProductButton
 			style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
 			onClick={() => {
-				state.setOverlay({visible: true, component: <ProductDescription {...props} />});
+				state.setContext({...state.ontext, overlay: { visible: true, component: <ProductDescription {...props}/>}});
 			}}
 		>
 			<span
@@ -882,16 +882,19 @@ const BusyTable = props => {
 			<div style={{ minWidth: '100%', height: 'min-content' }}>
 				<BusyTableAddProduct
 					onClick={() => {
-						state.setOverlay({
-							visible: true,
-							component: <AddComponent order={load.order} />
+						state.setContext({
+							...state.context,
+							overlay:{
+								visible: true,
+								component: <AddComponent order={load.order} />
+							}
 						});
 					}}
 				>
 					Adicionar
 				</BusyTableAddProduct>
 				<BusyTableDetails
-					onClick={()=>{state.setOverlay({visible: true, component: <TableDescription order={load.order} />});}}
+					onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
 				>Detalhes</BusyTableDetails>
 				<BusyTableCheckout>Fechar</BusyTableCheckout>
 			</div>

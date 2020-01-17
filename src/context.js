@@ -1,22 +1,25 @@
 import React, {useState} from 'react';
 
 const config = {
-	overlay:{
-		visible: false,
-		component: null,
-		callback: ()=> {}
+	context: {
+		overlay:{
+			visible: false,
+			component: null,
+			callback: ()=> {}
+		},
+		serverData: [],
 	},
-	setOverlay: () => {}
+	setContext: () => {},
 };
 
 const Context = React.createContext(config);
 
 const Provider = props =>{
-	const setOverlay = (newConfig) => {
-		setState({...state, overlay: newConfig});
+	const setContext = (newConfig) => {
+		setState({...state, context: newConfig});
 	};
     
-	const [state, setState] = useState({...config, setOverlay});
+	const [state, setState] = useState({...config, setContext});
 
 	return (
 		<Context.Provider value={state}>

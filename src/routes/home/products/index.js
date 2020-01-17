@@ -34,7 +34,7 @@ const ProductInterface = props => {
 				}
 			}).catch((error) => {
 				if(error.response.status === 403){
-					state.setOverlay({visible: true, message: 'Você não tem permissão para acessar este conteúdo', callback: () => {}});
+					window.alert('Você não tem permissão para cessar este conteúdo');
 				}
 			});
 	else if (!cookies.authorization) history.push('/');
