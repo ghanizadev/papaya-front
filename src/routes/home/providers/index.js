@@ -1,10 +1,27 @@
-import React from 'react';
-import {Results, ContentContainer, ContentHeader, Input, Select, Button, TextArea} from '../components';
+import React, {useState} from 'react';
+import {ContentContainer, ContentHeader, Input, Select, Button, TextArea} from '../components';
 import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 
 const ProviderInterface = props => {
+    const [body, setBody] = useState({
+        providerId: '0000',
+        name: '',
+        address: {
+            street: '',
+            postalCode: '',
+            district: '',
+            city: '',
+            state: '',
+        },
+        cnpj: '',
+        email: '',
+        website: '',
+        phoneNumber: ''
+    });
+
+
     return (
         <ContentContainer>
 			<ContentHeader>Produtos</ContentHeader>
@@ -24,13 +41,13 @@ const ProviderInterface = props => {
                             label='Código'
                             placeholder="00000"
                             size={5}
-                            onChange={e => { }}
-                            />
+                            onChange={e => setBody({...body, providerId: e.target.value}) }
+                            /> 
                             <Input
                             proportion={3} 
 							label="Fornecedor"
 							placeholder="Digite aqui o nome do fornecedor"
-							onChange={e => { }} 
+							onChange={e => setBody({...body, name: e.target.value})} 
 						    />
 						</div>
 
@@ -39,13 +56,13 @@ const ProviderInterface = props => {
                             proportion={4}
 							label="Endereço"
 							placeholder="Digite aqui o endereço do fornecedor"
-							onChange={e => {  }}
+							onChange={e => setBody({...body, address: { ...body.address, street: e.target.value}}) }
 						/>
 
     					<Input
                             proportion={1}
 							label="Número"
-							onChange={e => {  }}
+							onChange={e => setBody({...body, address: { ...body.address, number: e.target.value}}) }
 						/>
 						</div>
 
@@ -54,17 +71,17 @@ const ProviderInterface = props => {
                             proportion={1.5}
 							label="Bairro"
 							placeholder="Digite aqui o bairro"
-							onChange={e => {  }}
+							onChange={e => setBody({...body, address: { ...body.address, district: e.target.value}})}
 						/>
 
                         <Input
                             proportion={1.5}
 							label="Cidade"
 							placeholder="Digite aqui a cidade"
-							onChange={e => {  }}
+							onChange={e => setBody({...body, address: { ...body.address, city: e.target.value}}) }
 						/>
 
-                        <Select proportion={1.5} label="Estado" placeholder="Selecione" onChange={e => { }} >
+                        <Select proportion={1.5} label="Estado" placeholder="Selecione" onChange={e => setBody({...body, address: { ...body.address, state: e.target.value}}) } >
                         
                             <option value="AC">Acre (AC)</option>
                             <option value="AL">Alagoas (AL)</option>
@@ -99,7 +116,7 @@ const ProviderInterface = props => {
                         <Input
 							label="CEP"
 							placeholder="Digite aqui o CEP"
-							onChange={e => {  }}
+							onChange={e => setBody({...body, address: { ...body.address, postalCode: e.target.value}}) }
 						/>
 						</div>
 
@@ -109,19 +126,19 @@ const ProviderInterface = props => {
                             <Input
                                 label="CNPJ"
                                 placeholder="Digite aqui o CNPJ"
-                                onChange={e => {  }}
+                                onChange={e => setBody({...body, cnpj: e.target.value })}
                             />
 
                             <Input
                                 label="Email"
                                 placeholder="Digite aqui o endereço do fornecedor"
-                                onChange={e => {  }}
+                                onChange={e => setBody({...body, email: e.target.value }) }
                              />
 
                             <Input
                                 label="Telefone"
                                 placeholder="Digite aqui o telefone do fornecedor"
-                                onChange={e => {  }}
+                                onChange={e => setBody({...body, phoneNumber: e.target.value })}
                             />
 
 						</div>
@@ -132,7 +149,9 @@ const ProviderInterface = props => {
 					
 					<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', bottom: 25, right: 25}}>
 
-						<Button title="Salvar o produto atual" onClick={()=> {}}>Salvar</Button>
+						<Button title="Salvar o produto atual" onClick={()=> {
+                            console.log(JSON.stringify(body))
+                        }}>Salvar</Button>
 						<Button title="Limpar o formulário para novo cadastro" onClick={()=> {window.alert('Ok');}}>Limpar</Button>
 
 					</div>

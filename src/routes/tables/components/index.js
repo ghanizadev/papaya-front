@@ -212,7 +212,7 @@ const ProductDescription = props => {
 				<span>adicionais: {product.aditionals}</span>
 				<span>preço: {product.price}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -230,7 +230,7 @@ const TableDescription = props => {
 				<span>data de entrada: {new Date(order.createdAt).toLocaleDateString()}</span>
 				<span>última atualização: {new Date(order.updatedAt).toLocaleTimeString()}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false }});}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -324,7 +324,7 @@ const AddProductComponent = props => {
 					borderRadius: 5,
 					color: '#fdfdfd'
 				}}>Adicionar</button>
-			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
 
 		</div>
 	);
@@ -402,7 +402,7 @@ const AddPizzaComponent = props => {
 				position: 'relative'
 			}}
 		>
-			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
 			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 				<h1>Pizza</h1>
 				<div
@@ -884,7 +884,7 @@ const BusyTable = props => {
 					onClick={() => {
 						state.setContext({
 							...state.context,
-							overlay:{
+							overlay: {
 								visible: true,
 								component: <AddComponent order={load.order} />
 							}

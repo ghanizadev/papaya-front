@@ -2,16 +2,21 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Context} from '../../../context';
 import {find, save} from './functions';
-import {Results, ContentContainer, ContentHeader, Input, Select, Button} from '../components';
+import {Results, Container, Header, Input, Select, Button} from '../components';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
 import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
+
 const ProductInterface = props => {
 	const [cookies] = useCookies('authorization');
 	const [data, setData] = useState([]);
+	const state = useContext(Context);
 	const history = useHistory();
+	const [selectedGroup, setSelectedGroup] = useState('1');
+	const [selectedSubgroup, setSelectedSubgroup] = useState('01');
+	const [selectedVariation, setSelectedVariation] = useState('00');
 	const [body, setBody] = useState({
 		code: 0,
 		price: 0,
@@ -22,8 +27,26 @@ const ProductInterface = props => {
 		variation: '00'
 	});
 
-	useEffect(()=> {
-		if(data.length === 0 && cookies.authorization)
+	const [provider, setProvider] = useState({name: '', cnpj: ''})
+
+
+	const getProvider = provider => {
+		if(cookies.authorization){
+			fetch(process.env.REACT_APP_API + '/api/v1/provider?providerId=' + provider)
+			.then(result => {
+				if(result.status === 200){
+					result.json()
+					.then(answer =>{
+						if(answer.length && answer.length > 0){
+							setProvider(answer[0]);
+						}
+					})
+				}
+			})
+		}
+	}
+
+	if(data.length === 0 && cookies.authorization)
 		find(cookies.authorization.access_token)
 			.then(response => {
 				if(response.status === 200){
@@ -34,9 +57,12 @@ const ProductInterface = props => {
 					window.alert('Você não tem permissão para cessar este conteúdo');
 				}
 			});
-		else if (!cookies.authorization) history.push('/');
+	else if (!cookies.authorization) history.push('/');
 
-	}, [])
+	useEffect(() => {
+		setBody({...body, ref: `${selectedGroup}${selectedSubgroup}${selectedVariation}` });
+	}, [selectedGroup, selectedSubgroup, selectedVariation]);
+
 	const subgroups = {
 		'1': {
 			'01': 'AGUA 500ML/600ML',
@@ -144,8 +170,8 @@ const ProductInterface = props => {
 	];
 
 	return (
-		<ContentContainer>
-			<ContentHeader>Produtos</ContentHeader>
+		<Container>
+			<Header>Produtos</Header>
 			
 			<Tabs>
 				<TabList>
@@ -229,9 +255,9 @@ const ProductInterface = props => {
 					<div>
 						<h3>Fornecedor</h3>
 						<div style={{display: 'flex', flexDirection: 'row'}}>
-							<Input label='Código' placeholder="0000" onChange={e => { setBody({...body, provider: e.target.value}); }} />
-							<Input label='Nome' placeholder="Nome do fornecedor" readonly />
-							<Input label='CNPJ' placeholder="CNPJ do fornecedor" readonly />
+							<Input label='Código' placeholder="0000" onChange={e => { getProvider(e.target.value)}} />
+							<Input label='Nome' placeholder="Nome do fornecedor" value={provider.name} readonly />
+							<Input label='CNPJ' placeholder="CNPJ do fornecedor" value={provider.cnpj} readonly />
 						</div>
 					</div>
 					<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', bottom: 25, right: 25}}>
@@ -262,7 +288,7 @@ const ProductInterface = props => {
 					</div>
 				</TabPanel>
 			</Tabs>
-		</ContentContainer>
+		</Container>
 	);
 };
 

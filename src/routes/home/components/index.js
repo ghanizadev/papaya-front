@@ -118,23 +118,6 @@ const OverlayBox = styled.div`
 	flex-direction: column;
 `;
 
-export const Overlay = () => {
-	return (
-		<Context.Consumer>
-			{({ context }) => {
-				return (
-					<OverlayBackground
-						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
-					>
-						<OverlayBox>{context.overlay.component}</OverlayBox>
-					</OverlayBackground>
-				);
-			}}
-		</Context.Consumer>
-	);
-};
-
-
 const InputContainer = styled.div`
     height: 30px;
     border: .5px solid lightgray;
@@ -324,6 +307,22 @@ export const Select = props => {
 export const Button = props => {
 	return (
 		<ButtonComponent {...props} />
+	);
+};
+
+export const Overlay = () => {
+	return (
+		<Context.Consumer>
+			{({ context }) => {
+				return (
+					<OverlayBackground
+						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
+					>
+						<OverlayBox>{context.overlay.component}</OverlayBox>
+					</OverlayBackground>
+				);
+			}}
+		</Context.Consumer>
 	);
 };
 
