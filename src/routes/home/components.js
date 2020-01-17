@@ -120,12 +120,12 @@ const OverlayBox = styled.div`
 export const Overlay = () => {
 	return (
 		<Context.Consumer>
-			{({ overlay }) => {
+			{({ context }) => {
 				return (
 					<OverlayBackground
-						style={{ display: overlay.visible ? 'flex' : 'none' }}
+						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
 					>
-						<OverlayBox>{overlay.component}</OverlayBox>
+						<OverlayBox>{context.overlay.component}</OverlayBox>
 					</OverlayBackground>
 				);
 			}}
