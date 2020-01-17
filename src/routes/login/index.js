@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect, useContext} from 'react';
 import './style.css';
 import {withRouter} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
@@ -6,6 +6,7 @@ import {useCookies} from 'react-cookie';
 import logo from '../../assets/logo.png';
 import login from '../../functions';
 import loading from '../../assets/loading.gif';
+import { Context } from '../../context';
 
 const Home = props =>{
 	const {history} = props;
@@ -19,6 +20,8 @@ const Home = props =>{
 	const [isLoading, setIsLoading] = useState(false);
 	const [isShowing, setIsShowing] = useState(false);
 	const [handler, setHandler] = useState({});
+
+	const state = useContext(Context);
 
 	useEffect(() => {
 		setIsLoading(false);

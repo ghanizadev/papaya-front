@@ -5,7 +5,7 @@ import {
 	SideBar,
 	Header,
 	SubHeader,
-	Button,
+	SidebarButton,
 	Container,
 	Overlay
 } from './components';
@@ -25,7 +25,6 @@ const Home = props => {
 
 	const updateUser = () => {
 		if (cookies.authorization) {
-			//TODO pegar info do usuario no banco
 			const decoded = jwtDecode(cookies.authorization.access_token);
 			const email = decoded.email;
 
@@ -86,12 +85,12 @@ const Home = props => {
 				</Header>
 				<SubHeader />
 				<SideBar>
-					<Button onClick={() => setPage('orders')}>Pedidos</Button>
-					<Button>Clientes</Button>
-					<Button onClick={() => setPage('products')}>Produtos</Button>
-					<Button>Fornecedores</Button>
-					<Button>Gerenciamento</Button>
-					<Button>Configurações</Button>
+					<SidebarButton onClick={() => setPage('orders')}>Pedidos</SidebarButton>
+					<SidebarButton>Clientes</SidebarButton>
+					<SidebarButton onClick={() => setPage('products')}>Produtos</SidebarButton>
+					<SidebarButton>Fornecedores</SidebarButton>
+					<SidebarButton>Gerenciamento</SidebarButton>
+					<SidebarButton>Configurações</SidebarButton>
 				</SideBar>
 				<Logo />
 				<Container>{getCurrentPage()}</Container>

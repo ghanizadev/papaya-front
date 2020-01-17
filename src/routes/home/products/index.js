@@ -2,7 +2,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Context} from '../../../context';
 import {find, save} from './functions';
-import {Results, Container, Header, Input, Select, Button} from './components';
+import {Results, ContentContainer, ContentHeader, Input, Select, Button} from '../components';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
 import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
@@ -11,11 +11,7 @@ import 'react-tabs/style/react-tabs.css';
 const ProductInterface = props => {
 	const [cookies] = useCookies('authorization');
 	const [data, setData] = useState([]);
-	const state = useContext(Context);
 	const history = useHistory();
-	const [selectedGroup, setSelectedGroup] = useState('1');
-	const [selectedSubgroup, setSelectedSubgroup] = useState('01');
-	const [selectedVariation, setSelectedVariation] = useState('00');
 	const [body, setBody] = useState({
 		code: 0,
 		price: 0,
@@ -26,7 +22,8 @@ const ProductInterface = props => {
 		variation: '00'
 	});
 
-	if(data.length === 0 && cookies.authorization)
+	useEffect(()=> {
+		if(data.length === 0 && cookies.authorization)
 		find(cookies.authorization.access_token)
 			.then(response => {
 				if(response.status === 200){
@@ -37,12 +34,9 @@ const ProductInterface = props => {
 					window.alert('Você não tem permissão para cessar este conteúdo');
 				}
 			});
-	else if (!cookies.authorization) history.push('/');
+		else if (!cookies.authorization) history.push('/');
 
-	useEffect(() => {
-		setBody({...body, ref: `${selectedGroup}${selectedSubgroup}${selectedVariation}` });
-	}, [selectedGroup, selectedSubgroup, selectedVariation]);
-
+	}, [])
 	const subgroups = {
 		'1': {
 			'01': 'AGUA 500ML/600ML',
@@ -150,8 +144,8 @@ const ProductInterface = props => {
 	];
 
 	return (
-		<Container>
-			<Header>Produtos</Header>
+		<ContentContainer>
+			<ContentHeader>Produtos</ContentHeader>
 			
 			<Tabs>
 				<TabList>
@@ -268,7 +262,7 @@ const ProductInterface = props => {
 					</div>
 				</TabPanel>
 			</Tabs>
-		</Container>
+		</ContentContainer>
 	);
 };
 
