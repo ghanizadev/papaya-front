@@ -595,33 +595,51 @@ const ProductDescription = props => {
 
 const ProductDescriptionCustomer = props => {
 	const {items, name} = props.customer;
+	const [list, setList] = useState([]);
 
 	const state = useContext(Context);
 	return (
 		<div style={{width: '100%', position: 'relative', padding: 25, boxSizing: 'border-box'}}>
-			<h1>{name}</h1>
-			<h4>Produtos</h4>
+			<p style={{fontSize: 24, color: '#333', fontWeight:  'bold'}}>{name}</p>
+			<p style={{fontSize: 18, color: '#666', fontWeight:  'bold'}}>Produtos</p>
 			<div style={{display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh'}}>
 				{items && items.map((product, index) => (
 					<div key={index}
-					onClick={() => {console.log(product)}}
 					style={{
 							border: '1px solid whitesmoke',
 							margin: 8,
 							borderRadius: 5,
 							padding: 15,
 						}}>
+						<span style={{fontSize: 16, display: 'flex', color: '#444', fontWeight:  'bold', alignItems: 'center'}}>
+							<input
+								onClick={() => {
+									console.log(list)
+									const tmp = list;
 
-						<h5>{product.title}</h5>
+									if(list.includes(product)){
+										tmp.pop(product);
+										setList(tmp)
+										return;
+									}
+									tmp.push(product);
+									setList(tmp);
+									return;
+
+									}} type="checkbox"/>
+							{product.title}
+						</span>
 						<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-							<span>Descrição: {product.description.toString()}, adicionais: {product.aditionals}</span>
-							<span>R$ {product.price.toFixed(2).toString().replace('.', ',')}</span>
+							<span style={{fontSize: 12, color: '#888', fontWeight:  'bold'}}>Descrição: {product.description.toString()}, adicionais: {product.aditionals}</span>
+							<span style={{fontSize: 20, color: '#1ad67e', fontWeight:  'bold'}}>R$ {product.price.toFixed(2).toString().replace('.', ',')}</span>
 						</div>
 					</div>
 				))}
 			</div>
-			<Button>Pagar total</Button>
-			<Button>Descontar</Button>
+			<div style={{width: '100%', display: 'flex', flexDirection: "row", justifyContent: 'flex-end', marginTop: 15}}>
+				<Button>Descontar</Button>
+				<Button>Pagar total</Button>
+			</div>
 			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
 		</div>
 	);
@@ -1257,7 +1275,7 @@ const BusyTableProductCustomer = props => {
 				style={{
 					textAlign: 'end',
 					marginVertical: 3,
-					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#aaa',
+					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
 					fontSize: '12pt'
 				}}
 				>
@@ -1268,7 +1286,7 @@ const BusyTableProductCustomer = props => {
 				style={{
 					textAlign: 'end',
 					marginVertical: 3,
-					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#aaa'
+					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888'
 				}}
 				>
 				{`un R$ ${price
@@ -1291,9 +1309,10 @@ BusyTableProduct.propTypes = {
 };
 
 const BusyTable = props => {
-	const { load, owners } = props;
+	const { load } = props;
 
 	const state = useContext(Context);
+	const [owners, setOwners] = useState(false);
 
 	let customers = {};
 	load.order.items.forEach( item => {
@@ -1320,6 +1339,7 @@ const BusyTable = props => {
 			<h2 style={{ color: '#888', height: 'min-content' }}>
 				{load.number}.{load.order.costumer}
 			</h2>
+			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
 			<BusyTableProductContainer>
 				{owners ? 
 				Object.keys(customers).map((customer, index) => (
