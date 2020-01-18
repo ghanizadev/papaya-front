@@ -1,5 +1,4 @@
 import React, {useRef, useState, useEffect, useContext} from 'react';
-import './style.css';
 import {withRouter} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 
@@ -7,16 +6,17 @@ import logo from '../../assets/logo.png';
 import login from '../../functions';
 import loading from '../../assets/loading.gif';
 import { Context } from '../../context';
+import { LoginHolder, Loading, MessageBox, Input, LoadingMessage, LoadingTitle, Button} from '../components';
 
 const Home = props =>{
 	const {history} = props;
 	const [cookies, setCookie] = useCookies('authorization');
 
-	const username = useRef();
-	const password = useRef();
+	const [username, setUsername] = useState();
+	const [password, setPassword] = useState();
 	const closeButton = useRef();
   
-	const [message, setMessage] = useState('Carregando...');
+	const [message, setMessage] = useState({title: '', description: ''});
 	const [isLoading, setIsLoading] = useState(false);
 	const [isShowing, setIsShowing] = useState(false);
 	const [handler, setHandler] = useState({});
@@ -34,46 +34,51 @@ const Home = props =>{
 				history.push('/home');
 				break;
 			case 403:
-				closeButton.current.focus();
-				setMessage('Usuário ou senha incorretos, por favor, tente novamente');
+				setMessage({title: 'Autenticação', description: 'Usuário ou senha incorretos, por favor, tente novamente'});
+				console.log(username, password)
 				break;
 			default: 
 				closeButton.current.focus();
-				setMessage('Erro desconhecido, por favor, entre em contato com o administrador');
+				setMessage({title: 'Erro desconhecido', description:'por favor, entre em contato com o administrador'});
 				break;
 			}
 		}
 	}, [handler, history, setCookie]);
 
 	return (
-		<div className="App">
-			<form id="login-holder">
+		<div style={{
+			height: '100vh',
+			width: '100vw',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			}}>
+			<LoginHolder>
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
-				<input defaultValue="jf.melo6@gmail.com" type="email" ref={username} placeholder="e-mail" onKeyPress={e=>{
-					if (e.key === 'Enter') password.current.focus();
-				}}/>
-				<input defaultValue="tr4df2g5wp" type="password" ref={password} placeholder="senha" onKeyPress={e=>{
+				<Input type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
+				<Input type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
 					if (e.key === 'Enter') {
 						e.preventDefault();
-						login(username.current.value, password.current.value, e => {
+						login(username, password, e => {
 							setHandler(e);
 						});
 						setIsShowing(true);
 						setIsLoading(true);
 					}
 				}}/>
-				<input type="submit" value="Entrar" onClick={(e) => {
+				<Button onClick={(e) => {
 					e.preventDefault();
-					login(username.current.value, password.current.value, e => {
+					login(username, password, e => {
 						setHandler(e);
 					});
 					setIsShowing(true);
 					setIsLoading(true);
-				}}/>
-			</form>
-			<div id="loading" style={{display: isShowing ? 'flex' : 'none'}}>
-				<div id="message-box">
-					<span id="loading-message">{message}</span>
+				}}>Entrar</Button>
+			</LoginHolder>
+			<Loading style={{display: isShowing ? 'flex' : 'none'}}>
+				<MessageBox>
+					<LoadingTitle>{message.title}</LoadingTitle>
+					<LoadingMessage>{message.description}</LoadingMessage>
 					<img id="loading-gif" alt="Loading gif" src={loading} height={40} width={40} style={{marginTop: 10, display: isLoading ? 'block' : 'none'}} />
 					<input ref={closeButton} style={{display: isLoading ? 'none' : 'block', height: 25, width: 'min-content'}} type="button" value="Fechar" onClick={
 						(e)=>{
@@ -81,8 +86,8 @@ const Home = props =>{
 							setIsShowing(false);
 						}
 					}/>
-				</div>
-			</div>
+				</MessageBox>
+			</Loading>
 		</div>);
 };
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Tables, Header, Table, ScrollView} from './components';
-import {findAllTables} from './components/functions';
+import { Tables, Header, Table, ScrollView} from '../components';
+import {findAllTables} from '../components/functions';
 import {Context, Consumer} from '../../context';
 import io from 'socket.io-client';
 
@@ -14,7 +14,7 @@ const TablesContainer = () => {
 				state.setContext({...state.context, serverData: result.data });
 			})
 			.catch(error => {
-				console(error);
+				console.log(error);
 			});
 
 		const socket = io.connect(process.env.REACT_APP_API);
@@ -31,8 +31,8 @@ const TablesContainer = () => {
 
 	return (
 		<Consumer>
-			{({context}) => (<Tables>
-				<Header>Mesas</Header>
+			{({context}) => (
+			<Tables>
 				<ScrollView>
 					{context.serverData && context.serverData.map((table, index) => <Table key={index} load={table} />) }
 					<div style={{minWidth: 7}} />

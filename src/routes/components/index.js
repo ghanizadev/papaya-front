@@ -2,36 +2,67 @@ import React, { useContext, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
-import { Context} from '../../../context';
+import { Context} from '../../context';
 import { findFlavor, addProduct } from './functions';
 
+import logo from '../../assets/logo.png';
+
+export const MessageBox = styled.div`
+	width: 30%;
+	height: min-content;
+	border-radius: 7px;
+	background-color: #fff;
+	border: none;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+`;
+
+export const Loading = styled.div`
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.35);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+export const LoadingMessage = styled.span`
+	font-size: 14pt;
+	color: #333;
+`;
+
+export const LoadingTitle = styled.span`
+	font-size: 11pt;
+	color: #444;
+`;
+
+
+export const LoginHolder = styled.div`
+	height: 45vh;
+	width: 45vh;
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 15px;
+	opacity: 1;
+`;
+
 export const Tables = styled.div`
-	padding: 65px 25px 25px 25px;
+	padding: 25px;
 	position: relative;
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-`;
-
-export const Header = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	height: 40px;
-	max-height: 40px;
-	background-color: #ffbe5b;
-	box-sizing: border-box;
-	padding: 0 15px;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	font-size: 14pt;
-	border-radius: 5px 5px 0 0;
-	color: #fdfdfd;
 `;
 
 const TableContainer = styled.div`
@@ -196,6 +227,351 @@ const CloseButton = styled.button`
 	top: 0;
 	right: 0;
 `;
+
+export const Background = styled.div`
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	padding: calc(5.25vw + 45px) 45px 45px calc(18vw + 45px);
+	box-sizing: border-box;
+`;
+
+export const Logo = styled.div`
+	background-image: url(${logo});
+	background-size: 75%;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 25px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 12vw;
+	width: 18vw;
+	box-sizing: border-box;
+`;
+
+export const Header = styled.div`
+	height: 3.5vw;
+	color: #fff;
+	background-color: #ffbe5b;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0 25px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 0 0 18vw;
+	justify-content: space-between;
+`;
+
+export const SubHeader = styled.div`
+	height: 1.75vw;
+	color: #fff;
+	background-color: #f1f1f1;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0 25px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 3.5vw 0 0 18vw;
+	justify-content: flex-start;
+`;
+
+export const SideBar = styled.div`
+	width: 18vw;
+	padding: calc(12vw + 25px) 0 25px 0;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	box-sizing: border-box;
+	background-color: #fff;
+`;
+
+export const SidebarButton = styled.button`
+	width: 100%;
+	height: 58px;
+	font-size: 18pt;
+	color: #fdfdfd;
+	background-color: #ffbe5b;
+	text-align: center;
+	padding: 5px;
+	border: 0.25px solid #dcdcdc;
+`;
+
+export const Container = styled.div`
+	height: 100%;
+	width: 100%;
+	border-radius: 5px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+`;
+
+const OverlayBackground = styled.div`
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.35);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+const OverlayBox = styled.div`
+	min-width: 50%;
+	width: 50%;
+	height: min-content;
+	border-radius: 7px;
+	background-color: #fff;
+	border: none;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+`;
+
+const InputContainer = styled.div`
+	max-height: 30px;
+    min-height: 30px;
+    border: .5px solid lightgray;
+    border-radius: 5px;
+    padding: 3px 5px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 5px;
+`;
+
+const TextAreaContainer = styled.div`
+    height: 100px;
+    border: .5px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 5px;
+`;
+
+const InputLabel = styled.span`
+    color: gray;
+    white-space: nowrap
+`;
+
+const ButtonComponent = styled.button`
+    height: 30px;
+    border: none;
+    width: 120px;
+    margin: 0 0 0 5px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    background-color: #ed9140;
+`;
+
+const InputComponent = styled.input`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+    background-color: transparent;
+`;
+
+const TextAreaComponent = styled.textarea`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+	background-color: transparent;
+	padding: 3px;
+	resize: none;
+`;
+
+const SelectComponent = styled.select`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+    background-color: transparent;
+`;
+
+export const ContentHeader = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 40px;
+	max-height: 40px;
+	background-color: #ffbe5b;
+	box-sizing: border-box;
+	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	font-size: 14pt;
+	border-radius: 5px 5px 0 0;
+	color: #fdfdfd;
+`;
+
+export const ContentContainer = styled.div`
+    padding: 65px 25px 25px 25px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ResultsTable = styled.table`
+    margin: 5px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+`;
+
+const ResultsContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 5px;
+    box-sizing: border-box;
+    overflow: hidden scroll;
+    position: relative;
+
+`;
+
+export const Results = props => {
+	return (
+		<ResultsContainer>
+			<ResultsTable>
+				<tr style={{backgroundColor: '#ed9140', color: 'white'}}>
+					<th>Código</th>
+					<th>Nome</th>
+					<th>Descrição</th>
+					<th>Unidade</th>
+					<th>Preço</th>
+				</tr>
+				{props && props.data.map((item, index) => {
+					return (
+						<tr style={{backgroundColor: index & 1 ? 'whitesmoke': 'white', color: '#444'}} key={index}>
+							<td style={{textAlign: 'center'}}>{item.code}</td>
+							<td style={{textAlign: 'center'}}>{item.name}</td>
+							<td style={{textAlign: 'center'}}>{item.description}</td>
+							<td style={{textAlign: 'center'}}>{item.unity}</td>
+							<td style={{textAlign: 'center'}}>{`R$ ${item.price.toFixed(2).toString().replace('.', ',')}`}</td>
+						</tr>
+					);
+				})}
+			</ResultsTable>
+		</ResultsContainer>
+	);
+};
+
+export const Input = props => {
+	const {label, containerStyle, disabled, proportion} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<InputComponent {...props} />
+		</InputContainer>
+	);
+};
+
+export const TextArea = props => {
+	const {label, containerStyle, disabled, proportion} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<TextAreaContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<TextAreaComponent draggable={false} {...props} />
+		</TextAreaContainer>
+	);
+};
+
+export const Select = props => {
+	const {label, children, containerStyle, proportion} = props;
+
+	const currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel>{label}</InputLabel>
+			<SelectComponent {...props}>{children}</SelectComponent>
+		</InputContainer>
+	);
+};
+
+export const Button = props => {
+	return (
+		<ButtonComponent {...props} />
+	);
+};
+
+export const Overlay = () => {
+	return (
+		<Context.Consumer>
+			{({ context }) => {
+				return (
+					<OverlayBackground
+						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
+					>
+						<OverlayBox>{context.overlay.component}</OverlayBox>
+					</OverlayBackground>
+				);
+			}}
+		</Context.Consumer>
+	);
+};
+
+Results.propTypes = {
+	data: PropTypes.arrayOf(PropTypes.object)
+};
+
+Input.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	proportion: PropTypes.number,
+	multiline: PropTypes.bool
+};
+
+Input.defaultProps = {
+	proportion: 0,
+	multiline: false,
+}
+
+Select.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	children: PropTypes.any
+};
 
 const ProductDescription = props => {
 	const {product} = props;
@@ -785,7 +1161,7 @@ const BusyTableProduct = props => {
 		<BusyTableProductButton
 			style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
 			onClick={() => {
-				state.setContext({...state.ontext, overlay: { visible: true, component: <ProductDescription {...props}/>}});
+				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescription {...props}/>}});
 			}}
 		>
 			<span
@@ -821,10 +1197,80 @@ BusyTableProduct.propTypes = {
 	product: PropTypes.object.isRequired
 };
 
-const BusyTable = props => {
-	const { load } = props;
+const BusyTableProductCustomer = props => {
+	const { items, name} = props.customer;
 
 	const state = useContext(Context);
+
+	return (
+		<BusyTableProductButton
+			onClick={() => {
+				//state.setContext({...state.context, overlay: { visible: true, component: <ProductDescription product={{}} />}});
+			}}
+		>
+			<span
+				style={{
+					textAlign: 'start',
+					color: '#444',
+					marginVertical: 3
+				}}
+			>
+				{name}
+			</span>
+			{items && items.map(({quantity, title, price, subtotal}, index) => (
+				<div key={index} style={{width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
+				<span
+				style={{
+					textAlign: 'end',
+					marginVertical: 3,
+					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#aaa',
+					fontSize: '12pt'
+				}}
+				>
+				{`${quantity}x ${title}`}
+				</span>
+				<br/>
+				<span
+				style={{
+					textAlign: 'end',
+					marginVertical: 3,
+					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#aaa'
+				}}
+				>
+				{`un R$ ${price
+					.toFixed(2)
+					.toString()
+					.replace('.', ',')}
+				=> sub R$ ${subtotal
+				.toFixed(2)
+				.toString()
+				.replace('.', ',')}`}
+				</span>
+				</div>
+			))}
+		</BusyTableProductButton>
+	);
+};
+
+BusyTableProduct.propTypes = {
+	product: PropTypes.object.isRequired
+};
+
+const BusyTable = props => {
+	const { load, owners } = props;
+
+	const state = useContext(Context);
+
+	let customers = {};
+	load.order.items.forEach( item => {
+		const keys = Object.keys(customers);
+
+		if (keys.includes(item.owner)){
+			customers[item.owner].push(item);
+		}else {
+			customers[item.owner] = [item];
+		}
+	})
 
 	return (
 		<div
@@ -841,7 +1287,15 @@ const BusyTable = props => {
 				{load.number}.{load.order.costumer}
 			</h2>
 			<BusyTableProductContainer>
-				{load.order.items.map((product, index) => (
+				{owners ? 
+				Object.keys(customers).map((customer, index) => (
+					<BusyTableProductCustomer
+						key={index}
+						customer={{ items: customers[customer], name: customer}}
+					/>
+				))
+				:
+				load.order.items.map((product, index) => (
 					<BusyTableProduct
 						key={index}
 						product={product}
@@ -903,7 +1357,12 @@ const BusyTable = props => {
 };
 
 BusyTable.propTypes = {
-	load: PropTypes.object.isRequired
+	load: PropTypes.object.isRequired,
+	owners: PropTypes.bool,
+};
+
+BusyTable.defaultProps = {
+	owners: false,
 };
 
 const FreeTable = props => (
@@ -914,6 +1373,6 @@ const FreeTable = props => (
 
 export const Table = props => (
 	<TableContainer>
-		<BusyTable {...props} />
+		<BusyTable owners {...props} />
 	</TableContainer>
 );

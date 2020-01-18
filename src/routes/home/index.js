@@ -20,7 +20,7 @@ import Axios from 'axios';
 
 const Home = props => {
 	const [user, setUser] = useState('Jean');
-	const [page, setPage] = useState('Jean');
+	const [page, setPage] = useState('Mesas');
 	const [cookies, setCookies, removeCookies] = useCookies('authorization');
 	const history = useHistory();
 
@@ -51,12 +51,12 @@ const Home = props => {
 	const state = useContext(Context);
 
 	const getCurrentPage = () => {
-		switch (page) {
-		case 'orders':
+		switch (page.toLowerCase()) {
+		case 'pedidos':
 			return <Tables />;
-		case 'products':
+		case 'produtos':
 			return <ProductInterface />;
-		case 'providers':
+		case 'fornecedores':
 			return <ProviderInterface />;
 		default:
 			return <Tables />;
@@ -67,9 +67,8 @@ const Home = props => {
 		<Provider>
 			<Background>
 				<Header>
-					<div style={{ display: 'flex', flexDirection: 'row' }}>
-						<h3 style={{ marginRight: 15 }}>La Solana</h3>
-						<h4>Central de gerenciamento</h4>
+					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+						<h3 style={{ marginRight: 15 }}>{page}</h3>
 					</div>
 					<div>
 						<span>
@@ -88,10 +87,10 @@ const Home = props => {
 				</Header>
 				<SubHeader />
 				<SideBar>
-					<SidebarButton onClick={() => setPage('orders')}>Pedidos</SidebarButton>
+					<SidebarButton onClick={() => setPage('Pedidos')}>Pedidos</SidebarButton>
 					<SidebarButton>Clientes</SidebarButton>
-					<SidebarButton onClick={() => setPage('products')}>Produtos</SidebarButton>
-					<SidebarButton onClick={() => setPage('providers')}>Fornecedores</SidebarButton>
+					<SidebarButton onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
+					<SidebarButton onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>
 					<SidebarButton>Gerenciamento</SidebarButton>
 					<SidebarButton>Configurações</SidebarButton>
 				</SideBar>
