@@ -593,6 +593,40 @@ const ProductDescription = props => {
 	);
 };
 
+const ProductDescriptionCustomer = props => {
+	const {items, name} = props.customer;
+
+	const state = useContext(Context);
+	return (
+		<div style={{width: '100%', position: 'relative', padding: 25, boxSizing: 'border-box'}}>
+			<h1>{name}</h1>
+			<h4>Produtos</h4>
+			<div style={{display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh'}}>
+				{items && items.map((product, index) => (
+					<div key={index}
+					onClick={() => {console.log(product)}}
+					style={{
+							border: '1px solid whitesmoke',
+							margin: 8,
+							borderRadius: 5,
+							padding: 15,
+						}}>
+
+						<h5>{product.title}</h5>
+						<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+							<span>Descrição: {product.description.toString()}, adicionais: {product.aditionals}</span>
+							<span>R$ {product.price.toFixed(2).toString().replace('.', ',')}</span>
+						</div>
+					</div>
+				))}
+			</div>
+			<Button>Pagar total</Button>
+			<Button>Descontar</Button>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
+		</div>
+	);
+};
+
 const TableDescription = props => {
 	const {order} = props;
 
@@ -1205,7 +1239,7 @@ const BusyTableProductCustomer = props => {
 	return (
 		<BusyTableProductButton
 			onClick={() => {
-				//state.setContext({...state.context, overlay: { visible: true, component: <ProductDescription product={{}} />}});
+				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} />}});
 			}}
 		>
 			<span
