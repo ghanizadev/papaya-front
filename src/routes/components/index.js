@@ -468,45 +468,91 @@ export const ContentContainer = styled.div`
     flex-direction: column;
 `;
 
-const ResultsTable = styled.table`
-    margin: 5px;
-    box-sizing: border-box;
+const ResultsTable = styled.div`
+	box-sizing: border-box;
     width: 100%;
-    height: 100%;
+	height: 100%;
+	padding: 40px 0 0 0;
+	overflow: hidden auto;
 `;
 
 const ResultsContainer = styled.div`
-    width: 100%;
-    height: 100%;
+	width: 100%;
+    flex: 1;
     border: 1px solid gray;
     border-radius: 5px;
     margin: 5px;
     box-sizing: border-box;
-    overflow: hidden scroll;
     position: relative;
 
 `;
 
 export const Results = props => {
+	const {data, headerOptions} = props;
+	const [headerItems, setHeaderItems] = useState([]);
+	const [parentHeight, setParentHeight] = useState(500)
+
+	const resulttable = useRef();
+	const parent = useRef();
+
+	useEffect(()=>{
+		const keys = Object.keys(headerOptions);
+
+		let total = 0;
+		keys.forEach(key => {
+			total += headerOptions[key].size;
+		})
+
+		const localHeaderItems = headerItems;
+
+		keys.forEach(key => {
+			const headerItem = {};
+
+			headerItem.label = headerOptions[key].label;
+			headerItem.key = key;
+			headerItem.width = (resulttable.current.offsetWidth / total) * headerOptions[key].size;
+			localHeaderItems.push(headerItem);
+		})
+
+		setHeaderItems(localHeaderItems);
+		setParentHeight(parent.current.offsetHeight);
+
+	},[]);
+
 	return (
-		<ResultsContainer>
-			<ResultsTable>
-				<tr style={{backgroundColor: '#ed9140', color: 'white'}}>
-					<th>Código</th>
-					<th>Nome</th>
-					<th>Descrição</th>
-					<th>Unidade</th>
-					<th>Preço</th>
-				</tr>
-				{props && props.data.map((item, index) => {
+		<ResultsContainer ref={parent}>
+			<div
+			style={{
+					backgroundColor: '#ed9140',
+					color: 'white',
+					position: 'absolute',
+					textAlign: "center",
+					alignItems: 'center',
+					top: 0,
+					right: 0,
+					left: 0,
+					height: 42,
+					display: 'flex',
+					flexDirection: 'row'
+				}}>
+				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
+			</div>
+			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight}}>
+				{data && data.map((item, index) => {
 					return (
-						<tr style={{backgroundColor: index & 1 ? 'whitesmoke': 'white', color: '#444'}} key={index}>
-							<td style={{textAlign: 'center'}}>{item.code}</td>
-							<td style={{textAlign: 'center'}}>{item.name}</td>
-							<td style={{textAlign: 'center'}}>{item.description}</td>
-							<td style={{textAlign: 'center'}}>{item.unity}</td>
-							<td style={{textAlign: 'center'}}>{`R$ ${item.price.toFixed(2).toString().replace('.', ',')}`}</td>
-						</tr>
+						<div style={{
+							backgroundColor: index & 1 ? 'whitesmoke': 'white',
+							color: '#444',
+							display: 'flex',
+							flexDirection: 'row',
+							height: 30
+							}} key={index}>
+							{headerItems && headerItems.map(headerItem => 
+								<div style={{textAlign: 'center', width: headerItem.width || null}}>
+									{headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
+								</div>
+							)}
+						</div>
 					);
 				})}
 			</ResultsTable>
