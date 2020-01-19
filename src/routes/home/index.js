@@ -11,7 +11,11 @@ import {
 } from './components';
 import ProductInterface from './products';
 import ProviderInterface from './providers';
-import Tables from '../tables';
+import DeliveryInterface from './deliveries';
+import TablesInterface from './tables';
+import SettingsInterface from './settings';
+import ManagementInterface from './management';
+import ClientsInterface from './clients';
 import { Context, Provider } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
@@ -20,7 +24,7 @@ import Axios from 'axios';
 
 const Home = props => {
 	const [user, setUser] = useState('Jean');
-	const [page, setPage] = useState('Mesas');
+	const [page, setPage] = useState('Pedidos');
 	const [cookies, setCookies, removeCookies] = useCookies('authorization');
 	const history = useHistory();
 
@@ -53,13 +57,21 @@ const Home = props => {
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {
 		case 'pedidos':
-			return <Tables />;
+			return <TablesInterface />;
 		case 'produtos':
 			return <ProductInterface />;
 		case 'fornecedores':
 			return <ProviderInterface />;
+		case 'clientes':
+			return <ClientsInterface />;
+		case 'configurações':
+			return <SettingsInterface />;
+		case 'gerenciamento':
+			return <ManagementInterface />;
+		case 'entregas':
+			return <DeliveryInterface />;
 		default:
-			return <Tables />;
+			return <TablesInterface />;
 		}
 	};
 
@@ -68,7 +80,7 @@ const Home = props => {
 			<Background>
 				<Header>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-						<h3 style={{ marginRight: 15 }}>{page}</h3>
+						<h1 style={{ marginRight: 15 }}>{page}</h1>
 					</div>
 					<div>
 						<span>
@@ -87,12 +99,13 @@ const Home = props => {
 				</Header>
 				<SubHeader />
 				<SideBar>
-					<SidebarButton onClick={() => setPage('Pedidos')}>Pedidos</SidebarButton>
-					<SidebarButton>Clientes</SidebarButton>
-					<SidebarButton onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
-					<SidebarButton onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>
-					<SidebarButton>Gerenciamento</SidebarButton>
-					<SidebarButton>Configurações</SidebarButton>
+					<SidebarButton selected={page === 'Pedidos'} onClick={() => setPage('Pedidos')}>Pedidos</SidebarButton>
+					<SidebarButton selected={page === 'Entregas'} onClick={() => setPage('Entregas')}>Entregas</SidebarButton>
+					<SidebarButton selected={page === 'Clientes'} onClick={() => setPage('Clientes')}>Clientes</SidebarButton>
+					<SidebarButton selected={page === 'Produtos'} onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
+					<SidebarButton selected={page === 'Fornecedores'} onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>
+					<SidebarButton selected={page === 'Gerenciamento'} onClick={() => setPage('Gerenciamento')}>Gerenciamento</SidebarButton>
+					<SidebarButton selected={page === 'Configurações'} onClick={() => setPage('Configurações')}>Configurações</SidebarButton>
 				</SideBar>
 				<Logo />
 				<Container>{getCurrentPage()}</Container>

@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Tables, Header, Table, ScrollView} from '../components';
-import {findAllTables} from '../components/functions';
-import {Context, Consumer} from '../../context';
+import { Tables, Header, Table, ScrollView} from '../../components';
+import {findAllTables} from '../../components/functions';
+import {Context, Consumer} from '../../../context';
 import io from 'socket.io-client';
 
-const TablesContainer = () => {
+const TablesInterface = () => {
 
 	const state = useContext(Context);
 
@@ -42,4 +42,4 @@ const TablesContainer = () => {
 	);
 };
 
-export default TablesContainer;
+export default TablesInterface;

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
@@ -373,6 +373,35 @@ const InputLabel = styled.span`
     white-space: nowrap
 `;
 
+const InputItemContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 0;
+	margin: 36px 0 0 0;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 4px 10px 0 rgba(0,0,0,0.12);
+`;
+
+const InputItem = styled.button`
+	width: 100%;
+	height: 30px;
+	color: #444;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	background-color: #fbfbfb;
+	border: .25px solid whitesmoke;
+	padding: 5px;
+	box-sizing: border-box;
+
+	&:hover{
+		background-color: #ffbe5b;
+		color: #fbfbfb;
+	}
+`;
+
 const ButtonComponent = styled.button`
     height: 30px;
     border: none;
@@ -498,6 +527,61 @@ export const Input = props => {
 		</InputContainer>
 	);
 };
+
+export const Search = props => {
+	const {label, containerStyle, disabled, proportion, data} = props;
+	const [visible, setVisible] = useState(false);
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+	currentContainerStyle.position = 'relative';
+
+	const ref = useRef(null);
+	const inputRef = useRef(null);
+
+	useEffect(() => {
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+		  document.removeEventListener("mousedown", handleClickOutside);
+		};
+	  });
+
+	function handleClickOutside(event) {
+		if (ref.current &&
+			inputRef.current &&
+			(!ref.current.contains(event.target) &&
+			!inputRef.current.contains(event.target))){
+			setVisible(false);
+		}
+	}
+	  
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<InputComponent
+			ref={inputRef}
+			onChange={e => {
+				if (e.target.value !== '')
+					return setVisible(true);
+				return;
+				}} {...props} />
+			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
+				{data && data.map((item, index) => (
+					<InputItem key={index} onClick={() => {props.onSelect(item); setVisible(false);}}>{item}</InputItem>
+				))}
+			</InputItemContainer>
+		</InputContainer>
+	);
+};
+
+Search.propTypes = {
+	onSelect: PropTypes.func
+}
+
+Search.defaultProps = {
+	onSelect: () => {}
+}
 
 export const TextArea = props => {
 	const {label, containerStyle, disabled, proportion} = props;

@@ -75,7 +75,7 @@ export const SideBar = styled.div`
 	background-color: #fff;
 `;
 
-export const SidebarButton = styled.button`
+export const SidebarButtonContainer = styled.button`
 	width: 100%;
 	height: 58px;
 	font-size: 18pt;
@@ -86,10 +86,21 @@ export const SidebarButton = styled.button`
 	border: 0.25px solid #dcdcdc;
 `;
 
+export const SidebarButton = props => {
+	const {selected} = props;
+	return (
+		<SidebarButtonContainer style={{
+			color: selected ? '#ffbe5b' : '#fdfdfd',
+			backgroundColor: selected ? '#fdfdfd' : '#ffbe5b',
+		}} {...props} />
+	);
+}
+
 export const Container = styled.div`
 	height: 100%;
 	width: 100%;
 	border-radius: 5px;
+	position: relative;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
 `;
 
