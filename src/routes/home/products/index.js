@@ -605,7 +605,7 @@ const ProductInterface = props => {
 				<Results data={dataMock} headerOptions={headerOptions}/>
 			</TabPanel>
 			<TabPanel style={{padding: 25}}>
-				<div style={{width: '100%', display: 'flex', margin:'auto', flexDirection: 'column'}}>
+				<div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
 					<h3>Produto</h3>
 					<div style={{display: 'flex', flexDirection: 'row'}}>
 						<Input label='Código' placeholder="00000000000"  size={13} onChange={e => { setBody({...body, code: e.target.value}); }} />

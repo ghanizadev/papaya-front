@@ -16,6 +16,7 @@ import TablesInterface from './tables';
 import SettingsInterface from './settings';
 import ManagementInterface from './management';
 import ClientsInterface from './clients';
+import WaitingListInterface from './waitinglist';
 import { Context, Provider } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
@@ -24,7 +25,7 @@ import Axios from 'axios';
 
 const Home = props => {
 	const [user, setUser] = useState('Jean');
-	const [page, setPage] = useState('Pedidos');
+	const [page, setPage] = useState('Mesas');
 	const [cookies, setCookies, removeCookies] = useCookies('authorization');
 	const history = useHistory();
 
@@ -56,7 +57,7 @@ const Home = props => {
 
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {
-		case 'pedidos':
+		case 'mesas':
 			return <TablesInterface />;
 		case 'produtos':
 			return <ProductInterface />;
@@ -70,6 +71,8 @@ const Home = props => {
 			return <ManagementInterface />;
 		case 'entregas':
 			return <DeliveryInterface />;
+		case 'lista de espera':
+			return <WaitingListInterface />;
 		default:
 			return <TablesInterface />;
 		}
@@ -99,8 +102,9 @@ const Home = props => {
 				</Header>
 				<SubHeader />
 				<SideBar>
-					<SidebarButton selected={page === 'Pedidos'} onClick={() => setPage('Pedidos')}>Pedidos</SidebarButton>
+					<SidebarButton selected={page === 'Mesas'} onClick={() => setPage('Mesas')}>Mesas</SidebarButton>
 					<SidebarButton selected={page === 'Entregas'} onClick={() => setPage('Entregas')}>Entregas</SidebarButton>
+					<SidebarButton selected={page === 'Lista de espera'} onClick={() => setPage('Lista de espera')}>Lista de espera</SidebarButton>
 					<SidebarButton selected={page === 'Clientes'} onClick={() => setPage('Clientes')}>Clientes</SidebarButton>
 					<SidebarButton selected={page === 'Produtos'} onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
 					<SidebarButton selected={page === 'Fornecedores'} onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>

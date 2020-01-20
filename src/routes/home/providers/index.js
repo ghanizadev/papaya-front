@@ -33,7 +33,7 @@ const ProviderInterface = props => {
             </TabList>
 
             <TabPanel style={{padding: 25}}>
-                <div style={{width: '100%', display: 'flex', margin:'auto', flexDirection: 'column'}}>
+                <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
                     <h3>Fornecedor</h3>
                     <div style={{display: 'flex', flexDirection: 'row'}}>
                         <Input

@@ -55,8 +55,8 @@ const Home = props =>{
 			}}>
 			<LoginHolder>
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
-				<Input type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
-				<Input type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
+				<Input label="Email" type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
+				<Input label="Senha" type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
 					if (e.key === 'Enter') {
 						e.preventDefault();
 						login(username, password, e => {

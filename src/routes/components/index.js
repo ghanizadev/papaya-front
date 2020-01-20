@@ -86,6 +86,15 @@ flex-direction: column;
     height: 100%;
 `;
 
+const WaitingPaymentTableContainer = styled.div`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	color: #666;
+`;
+
 const FreeTableContainer = styled.div`
 	min-height: 75%;
 	display: flex;
@@ -101,6 +110,16 @@ const FreeTableButtom = styled.button`
 	color: #40bd63;
 	border-bottom: 1px solid lightgreen;
 	font-size: 18pt;
+`;
+
+const WaitingPaymentTableButtom = styled.button`
+	height: min-content;
+	font-weight: bold;
+	background-color: transparent;
+	border: none;
+	color: #666;
+	border-bottom: 1px solid #666;
+	font-size: 16pt;
 `;
 
 const BusyTableProductContainer = styled.div`
@@ -607,10 +626,10 @@ export const Search = props => {
 			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
 			<InputComponent
 			ref={inputRef}
-			onChange={e => {
-				if (e.target.value !== '')
-					return setVisible(true);
-				return;
+			onKeyPress={e => {
+				if (inputRef.current.value === '')
+					return setVisible(false);
+				return setVisible(true);
 				}} {...props} />
 			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
 				{data && data.map((item, index) => (
@@ -1467,7 +1486,7 @@ const BusyTable = props => {
 			}}
 		>
 			<h2 style={{ color: '#888', height: 'min-content' }}>
-				{load.number}.{load.order.costumer}
+				{load.number}.{load.costumer}
 			</h2>
 			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
 			<BusyTableProductContainer>
@@ -1555,8 +1574,71 @@ const FreeTable = props => (
 	</FreeTableContainer>
 );
 
-export const Table = props => (
-	<TableContainer>
-		<BusyTable owners {...props} />
-	</TableContainer>
-);
+const WaitingListTable = props => {
+	const {load} = props;
+	const state = useContext(Context)
+	return (
+	<WaitingPaymentTableContainer>
+		<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+			{load.number}.{load.costumer}
+		</h2>
+		<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+			<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+			<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
+			<span>Próximo da lista</span>
+			<WaitingPaymentTableButtom>{load.order.costumer}</WaitingPaymentTableButtom>
+		</div>
+		<WaitingPaymentTableButtom
+			onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+			style={{fontSize: 12}}>
+				detalhes
+			</WaitingPaymentTableButtom>
+	</WaitingPaymentTableContainer>
+	)
+};
+
+const WaitingPaymentTable = props => {
+	const {load} = props;
+	const state = useContext(Context)
+	return (
+	<WaitingPaymentTableContainer>
+		<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+			{load.number}.{load.costumer}
+		</h2>
+		<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+			<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+			<WaitingPaymentTableButtom>Aguardando pagamento...</WaitingPaymentTableButtom>
+		</div>
+		<WaitingPaymentTableButtom
+			onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+			style={{fontSize: 12}}>
+				detalhes
+			</WaitingPaymentTableButtom>
+	</WaitingPaymentTableContainer>
+	)
+};
+
+export const Table = props => {
+	const {load} = props;
+
+	const status = () => {
+		switch(load.status){
+			case 'FREE':
+				return <FreeTable {...props} />
+			case 'BUSY':
+				return <BusyTable {...props} />
+			case 'WAITING_PAYMENT':
+				return <WaitingPaymentTable {...props} />
+			case 'ON_HOLD':
+				return <WaitingListTable {...props} />
+			default:
+				return <FreeTable {...props} />
+		}
+	}
+
+	return (
+		<TableContainer>
+			{status()}
+		</TableContainer>
+		)
+}

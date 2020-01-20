@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { Tables, Header, Table, ScrollView} from '../../components';
+import React, {useEffect, useContext} from 'react';
+import { Tables, Table, ScrollView} from '../../components';
 import {findAllTables} from '../../components/functions';
 import {Context, Consumer} from '../../../context';
 import io from 'socket.io-client';
