@@ -3,7 +3,7 @@ import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 const ManagementInterface = props => {
-    return (
+	return (
 		<Tabs>
 			<TabList>
 				<Tab>Desempenho do dia</Tab>
@@ -16,11 +16,11 @@ const ManagementInterface = props => {
 			<TabPanel style={{padding: 25}}>
 				
 			</TabPanel>
-            <TabPanel style={{padding: 25}}>
+			<TabPanel style={{padding: 25}}>
 				
-            </TabPanel>
+			</TabPanel>
 		</Tabs>
-    );
-}
+	);
+};
 
 export default ManagementInterface;

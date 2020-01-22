@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 
 const config = {
 	context: {
@@ -31,5 +32,9 @@ const Consumer = props =>
 	<Context.Consumer>
 		{props.children}
 	</Context.Consumer>;
+
+Consumer.propTypes = {
+	children: PropTypes.any.isRequired
+}
 
 export {Context, Provider, Consumer};

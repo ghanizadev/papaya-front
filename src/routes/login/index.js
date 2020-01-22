@@ -1,16 +1,18 @@
 import React, {useRef, useState, useEffect, useContext} from 'react';
 import {withRouter} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
+import PropTypes from 'prop-types';
 
 import logo from '../../assets/logo.png';
 import login from '../../functions';
 import loading from '../../assets/loading.gif';
 import { Context } from '../../context';
 import { LoginHolder, Loading, MessageBox, Input, LoadingMessage, LoadingTitle, Button} from '../components';
+import { fetchTables } from './functions';
 
 const Home = props =>{
-	const {history} = props;
-	const [cookies, setCookie] = useCookies('authorization');
+	const { history } = props;
+	const [, setCookie] = useCookies('authorization');
 
 	const [username, setUsername] = useState();
 	const [password, setPassword] = useState();
@@ -29,13 +31,22 @@ const Home = props =>{
 			switch(handler.status){
 			case 200:
 				setCookie('authorization', handler.load, { path: '/', maxAge: handler.load.exp /1000 });
+				fetchTables(handler.load)
+					.then(answer => {
+						if(answer.status === 200){
+							answer.json()
+								.then(serverData => {
+									state.setContext({...state.context, serverData});
+								});
+						}
+					});
 				global.auth = handler.load;
 				setIsShowing(false);
 				history.push('/home');
 				break;
 			case 403:
 				setMessage({title: 'Autenticação', description: 'Usuário ou senha incorretos, por favor, tente novamente'});
-				console.log(username, password)
+				console.log(username, password);
 				break;
 			default: 
 				closeButton.current.focus();
@@ -52,7 +63,7 @@ const Home = props =>{
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			}}>
+		}}>
 			<LoginHolder>
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
 				<Input label="Email" type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
@@ -89,6 +100,10 @@ const Home = props =>{
 				</MessageBox>
 			</Loading>
 		</div>);
+};
+
+Home.propTypes = {
+	history: PropTypes.any.isRequired
 };
 
 export default withRouter(Home);

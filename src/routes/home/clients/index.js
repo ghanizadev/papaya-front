@@ -3,13 +3,13 @@ import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import {Input, Select, Button, TextArea, Search} from '../../components';
 import 'react-tabs/style/react-tabs.css';
 
-const ClientsInterface = props => {
-    const [userData, setUserData] = useState([
-        'Jean',
-        'Ivona'
-    ]);
+const ClientsInterface = () => {
+	const [userData, ] = useState([
+		'Jean',
+		'Ivona'
+	]);
 
-    return (
+	return (
 		<Tabs>
 			<TabList>
 				<Tab>Cadastro de cliente</Tab>
@@ -18,247 +18,247 @@ const ClientsInterface = props => {
 			</TabList>
 
 			<TabPanel style={{padding: 25}}>
-            <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
-                    <h3>Cliente</h3>
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                        <Input
-                        proportion={5} 
-                        label="Nome"
-                        placeholder="Digite aqui o nome do fornecedor"
-                        />
+				<div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+					<h3>Cliente</h3>
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={5} 
+							label="Nome"
+							placeholder="Digite aqui o nome do fornecedor"
+						/>
 
-                        <Input
-                        proportion={1}
-                        label='Código'
-                        type='date'
-                        placeholder="01/01/1970"
-                        size={5}
-                        /> 
-                    </div>
+						<Input
+							proportion={1}
+							label='Código'
+							type='date'
+							placeholder="01/01/1970"
+							size={5}
+						/> 
+					</div>
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <Input
-                        proportion={4}
-                        label="Endereço"
-                        placeholder="Digite aqui o endereço do fornecedor"
-                    />
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={4}
+							label="Endereço"
+							placeholder="Digite aqui o endereço do fornecedor"
+						/>
 
-                    <Input
-                        proportion={1}
-                        label="Número"
-                    />
-                    </div>
+						<Input
+							proportion={1}
+							label="Número"
+						/>
+					</div>
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <Input
-                        proportion={1.5}
-                        label="Bairro"
-                        placeholder="Digite aqui o bairro"
-                    />
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={1.5}
+							label="Bairro"
+							placeholder="Digite aqui o bairro"
+						/>
 
-                    <Input
-                        proportion={1.5}
-                        label="Cidade"
-                        placeholder="Digite aqui a cidade"
-                    />
+						<Input
+							proportion={1.5}
+							label="Cidade"
+							placeholder="Digite aqui a cidade"
+						/>
 
-                    <Select proportion={1.5} label="Estado" placeholder="Selecione" >
+						<Select proportion={1.5} label="Estado" placeholder="Selecione" >
                     
-                        <option value="AC">Acre (AC)</option>
-                        <option value="AL">Alagoas (AL)</option>
-                        <option value="AP">Amapá (AP)</option>
-                        <option value="AM">Amazonas (AM)</option>
-                        <option value="BA">Bahia (BA)</option>
-                        <option value="CE">Ceará (CE)</option>
-                        <option value="DF">Distrito Federal (DF)</option>
-                        <option value="ES">Espírito Santo (ES)</option>
-                        <option value="GO">Goiás (GO)</option>
-                        <option value="MA">Maranhão (MA)</option>
-                        <option value="MT">Mato Grosso (MT)</option>
-                        <option value="MS">Mato Grosso do Sul (MS)</option>
-                        <option value="MG">Minas Gerais (MG)</option>
-                        <option value="PA">Pará (PA)</option>
-                        <option value="PB">Paraíba (PB)</option>
-                        <option value="PR">Paraná (PR)</option>
-                        <option value="PE">Pernambuco (PE)</option>
-                        <option value="PI">Piauí (PI)</option>
-                        <option value="RJ">Rio de Janeiro (RJ)</option>
-                        <option value="RN">Rio Grande do Norte (RN)</option>
-                        <option value="RS">Rio Grande do Sul (RS)</option>
-                        <option value="RO">Rondônia (RO)</option>
-                        <option value="RR">Roraima (RR)</option>
-                        <option value="SC">Santa Catarina (SC)</option>
-                        <option value="SP">São Paulo (SP)</option>
-                        <option value="SE">Sergipe (SE)</option>
-                        <option value="TO">Tocantins (TO)</option>
+							<option value="AC">Acre (AC)</option>
+							<option value="AL">Alagoas (AL)</option>
+							<option value="AP">Amapá (AP)</option>
+							<option value="AM">Amazonas (AM)</option>
+							<option value="BA">Bahia (BA)</option>
+							<option value="CE">Ceará (CE)</option>
+							<option value="DF">Distrito Federal (DF)</option>
+							<option value="ES">Espírito Santo (ES)</option>
+							<option value="GO">Goiás (GO)</option>
+							<option value="MA">Maranhão (MA)</option>
+							<option value="MT">Mato Grosso (MT)</option>
+							<option value="MS">Mato Grosso do Sul (MS)</option>
+							<option value="MG">Minas Gerais (MG)</option>
+							<option value="PA">Pará (PA)</option>
+							<option value="PB">Paraíba (PB)</option>
+							<option value="PR">Paraná (PR)</option>
+							<option value="PE">Pernambuco (PE)</option>
+							<option value="PI">Piauí (PI)</option>
+							<option value="RJ">Rio de Janeiro (RJ)</option>
+							<option value="RN">Rio Grande do Norte (RN)</option>
+							<option value="RS">Rio Grande do Sul (RS)</option>
+							<option value="RO">Rondônia (RO)</option>
+							<option value="RR">Roraima (RR)</option>
+							<option value="SC">Santa Catarina (SC)</option>
+							<option value="SP">São Paulo (SP)</option>
+							<option value="SE">Sergipe (SE)</option>
+							<option value="TO">Tocantins (TO)</option>
 
-                    </Select>
+						</Select>
 
-                    <Input
-                        label="CEP"
-                        placeholder="Digite aqui o CEP"
-                    />
-                    </div>
+						<Input
+							label="CEP"
+							placeholder="Digite aqui o CEP"
+						/>
+					</div>
 
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
+					<div style={{display: 'flex', flexDirection: 'row'}}>
 
-                        <Input
-                            label="CPF"
-                            placeholder="Digite aqui o CNPJ"
-                        />
+						<Input
+							label="CPF"
+							placeholder="Digite aqui o CNPJ"
+						/>
 
-                        <Input
-                            label="Email"
-                            placeholder="Digite aqui o endereço do fornecedor"
-                            />
+						<Input
+							label="Email"
+							placeholder="Digite aqui o endereço do fornecedor"
+						/>
 
-                        <Input
-                            label="Telefone"
-                            placeholder="Digite aqui o telefone do fornecedor"
-                        />
+						<Input
+							label="Telefone"
+							placeholder="Digite aqui o telefone do fornecedor"
+						/>
 
-                    </div>
+					</div>
 
-                    <TextArea label='Observações' onChange={e => {  }} placeholder="Digite aqui quaisquer informações adicionais" />
+					<TextArea label='Observações' onChange={() => {  }} placeholder="Digite aqui quaisquer informações adicionais" />
 
-                </div>
+				</div>
                 
-                <div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
+				<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
 
-                    <Button title="Limpar o formulário para novo cadastro">Limpar</Button>
-                    <Button title="Salvar o produto atual" >Salvar</Button>
+					<Button title="Limpar o formulário para novo cadastro">Limpar</Button>
+					<Button title="Salvar o produto atual" >Salvar</Button>
 
-                </div>
+				</div>
 			</TabPanel>
 			<TabPanel style={{padding: 25}}>
-            <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+				<div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
 
-                    <h3>Pesquisar cliente</h3>
-                    <Search
-                        proportion={1} 
-                        label="Pesquisar"
-                        placeholder="Digite aqui o nome, email ou CPF do cliente"
-                        data={userData}
-                    />
+					<h3>Pesquisar cliente</h3>
+					<Search
+						proportion={1} 
+						label="Pesquisar"
+						placeholder="Digite aqui o nome, email ou CPF do cliente"
+						data={userData}
+					/>
 
-                    <h3>Alterar dados</h3>
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                        <Input
-                        proportion={5} 
-                        label="Nome"
-                        placeholder="Digite aqui o nome do fornecedor"
-                        />
+					<h3>Alterar dados</h3>
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={5} 
+							label="Nome"
+							placeholder="Digite aqui o nome do fornecedor"
+						/>
 
-                        <Input
-                        proportion={1}
-                        label='Código'
-                        type='date'
-                        placeholder="01/01/1970"
-                        size={5}
-                        /> 
-                    </div>
+						<Input
+							proportion={1}
+							label='Código'
+							type='date'
+							placeholder="01/01/1970"
+							size={5}
+						/> 
+					</div>
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <Input
-                        proportion={4}
-                        label="Endereço"
-                        placeholder="Digite aqui o endereço do fornecedor"
-                    />
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={4}
+							label="Endereço"
+							placeholder="Digite aqui o endereço do fornecedor"
+						/>
 
-                    <Input
-                        proportion={1}
-                        label="Número"
-                    />
-                    </div>
+						<Input
+							proportion={1}
+							label="Número"
+						/>
+					</div>
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                    <Input
-                        proportion={1.5}
-                        label="Bairro"
-                        placeholder="Digite aqui o bairro"
-                    />
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<Input
+							proportion={1.5}
+							label="Bairro"
+							placeholder="Digite aqui o bairro"
+						/>
 
-                    <Input
-                        proportion={1.5}
-                        label="Cidade"
-                        placeholder="Digite aqui a cidade"
-                    />
+						<Input
+							proportion={1.5}
+							label="Cidade"
+							placeholder="Digite aqui a cidade"
+						/>
 
-                    <Select proportion={1.5} label="Estado" placeholder="Selecione" >
+						<Select proportion={1.5} label="Estado" placeholder="Selecione" >
                     
-                        <option value="AC">Acre (AC)</option>
-                        <option value="AL">Alagoas (AL)</option>
-                        <option value="AP">Amapá (AP)</option>
-                        <option value="AM">Amazonas (AM)</option>
-                        <option value="BA">Bahia (BA)</option>
-                        <option value="CE">Ceará (CE)</option>
-                        <option value="DF">Distrito Federal (DF)</option>
-                        <option value="ES">Espírito Santo (ES)</option>
-                        <option value="GO">Goiás (GO)</option>
-                        <option value="MA">Maranhão (MA)</option>
-                        <option value="MT">Mato Grosso (MT)</option>
-                        <option value="MS">Mato Grosso do Sul (MS)</option>
-                        <option value="MG">Minas Gerais (MG)</option>
-                        <option value="PA">Pará (PA)</option>
-                        <option value="PB">Paraíba (PB)</option>
-                        <option value="PR">Paraná (PR)</option>
-                        <option value="PE">Pernambuco (PE)</option>
-                        <option value="PI">Piauí (PI)</option>
-                        <option value="RJ">Rio de Janeiro (RJ)</option>
-                        <option value="RN">Rio Grande do Norte (RN)</option>
-                        <option value="RS">Rio Grande do Sul (RS)</option>
-                        <option value="RO">Rondônia (RO)</option>
-                        <option value="RR">Roraima (RR)</option>
-                        <option value="SC">Santa Catarina (SC)</option>
-                        <option value="SP">São Paulo (SP)</option>
-                        <option value="SE">Sergipe (SE)</option>
-                        <option value="TO">Tocantins (TO)</option>
+							<option value="AC">Acre (AC)</option>
+							<option value="AL">Alagoas (AL)</option>
+							<option value="AP">Amapá (AP)</option>
+							<option value="AM">Amazonas (AM)</option>
+							<option value="BA">Bahia (BA)</option>
+							<option value="CE">Ceará (CE)</option>
+							<option value="DF">Distrito Federal (DF)</option>
+							<option value="ES">Espírito Santo (ES)</option>
+							<option value="GO">Goiás (GO)</option>
+							<option value="MA">Maranhão (MA)</option>
+							<option value="MT">Mato Grosso (MT)</option>
+							<option value="MS">Mato Grosso do Sul (MS)</option>
+							<option value="MG">Minas Gerais (MG)</option>
+							<option value="PA">Pará (PA)</option>
+							<option value="PB">Paraíba (PB)</option>
+							<option value="PR">Paraná (PR)</option>
+							<option value="PE">Pernambuco (PE)</option>
+							<option value="PI">Piauí (PI)</option>
+							<option value="RJ">Rio de Janeiro (RJ)</option>
+							<option value="RN">Rio Grande do Norte (RN)</option>
+							<option value="RS">Rio Grande do Sul (RS)</option>
+							<option value="RO">Rondônia (RO)</option>
+							<option value="RR">Roraima (RR)</option>
+							<option value="SC">Santa Catarina (SC)</option>
+							<option value="SP">São Paulo (SP)</option>
+							<option value="SE">Sergipe (SE)</option>
+							<option value="TO">Tocantins (TO)</option>
 
-                    </Select>
+						</Select>
 
-                    <Input
-                        label="CEP"
-                        placeholder="Digite aqui o CEP"
-                    />
-                    </div>
+						<Input
+							label="CEP"
+							placeholder="Digite aqui o CEP"
+						/>
+					</div>
 
 
-                    <div style={{display: 'flex', flexDirection: 'row'}}>
+					<div style={{display: 'flex', flexDirection: 'row'}}>
 
-                        <Input
-                            label="CPF"
-                            placeholder="Digite aqui o CNPJ"
-                        />
+						<Input
+							label="CPF"
+							placeholder="Digite aqui o CNPJ"
+						/>
 
-                        <Input
-                            label="Email"
-                            placeholder="Digite aqui o endereço do fornecedor"
-                            />
+						<Input
+							label="Email"
+							placeholder="Digite aqui o endereço do fornecedor"
+						/>
 
-                        <Input
-                            label="Telefone"
-                            placeholder="Digite aqui o telefone do fornecedor"
-                        />
+						<Input
+							label="Telefone"
+							placeholder="Digite aqui o telefone do fornecedor"
+						/>
 
-                    </div>
+					</div>
 
-                    <TextArea label='Observações' onChange={e => {  }} placeholder="Digite aqui quaisquer informações adicionais" />
+					<TextArea label='Observações' onChange={() => {  }} placeholder="Digite aqui quaisquer informações adicionais" />
 
-                </div>
+				</div>
                 
-                <div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
+				<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
 
-                    <Button title="Limpar o formulário para novo cadastro">Deletar</Button>
-                    <Button title="Salvar o produto atual" >Salvar</Button>
+					<Button title="Limpar o formulário para novo cadastro">Deletar</Button>
+					<Button title="Salvar o produto atual" >Salvar</Button>
 
-                </div>
+				</div>
 			</TabPanel>
-            <TabPanel style={{padding: 25}}>
+			<TabPanel style={{padding: 25}}>
 				
-            </TabPanel>
+			</TabPanel>
 		</Tabs>
-    );
-}
+	);
+};
 
 export default ClientsInterface;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Background,
 	Logo,
@@ -17,16 +17,16 @@ import SettingsInterface from './settings';
 import ManagementInterface from './management';
 import ClientsInterface from './clients';
 import WaitingListInterface from './waitinglist';
-import { Context, Provider } from '../../context';
+import { Provider } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
 
-const Home = props => {
+const Home = () => {
 	const [user, setUser] = useState('Jean');
 	const [page, setPage] = useState('Mesas');
-	const [cookies, setCookies, removeCookies] = useCookies('authorization');
+	const [cookies, , removeCookies] = useCookies('authorization');
 	const history = useHistory();
 
 	const updateUser = () => {
@@ -53,7 +53,7 @@ const Home = props => {
 		updateUser();
 	}, []);
 
-	const state = useContext(Context);
+	// const state = useContext(Context);
 
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {

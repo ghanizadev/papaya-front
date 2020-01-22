@@ -94,7 +94,15 @@ export const SidebarButton = props => {
 			backgroundColor: selected ? '#fdfdfd' : '#ffbe5b',
 		}} {...props} />
 	);
-}
+};
+
+SidebarButton.propTypes = {
+	selected: PropTypes.bool
+};
+
+SidebarButton.defaultProps = {
+	selected: false
+};
 
 export const Container = styled.div`
 	height: 100%;
@@ -157,7 +165,7 @@ const TextAreaContainer = styled.div`
 
 const InputLabel = styled.span`
     color: gray;
-    white-space: nowrap
+    white-space: nowrap;
 `;
 
 const ButtonComponent = styled.button`
@@ -301,6 +309,19 @@ export const TextArea = props => {
 	);
 };
 
+TextArea.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	proportion: PropTypes.number
+};
+
+TextArea.defaultProps = {
+	containerStyle: {},
+	disabled: false,
+	proportion: 1
+};
+
 export const Select = props => {
 	const {label, children, containerStyle, proportion} = props;
 
@@ -352,11 +373,19 @@ Input.propTypes = {
 Input.defaultProps = {
 	proportion: 0,
 	multiline: false,
-}
+};
 
 Select.propTypes = {
 	label: PropTypes.string.isRequired,
 	containerStyle: PropTypes.object,
 	disabled: PropTypes.bool,
-	children: PropTypes.any
+	children: PropTypes.any,
+	proportion: PropTypes.number
+};
+
+Select.defaultProps = {
+	proportion: 1,
+	disabled: false,
+	containerStyle: {},
+	children: []
 };

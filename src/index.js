@@ -9,7 +9,7 @@ import {useCookies} from 'react-cookie';
 
 
 const ProtectedHome = () => {
-	const [cookies, setCookie] = useCookies('authorization');
+	const [cookies] = useCookies('authorization');
 	let history = useHistory();
 
 	if(cookies.authorization){

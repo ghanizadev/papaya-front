@@ -29,15 +29,25 @@ const TablesInterface = () => {
 		});
 	}, []);
 
+	const getData = data => {
+		let result = [];
+		if (data.length > 0) {
+			result = data.map((table, index) => <Table key={index} load={table} />);
+			return result;
+		}
+		return <span>Nenhuma mesa aberta!</span>;
+	};
+
 	return (
 		<Consumer>
 			{({context}) => (
-			<Tables>
-				<ScrollView>
-					{context.serverData && context.serverData.map((table, index) => <Table key={index} load={table} />) }
-					<div style={{minWidth: 7}} />
-				</ScrollView>
-			</Tables>)}
+				<Tables>
+					<ScrollView>
+						{/*context.serverData && context.serverData.map((table, index) => <Table key={index} load={table} />) */}
+						{getData(context.serverData)}
+						<div style={{minWidth: 7}} />
+					</ScrollView>
+				</Tables>)}
 		</Consumer>
 	);
 };

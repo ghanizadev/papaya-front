@@ -491,7 +491,6 @@ const ResultsTable = styled.div`
 	box-sizing: border-box;
     width: 100%;
 	height: 100%;
-	padding: 40px 0 0 0;
 	overflow: hidden auto;
 `;
 
@@ -507,7 +506,7 @@ const ResultsContainer = styled.div`
 `;
 
 export const Results = props => {
-	const {data, headerOptions} = props;
+	const {data, headerOptions, headerButtons} = props;
 	const [headerItems, setHeaderItems] = useState([]);
 	const [parentHeight, setParentHeight] = useState(500)
 
@@ -556,7 +555,28 @@ export const Results = props => {
 				}}>
 				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
 			</div>
-			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight}}>
+			<div style={{
+					backgroundColor: 'lightgray',
+					color: 'white',
+					position: 'absolute',
+					textAlign: "center",
+					alignItems: 'center',
+					justifyContent: 'flex-end',
+					top: 42,
+					right: 0,
+					left: 0,
+					height: 30,
+					display: headerButtons.length > 0 ? 'flex' : 'none',
+					flexDirection: 'row'
+				}}>
+					{(headerButtons && Array.isArray(headerItems)) && headerButtons.map(button => {
+						return (
+							<button type="button" onClick={(e)=>{button.onButtonClick(e)}}>{button.title}</button>
+						);
+					})}
+			</div>
+			})}
+			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight, padding: headerButtons.length > 0 ? '72px 5px 5px 5px' : '42px 5px 5px 5px'}}>
 				{data && data.map((item, index) => {
 					return (
 						<div style={{
@@ -564,6 +584,7 @@ export const Results = props => {
 							color: '#444',
 							display: 'flex',
 							flexDirection: 'row',
+							alignItems: 'center',
 							height: 30
 							}} key={index}>
 							{headerItems && headerItems.map(headerItem => 
@@ -578,6 +599,16 @@ export const Results = props => {
 		</ResultsContainer>
 	);
 };
+
+Results.propTypes = {
+	headerButtons: PropTypes.arrayOf(
+		PropTypes.object
+	)
+}
+
+Results.defaultProps = {
+	headerButtons: []
+}
 
 export const Input = props => {
 	const {label, containerStyle, disabled, proportion} = props;
@@ -1641,4 +1672,13 @@ export const Table = props => {
 			{status()}
 		</TableContainer>
 		)
+}
+
+const PaymentOverlay = props => {
+	const {table} = props;
+	return (
+		<View>
+			<h3>Pagamento</h3>
+		</View>
+	)
 }

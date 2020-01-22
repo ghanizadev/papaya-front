@@ -1,6 +1,5 @@
 
-import React, {useState, useContext, useEffect} from 'react';
-import {Context} from '../../../context';
+import React, {useState, useEffect} from 'react';
 import {find, save} from './functions';
 import {Results, Input, Select, Button, TextArea} from '../../components';
 import { useCookies } from 'react-cookie';
@@ -9,10 +8,9 @@ import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 
-const ProductInterface = props => {
+const ProductInterface = () => {
 	const [cookies] = useCookies('authorization');
 	const [data, setData] = useState([]);
-	const state = useContext(Context);
 	
 	const history = useHistory();
 	const [body, setBody] = useState({
@@ -25,24 +23,24 @@ const ProductInterface = props => {
 		variation: '00'
 	});
 
-	const [provider, setProvider] = useState({name: '', cnpj: ''})
+	const [provider, setProvider] = useState({name: '', cnpj: ''});
 
 
 	const getProvider = provider => {
 		if(cookies.authorization){
 			fetch(process.env.REACT_APP_API + '/api/v1/provider?providerId=' + provider)
-			.then(result => {
-				if(result.status === 200){
-					result.json()
-					.then(answer =>{
-						if(answer.length && answer.length > 0){
-							setProvider(answer[0]);
-						}
-					})
-				}
-			})
+				.then(result => {
+					if(result.status === 200){
+						result.json()
+							.then(answer =>{
+								if(answer.length && answer.length > 0){
+									setProvider(answer[0]);
+								}
+							});
+					}
+				});
 		}
-	}
+	};
 
 	useEffect(() => {
 		if(data.length === 0 && cookies.authorization)
@@ -51,11 +49,11 @@ const ProductInterface = props => {
 					if(response.status === 200){
 						setData(response.data);
 					}
-				}).catch((error) => {
-						window.alert('Você não tem permissão para cessar este conteúdo');
+				}).catch(() => {
+					window.alert('Você não tem permissão para cessar este conteúdo');
 				});
 		else
-			if (!cookies.authorization) history.push('/');
+		if (!cookies.authorization) history.push('/');
 	}, []);
 
 	const subgroups = {
@@ -588,9 +586,9 @@ const ProductInterface = props => {
 		price : {
 			label: 'Preço',
 			size: 2,
-			format: item => `R$ ${item.toFixed(2).toString().replace(".", ',')}`
+			format: item => `R$ ${item.toFixed(2).toString().replace('.', ',')}`
 		}
-	}
+	};
 
 	return (
 		<Tabs>
@@ -673,7 +671,7 @@ const ProductInterface = props => {
 				<div>
 					<h3>Fornecedor</h3>
 					<div style={{display: 'flex', flexDirection: 'row'}}>
-						<Input label='Código' proportion={1} placeholder="0000" onChange={e => { getProvider(e.target.value)}} />
+						<Input label='Código' proportion={1} placeholder="0000" onChange={e => { getProvider(e.target.value);}} />
 						<Input label='Nome' proportion={3} placeholder="Nome do fornecedor" value={provider.name} readonly />
 						<Input label='CNPJ' proportion={3} placeholder="CNPJ do fornecedor" value={provider.cnpj} readonly />
 					</div>
@@ -694,7 +692,7 @@ const ProductInterface = props => {
 						}
 
 						save(global.token || cookies.authorization.access_token, local)
-							.then(result => {
+							.then(() => {
 								window.alert('Produto salvo com sucesso!');
 							}).catch(error => {
 								console.log(error);
