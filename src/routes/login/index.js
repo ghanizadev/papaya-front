@@ -25,26 +25,6 @@ const Home = props =>{
 	const [isShowing, setIsShowing] = useState(false);
 	const [handler, setHandler] = useState({});
 
-	const state = useContext(Context);
-
-	const [cookies] = useCookies();
-
-	const ioConnection = () => {
-		const socket = io.connect(process.env.REACT_APP_API);
-		socket.on('update', () => {
-			fetchTables(cookies.authorization.access_token)
-				.then(result => {
-					if(result.status === 200)
-						result.json().then(json => {
-							state.setContext({...state.context, tables: json });
-						});
-				})
-				.catch(error => {
-					console.log(error);
-				});
-		});
-	};
-
 
 	useEffect(() => {
 		setIsLoading(false);
@@ -58,7 +38,6 @@ const Home = props =>{
 				break;
 			case 403:
 				setMessage({title: 'Autenticação', description: 'Usuário ou senha incorretos, por favor, tente novamente'});
-				console.log(username, password);
 				break;
 			default: 
 				closeButton.current.focus();
@@ -78,17 +57,20 @@ const Home = props =>{
 		}}>
 			<LoginHolder>
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
-				<Input label="Email" type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
-				<Input label="Senha" type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
-					if (e.key === 'Enter') {
-						e.preventDefault();
-						login(username, password, e => {
-							setHandler(e);
-						});
-						setIsShowing(true);
-						setIsLoading(true);
-					}
-				}}/>
+				<div style={{width: '60%'}}>
+					<Input label="Email" type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
+					<Input label="Senha" type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							login(username, password, e => {
+								setHandler(e);
+							});
+							setIsShowing(true);
+							setIsLoading(true);
+						}
+					}}/>
+				</div>
+
 				<Button onClick={(e) => {
 					e.preventDefault();
 					login(username, password, e => {

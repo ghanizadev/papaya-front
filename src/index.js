@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Login from './routes/login';
 import Home from './routes/home';
+import {Checkout} from './routes/components/overlay';
 import {BrowserRouter, Switch, Route, useHistory} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 import { Provider } from './context';
-
 
 
 const ProtectedHome = () => {
@@ -35,6 +35,7 @@ ReactDOM.render(
 			<Provider>
 				<Route path="/" exact component={()=><Login/>} />
 				<Route path="/home" exact component={()=><ProtectedHome />} />
+				<Route path="/test" exact component={()=><Checkout />} />
 			</Provider>
 		</Switch>
 	</BrowserRouter>

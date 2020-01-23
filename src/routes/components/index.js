@@ -6,6 +6,7 @@ import { Context} from '../../context';
 import { findFlavor, addProduct } from './functions';
 
 import logo from '../../assets/logo.png';
+import { useHistory } from 'react-router';
 
 export const MessageBox = styled.div`
 	width: 30%;
@@ -362,7 +363,8 @@ const OverlayBox = styled.div`
 
 const InputContainer = styled.div`
 	max-height: 30px;
-    min-height: 30px;
+	min-height: 30px;
+	width: 100%;
     border: .5px solid lightgray;
     border-radius: 5px;
     padding: 3px 5px;
@@ -593,8 +595,8 @@ export const Results = props => {
 							alignItems: 'center',
 							height: 30
 						}} key={index}>
-							{headerItems && headerItems.map(headerItem => 
-								<div style={{textAlign: 'center', width: headerItem.width || null}}>
+							{headerItems && headerItems.map((headerItem, index) => 
+								<div key={index} style={{textAlign: 'center', width: headerItem.width || null}}>
 									{headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
 								</div>
 							)}
@@ -1639,6 +1641,7 @@ const WaitingListTable = props => {
 const WaitingPaymentTable = props => {
 	const {load} = props;
 	const state = useContext(Context);
+	const history = useHistory();
 	return (
 		<WaitingPaymentTableContainer>
 			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
@@ -1646,7 +1649,7 @@ const WaitingPaymentTable = props => {
 			</h2>
 			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
 				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-				<WaitingPaymentTableButtom>Aguardando pagamento...</WaitingPaymentTableButtom>
+				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', '_blank');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
 			</div>
 			<WaitingPaymentTableButtom
 				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}

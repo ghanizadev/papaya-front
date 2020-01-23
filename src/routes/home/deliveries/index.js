@@ -7,36 +7,36 @@ import {fetchDeliveries} from './functions';
 import { useCookies } from 'react-cookie';
 import  {districts} from '../utils';
 
+import {deliveriesMock} from '../utils/mock';
+
 const Map = ReactMapboxGl({
 	accessToken:
         'pk.eyJ1IjoiZ2hhbml6YWRldiIsImEiOiJjazVqeHYyOTgwOGJ1M21wbHp3NHd6OGRlIn0.dkBkyxRxOupRyQ_wjGQkCA',
 });
 
 const headerOptions = {
-	ref: {
-		label: 'Referência',
-		size: 2
-	},
 	code: {
 		label: 'Código',
 		size: 3
 	},
 	title: {
 		label: 'Produto',
-		size: 5,
+		size: 3,
 	},
 	description: {
-		label: 'Quantidade',
+		label: 'Descrição',
 		size: 5
 	},
-    
-	unity: {
+	quantity: {
+		label: 'Quantidade',
+		size: 2
+	},
+	price: {
 		label: 'Preço',
 		size: 2,
 		format: item => `R$ ${item.toFixed(2).toString().replace('.', ',')}`
-
 	},
-	price : {
+	subtotal : {
 		label: 'Preço Final',
 		size: 2,
 		format: item => `R$ ${item.toFixed(2).toString().replace('.', ',')}`
@@ -120,10 +120,10 @@ const DeliveryInterface = () => {
 				<Tab>Mapa de entregas</Tab>
 			</TabList>
 
-			<TabPanel style={{padding: '65px 25px 25px 25px'}}>
+			<TabPanel style={{padding: '25px 25px 65px 25px'}}>
 				
 				<div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
-					<h3>Entrega</h3>
+					<h4 style={{margin:0}}>Cliente</h4>
 					<div style={{display: 'flex', flexDirection: 'row'}}>
 						<Input
 							label='Código'
@@ -146,6 +146,7 @@ const DeliveryInterface = () => {
 						/>
 
 					</div>
+					<h4 style={{margin:0}}>Endereço</h4>
 
 					<div style={{display: 'flex', flexDirection: 'row'}}>
 						<Input
@@ -164,14 +165,21 @@ const DeliveryInterface = () => {
 					</div>
 
 					<div style={{display: 'flex', flexDirection: 'row'}}>
-						<Select label="Bairro" onChange={()=>{}}>
+						<Select label="Bairro" proportion={3} onChange={()=>{}}>
 							{districts.map((item, index)=> <option key={index} value={item}>{item}</option>)}
 						</Select>
 
-						<Select label="Cidade" onChange={()=>{}}>
+						<Select label="Cidade" proportion={3} onChange={()=>{}}>
 							<option value="Florianópolis">Florianópolis</option>
 						</Select>
+						<Input
+							label="Complemento"
+							placeholder="Casa, Bloco A,..."
+							proportion={2}
+							onChange={()=>{}} 
+						/>
 					</div>
+					<h4 style={{margin:0}}>informações adicionais</h4>
 
 					<TextArea
 						label="Adicionais"
@@ -188,10 +196,12 @@ const DeliveryInterface = () => {
 						<option value="OUTRO">OUTRO</option>
 					</Select>
 
-					<Input label='Troco (R$)' placeholder="" onChange={()=>{}}  size={2} proportion={1} />
+					<Input type="number" label='Troco (R$)' placeholder="0,00" onChange={()=>{}} proportion={1} />
 
 				</div>
-				<Results  headerOptions={headerOptions} headerButtons={headerButtons} />
+				<h4 style={{margin:0}}>Produtos</h4>
+
+				<Results data={deliveriesMock[0].order.items}  headerOptions={headerOptions} headerButtons={headerButtons} />
 				<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
 					<Button title="Salvar o produto atual" onClick={()=> {}}>Salvar</Button>
 					<Button title="Limpar o formulário para novo cadastro" onClick={()=> {}}>Limpar</Button>

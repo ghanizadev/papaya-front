@@ -59,9 +59,7 @@ const Home = () => {
 			findAllTables(cookies.authorization.access_token)
 				.then(result => {
 					if(result.status === 200)
-						result.json().then(json => {
-							state.setContext({...state.context, tables: json });
-						});
+						state.setContext({...state.context, tables: result.data });
 				})
 				.catch(error => {
 					console.log(error);
