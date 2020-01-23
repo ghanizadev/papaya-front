@@ -5,6 +5,7 @@ import 'react-tabs/style/react-tabs.css';
 import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
 import {fetchDeliveries} from './functions';
 import { useCookies } from 'react-cookie';
+import  {districts} from '../utils';
 
 const Map = ReactMapboxGl({
 	accessToken:
@@ -119,16 +120,29 @@ const DeliveryInterface = () => {
 				<Tab>Mapa de entregas</Tab>
 			</TabList>
 
-			<TabPanel style={{paddingBottom: '65px'}}>
+			<TabPanel style={{padding: '65px 25px 25px 25px'}}>
 				
 				<div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
 					<h3>Entrega</h3>
 					<div style={{display: 'flex', flexDirection: 'row'}}>
-						<Input label='Código do cliente' placeholder="00000"  size={5} onChange={()=>{}} />
+						<Input
+							label='Código'
+							placeholder="00000"
+							proportion={1}
+							size={5}
+							onChange={()=>{}}
+						/>
 						<Input
 							label='Nome'
 							placeholder="Digite aqui o nome do cliente"
 							onChange={()=>{}}
+							proportion={4}
+						/>
+						<Input
+							label='Telefone'
+							placeholder="(00) 00000-0000"
+							onChange={()=>{}}
+							proportion={2}
 						/>
 
 					</div>
@@ -150,17 +164,13 @@ const DeliveryInterface = () => {
 					</div>
 
 					<div style={{display: 'flex', flexDirection: 'row'}}>
-						<Input
-							label="Bairro"
-							placeholder="Barra da Lagoa"
-							onChange={()=>{}} 
-						/>
+						<Select label="Bairro" onChange={()=>{}}>
+							{districts.map((item, index)=> <option key={index} value={item}>{item}</option>)}
+						</Select>
 
-						<Input
-							label="Cidade"
-							placeholder="Florianópolis"
-							onChange={()=>{}} 
-						/>
+						<Select label="Cidade" onChange={()=>{}}>
+							<option value="Florianópolis">Florianópolis</option>
+						</Select>
 					</div>
 
 					<TextArea
@@ -178,14 +188,13 @@ const DeliveryInterface = () => {
 						<option value="OUTRO">OUTRO</option>
 					</Select>
 
-					<Input label='Variação' placeholder="00" onChange={()=>{}}  size={2} proportion={1} />
+					<Input label='Troco (R$)' placeholder="" onChange={()=>{}}  size={2} proportion={1} />
 
 				</div>
-				<Input label="Pesquisar" placeholder="Digite algo para pesquisar" />
 				<Results  headerOptions={headerOptions} headerButtons={headerButtons} />
 				<div style={{display: 'flex', flexDirection: 'row', position: 'absolute', right: 25, bottom: 25}}>
 					<Button title="Salvar o produto atual" onClick={()=> {}}>Salvar</Button>
-					<Button title="Limpar o formulário para novo cadastro" onPress={()=> {}}>Limpar</Button>
+					<Button title="Limpar o formulário para novo cadastro" onClick={()=> {}}>Limpar</Button>
 				</div>
 
 			</TabPanel>

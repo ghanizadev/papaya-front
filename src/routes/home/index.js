@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
 	Background,
 	Logo,
@@ -17,17 +17,21 @@ import SettingsInterface from './settings';
 import ManagementInterface from './management';
 import ClientsInterface from './clients';
 import WaitingListInterface from './waitinglist';
-import { Provider } from '../../context';
+import { Context } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
+import {findAllTables} from '../components/functions';
 import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
+import io from 'socket.io-client';
 
 const Home = () => {
 	const [user, setUser] = useState('Jean');
 	const [page, setPage] = useState('Mesas');
 	const [cookies, , removeCookies] = useCookies('authorization');
 	const history = useHistory();
+
+	const state = useContext(Context);
 
 	const updateUser = () => {
 		if (cookies.authorization) {
@@ -49,8 +53,32 @@ const Home = () => {
 		}
 	};
 
+	const ioConnection = () => {
+		const socket = io.connect(process.env.REACT_APP_API);
+		socket.on('update', () => {
+			findAllTables(cookies.authorization.access_token)
+				.then(result => {
+					if(result.status === 200)
+						result.json().then(json => {
+							state.setContext({...state.context, tables: json });
+						});
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		});
+	};
+
 	useEffect(()=> {
 		updateUser();
+		findAllTables(cookies.authorization.access_token)
+			.then(answer => {
+				if(answer.status === 200){
+					console.log(answer.data);
+					state.setContext({...state.context, tables: answer.data});
+					ioConnection();
+				}
+			});
 	}, []);
 
 	// const state = useContext(Context);
@@ -79,7 +107,7 @@ const Home = () => {
 	};
 
 	return (
-		<Provider>
+		<div>
 			<Background>
 				<Header>
 					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -115,7 +143,7 @@ const Home = () => {
 				<Container>{getCurrentPage()}</Container>
 			</Background>
 			<Overlay />
-		</Provider>
+		</div>
 	);
 };
 

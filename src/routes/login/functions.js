@@ -9,6 +9,6 @@ export const fetchTables = token => {
 		headers
 	};
 
-	return fetch(process.env.REACT_APP +'/api/v1/table', init);
+	return fetch(process.env.REACT_APP_API +'/api/v1/table', init);
 
 };

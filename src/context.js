@@ -8,7 +8,7 @@ const config = {
 			component: null,
 			callback: ()=> {}
 		},
-		serverData: [],
+		tables: [],
 	},
 	setContext: () => {},
 };
@@ -35,6 +35,10 @@ const Consumer = props =>
 
 Consumer.propTypes = {
 	children: PropTypes.any.isRequired
-}
+};
+
+Provider.propTypes = {
+	children: PropTypes.any.isRequired
+};
 
 export {Context, Provider, Consumer};

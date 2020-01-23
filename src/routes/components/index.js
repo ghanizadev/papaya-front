@@ -389,7 +389,7 @@ const TextAreaContainer = styled.div`
 
 const InputLabel = styled.span`
     color: gray;
-    white-space: nowrap
+    white-space: nowrap;
 `;
 
 const InputItemContainer = styled.div`
@@ -506,9 +506,9 @@ const ResultsContainer = styled.div`
 `;
 
 export const Results = props => {
-	const {data, headerOptions, headerButtons} = props;
+	const {data, headerOptions, headerButtons, title} = props;
 	const [headerItems, setHeaderItems] = useState([]);
-	const [parentHeight, setParentHeight] = useState(500)
+	const [parentHeight, setParentHeight] = useState(500);
 
 	const resulttable = useRef();
 	const parent = useRef();
@@ -519,7 +519,7 @@ export const Results = props => {
 		let total = 0;
 		keys.forEach(key => {
 			total += headerOptions[key].size;
-		})
+		});
 
 		const localHeaderItems = headerItems;
 
@@ -530,7 +530,7 @@ export const Results = props => {
 			headerItem.key = key;
 			headerItem.width = (resulttable.current.offsetWidth / total) * headerOptions[key].size;
 			localHeaderItems.push(headerItem);
-		})
+		});
 
 		setHeaderItems(localHeaderItems);
 		setParentHeight(parent.current.offsetHeight);
@@ -540,42 +540,48 @@ export const Results = props => {
 	return (
 		<ResultsContainer ref={parent}>
 			<div
-			style={{
+				style={{
 					backgroundColor: '#ed9140',
 					color: 'white',
 					position: 'absolute',
-					textAlign: "center",
+					textAlign: 'center',
 					alignItems: 'center',
+					justifyContent: 'space-between',
 					top: 0,
 					right: 0,
 					left: 0,
 					height: 42,
 					display: 'flex',
-					flexDirection: 'row'
+					flexDirection: 'row',
+					padding: '0 25px'
 				}}>
-				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
-			</div>
-			<div style={{
-					backgroundColor: 'lightgray',
-					color: 'white',
-					position: 'absolute',
-					textAlign: "center",
-					alignItems: 'center',
-					justifyContent: 'flex-end',
-					top: 42,
-					right: 0,
-					left: 0,
-					height: 30,
-					display: headerButtons.length > 0 ? 'flex' : 'none',
-					flexDirection: 'row'
-				}}>
-					{(headerButtons && Array.isArray(headerItems)) && headerButtons.map(button => {
+				<h3>{title}</h3>
+				<div>
+					{(headerButtons && Array.isArray(headerItems)) && headerButtons.map((button, index) => {
 						return (
-							<button type="button" onClick={(e)=>{button.onButtonClick(e)}}>{button.title}</button>
+							<button key={index} type="button" onClick={(e)=>{button.onButtonClick(e);}}>{button.title}</button>
 						);
 					})}
+				</div>
+
 			</div>
-			})}
+			<div style={{
+				backgroundColor: 'whitesmoke',
+				color: '#444',
+				position: 'absolute',
+				textAlign: 'center',
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				top: 42,
+				right: 0,
+				left: 0,
+				height: 30,
+				display: headerButtons.length > 0 ? 'flex' : 'none',
+				flexDirection: 'row'
+			}}>
+				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
+			</div>
+
 			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight, padding: headerButtons.length > 0 ? '72px 5px 5px 5px' : '42px 5px 5px 5px'}}>
 				{data && data.map((item, index) => {
 					return (
@@ -586,7 +592,7 @@ export const Results = props => {
 							flexDirection: 'row',
 							alignItems: 'center',
 							height: 30
-							}} key={index}>
+						}} key={index}>
 							{headerItems && headerItems.map(headerItem => 
 								<div style={{textAlign: 'center', width: headerItem.width || null}}>
 									{headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
@@ -603,12 +609,14 @@ export const Results = props => {
 Results.propTypes = {
 	headerButtons: PropTypes.arrayOf(
 		PropTypes.object
-	)
-}
+	),
+	title: PropTypes.string
+};
 
 Results.defaultProps = {
-	headerButtons: []
-}
+	headerButtons: [],
+	title: 'Resultados'
+};
 
 export const Input = props => {
 	const {label, containerStyle, disabled, proportion} = props;
@@ -636,9 +644,9 @@ export const Search = props => {
 	const inputRef = useRef(null);
 
 	useEffect(() => {
-		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
-		  document.removeEventListener("mousedown", handleClickOutside);
+		  document.removeEventListener('mousedown', handleClickOutside);
 		};
 	  });
 
@@ -656,11 +664,11 @@ export const Search = props => {
 		<InputContainer style={currentContainerStyle}>
 			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
 			<InputComponent
-			ref={inputRef}
-			onKeyPress={e => {
-				if (inputRef.current.value === '')
-					return setVisible(false);
-				return setVisible(true);
+				ref={inputRef}
+				onKeyPress={e => {
+					if (inputRef.current.value === '')
+						return setVisible(false);
+					return setVisible(true);
 				}} {...props} />
 			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
 				{data && data.map((item, index) => (
@@ -673,11 +681,11 @@ export const Search = props => {
 
 Search.propTypes = {
 	onSelect: PropTypes.func
-}
+};
 
 Search.defaultProps = {
 	onSelect: () => {}
-}
+};
 
 export const TextArea = props => {
 	const {label, containerStyle, disabled, proportion} = props;
@@ -744,7 +752,7 @@ Input.propTypes = {
 Input.defaultProps = {
 	proportion: 0,
 	multiline: false,
-}
+};
 
 Select.propTypes = {
 	label: PropTypes.string.isRequired,
@@ -785,7 +793,7 @@ const ProductDescriptionCustomer = props => {
 			<div style={{display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh'}}>
 				{items && items.map((product, index) => (
 					<div key={index}
-					style={{
+						style={{
 							border: '1px solid whitesmoke',
 							margin: 8,
 							borderRadius: 5,
@@ -794,19 +802,19 @@ const ProductDescriptionCustomer = props => {
 						<span style={{fontSize: 16, display: 'flex', color: '#444', fontWeight:  'bold', alignItems: 'center'}}>
 							<input
 								onClick={() => {
-									console.log(list)
+									console.log(list);
 									const tmp = list;
 
 									if(list.includes(product)){
 										tmp.pop(product);
-										setList(tmp)
+										setList(tmp);
 										return;
 									}
 									tmp.push(product);
 									setList(tmp);
 									return;
 
-									}} type="checkbox"/>
+								}} type="checkbox"/>
 							{product.title}
 						</span>
 						<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -816,7 +824,7 @@ const ProductDescriptionCustomer = props => {
 					</div>
 				))}
 			</div>
-			<div style={{width: '100%', display: 'flex', flexDirection: "row", justifyContent: 'flex-end', marginTop: 15}}>
+			<div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
 				<Button>Descontar</Button>
 				<Button>Pagar total</Button>
 			</div>
@@ -1451,33 +1459,33 @@ const BusyTableProductCustomer = props => {
 			</span>
 			{items && items.map(({quantity, title, price, subtotal}, index) => (
 				<div key={index} style={{width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
-				<span
-				style={{
-					textAlign: 'end',
-					marginVertical: 3,
-					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
-					fontSize: '12pt'
-				}}
-				>
-				{`${quantity}x ${title}`}
-				</span>
-				<br/>
-				<span
-				style={{
-					textAlign: 'end',
-					marginVertical: 3,
-					color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888'
-				}}
-				>
-				{`un R$ ${price
+					<span
+						style={{
+							textAlign: 'end',
+							marginVertical: 3,
+							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
+							fontSize: '12pt'
+						}}
+					>
+						{`${quantity}x ${title}`}
+					</span>
+					<br/>
+					<span
+						style={{
+							textAlign: 'end',
+							marginVertical: 3,
+							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888'
+						}}
+					>
+						{`un R$ ${price
+							.toFixed(2)
+							.toString()
+							.replace('.', ',')}
+				=> sub R$ ${subtotal
 					.toFixed(2)
 					.toString()
-					.replace('.', ',')}
-				=> sub R$ ${subtotal
-				.toFixed(2)
-				.toString()
-				.replace('.', ',')}`}
-				</span>
+					.replace('.', ',')}`}
+					</span>
 				</div>
 			))}
 		</BusyTableProductButton>
@@ -1503,7 +1511,7 @@ const BusyTable = props => {
 		}else {
 			customers[item.owner] = [item];
 		}
-	})
+	});
 
 	return (
 		<div
@@ -1522,19 +1530,19 @@ const BusyTable = props => {
 			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
 			<BusyTableProductContainer>
 				{owners ? 
-				Object.keys(customers).map((customer, index) => (
-					<BusyTableProductCustomer
-						key={index}
-						customer={{ items: customers[customer], name: customer}}
-					/>
-				))
-				:
-				load.order.items.map((product, index) => (
-					<BusyTableProduct
-						key={index}
-						product={product}
-					/>
-				))}
+					Object.keys(customers).map((customer, index) => (
+						<BusyTableProductCustomer
+							key={index}
+							customer={{ items: customers[customer], name: customer}}
+						/>
+					))
+					:
+					load.order.items.map((product, index) => (
+						<BusyTableProduct
+							key={index}
+							product={product}
+						/>
+					))}
 			</BusyTableProductContainer>
 			<div
 				style={{
@@ -1607,46 +1615,46 @@ const FreeTable = props => (
 
 const WaitingListTable = props => {
 	const {load} = props;
-	const state = useContext(Context)
+	const state = useContext(Context);
 	return (
-	<WaitingPaymentTableContainer>
-		<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-			{load.number}.{load.costumer}
-		</h2>
-		<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-			<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-			<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
-			<span>Próximo da lista</span>
-			<WaitingPaymentTableButtom>{load.order.costumer}</WaitingPaymentTableButtom>
-		</div>
-		<WaitingPaymentTableButtom
-			onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
-			style={{fontSize: 12}}>
+		<WaitingPaymentTableContainer>
+			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+				{load.number}.{load.costumer}
+			</h2>
+			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+				<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+				<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
+				<span>Próximo da lista</span>
+				<WaitingPaymentTableButtom>{load.order.costumer}</WaitingPaymentTableButtom>
+			</div>
+			<WaitingPaymentTableButtom
+				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+				style={{fontSize: 12}}>
 				detalhes
 			</WaitingPaymentTableButtom>
-	</WaitingPaymentTableContainer>
-	)
+		</WaitingPaymentTableContainer>
+	);
 };
 
 const WaitingPaymentTable = props => {
 	const {load} = props;
-	const state = useContext(Context)
+	const state = useContext(Context);
 	return (
-	<WaitingPaymentTableContainer>
-		<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-			{load.number}.{load.costumer}
-		</h2>
-		<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-			<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-			<WaitingPaymentTableButtom>Aguardando pagamento...</WaitingPaymentTableButtom>
-		</div>
-		<WaitingPaymentTableButtom
-			onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
-			style={{fontSize: 12}}>
+		<WaitingPaymentTableContainer>
+			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+				{load.number}.{load.costumer}
+			</h2>
+			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+				<WaitingPaymentTableButtom>Aguardando pagamento...</WaitingPaymentTableButtom>
+			</div>
+			<WaitingPaymentTableButtom
+				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+				style={{fontSize: 12}}>
 				detalhes
 			</WaitingPaymentTableButtom>
-	</WaitingPaymentTableContainer>
-	)
+		</WaitingPaymentTableContainer>
+	);
 };
 
 export const Table = props => {
@@ -1654,31 +1662,31 @@ export const Table = props => {
 
 	const status = () => {
 		switch(load.status){
-			case 'FREE':
-				return <FreeTable {...props} />
-			case 'BUSY':
-				return <BusyTable {...props} />
-			case 'WAITING_PAYMENT':
-				return <WaitingPaymentTable {...props} />
-			case 'ON_HOLD':
-				return <WaitingListTable {...props} />
-			default:
-				return <FreeTable {...props} />
+		case 'FREE':
+			return <FreeTable {...props} />;
+		case 'BUSY':
+			return <BusyTable {...props} />;
+		case 'WAITING_PAYMENT':
+			return <WaitingPaymentTable {...props} />;
+		case 'ON_HOLD':
+			return <WaitingListTable {...props} />;
+		default:
+			return <FreeTable {...props} />;
 		}
-	}
+	};
 
 	return (
 		<TableContainer>
 			{status()}
 		</TableContainer>
-		)
-}
+	);
+};
 
 const PaymentOverlay = props => {
 	const {table} = props;
 	return (
-		<View>
+		<div>
 			<h3>Pagamento</h3>
-		</View>
-	)
-}
+		</div>
+	);
+};

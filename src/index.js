@@ -5,6 +5,7 @@ import Login from './routes/login';
 import Home from './routes/home';
 import {BrowserRouter, Switch, Route, useHistory} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
+import { Provider } from './context';
 
 
 
@@ -31,8 +32,10 @@ const ProtectedHome = () => {
 ReactDOM.render(
 	<BrowserRouter>
 		<Switch>
-			<Route path="/" exact component={()=><Login/>} />
-			<Route path="/home" exact component={()=><ProtectedHome />} />
+			<Provider>
+				<Route path="/" exact component={()=><Login/>} />
+				<Route path="/home" exact component={()=><ProtectedHome />} />
+			</Provider>
 		</Switch>
 	</BrowserRouter>
 	, document.getElementById('root'));

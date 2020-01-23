@@ -8,7 +8,9 @@ import login from '../../functions';
 import loading from '../../assets/loading.gif';
 import { Context } from '../../context';
 import { LoginHolder, Loading, MessageBox, Input, LoadingMessage, LoadingTitle, Button} from '../components';
-import { fetchTables } from './functions';
+import { fetchTables} from './functions';
+import io from 'socket.io-client';
+
 
 const Home = props =>{
 	const { history } = props;
@@ -25,21 +27,31 @@ const Home = props =>{
 
 	const state = useContext(Context);
 
+	const [cookies] = useCookies();
+
+	const ioConnection = () => {
+		const socket = io.connect(process.env.REACT_APP_API);
+		socket.on('update', () => {
+			fetchTables(cookies.authorization.access_token)
+				.then(result => {
+					if(result.status === 200)
+						result.json().then(json => {
+							state.setContext({...state.context, tables: json });
+						});
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		});
+	};
+
+
 	useEffect(() => {
 		setIsLoading(false);
 		if(handler.status){
 			switch(handler.status){
 			case 200:
-				setCookie('authorization', handler.load, { path: '/', maxAge: handler.load.exp /1000 });
-				fetchTables(handler.load)
-					.then(answer => {
-						if(answer.status === 200){
-							answer.json()
-								.then(serverData => {
-									state.setContext({...state.context, serverData});
-								});
-						}
-					});
+				setCookie('authorization', handler.load, { path: '/'});
 				global.auth = handler.load;
 				setIsShowing(false);
 				history.push('/home');
