@@ -135,3 +135,66 @@ export const deliveriesMock = [
 		'__v': 0
 	}
 ];
+
+export const order = {
+	'user': 'ADMIN',
+	'serviceTax': 20.9,
+	'items': [
+		{
+			'quantity': 1,
+			'code': '12*2010',
+			'title': '12 - PIZZA SIMPLES GRANDE',
+			'description': [
+				'2010 - LA SOLANA (SEM MAIONESE)'
+			],
+			'owner': 'Geral',
+			'price': 55,
+			'subtotal': 55
+		},
+		{
+			'quantity': 1,
+			'code': '12*1070',
+			'title': '12 - PIZZA SIMPLES GRANDE',
+			'description': [
+				'1070 - ANITA'
+			],
+			'owner': 'Jean',
+			'price': 55,
+			'subtotal': 55
+		},
+		{
+			'quantity': 1,
+			'code': '12*1031',
+			'title': '12 - PIZZA SIMPLES GRANDE',
+			'description': [
+				'1031 - ALHO'
+			],
+			'owner': 'Jean',
+			'price': 55,
+			'subtotal': 55
+		},
+		{
+			'quantity': 1,
+			'code': '11*1120',
+			'title': '11 - PIZZA SIMPLES MEDIA',
+			'description': [
+				'1120 - PARMEGIANA'
+			],
+			'owner': 'Ivona',
+			'price': 44,
+			'subtotal': 44
+		}
+	],
+	'total': 209,
+	'final': 229.9,
+	'paid': 0,
+	'remaining': 229.9,
+	'change': 0,
+	'payments': [],
+	'closed': false,
+	'_id': '5e254d3c3ededf51b947ee4a',
+	'orderId': 'PYW5h',
+	'createdAt': '2020-01-20T06:48:28.716Z',
+	'updatedAt': '2020-01-23T01:49:07.864Z',
+	'__v': 4
+};
