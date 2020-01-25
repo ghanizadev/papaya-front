@@ -53,10 +53,12 @@ function createWindow () {
 			win.on('page-title-updated', function(e) {
 				e.preventDefault();
 			});
+
 			win.setMenuBarVisibility(false);
 			win.fullScreenable = false;
 			win.resizable = false;
 			win.center();
+			
 			event.newGuest = win;
 		}
 	});
