@@ -25,6 +25,18 @@ import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
 import io from 'socket.io-client';
 
+const {dialog, app} = window.require('electron').remote;
+
+const quitConfirm = {
+	type: 'warning',
+	buttons: ['Cancelar', 'Trocar de usuário', 'Sair'],
+	defaultId: 0,
+	cancelId: 0,
+	title: 'Sair',
+	message: 'Deseja sair?',
+	detail: 'Escolha sua opção:',
+};
+
 const Home = () => {
 	const [user, setUser] = useState('Jean');
 	const [page, setPage] = useState('Mesas');
@@ -72,7 +84,6 @@ const Home = () => {
 		findAllTables(cookies.authorization.access_token)
 			.then(answer => {
 				if(answer.status === 200){
-					console.log(answer.data);
 					state.setContext({...state.context, tables: answer.data});
 					ioConnection();
 				}
@@ -117,8 +128,20 @@ const Home = () => {
 							<a
 								href="#"
 								onClick={() => {
-									history.push('/');
-									removeCookies('authorization');
+									const id = dialog.showMessageBoxSync(quitConfirm);
+
+									console.log(id);
+									switch(id){
+									case 2:
+										app.quit();
+										break;
+									case 1:
+										history.push('/');
+										removeCookies('authorization');
+										break;
+									default:
+										break;
+									}
 								}}
 							>
 								sair

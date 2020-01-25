@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Tables, Table, ScrollView} from '../../components';
-import {Consumer} from '../../../context';
+import {findAllTables} from '../../components/functions';
+import {Consumer, Context} from '../../../context';
+import { useCookies } from 'react-cookie';
 
 const getData = data => {
 	let result = [];
@@ -12,6 +14,19 @@ const getData = data => {
 };
 
 const TablesInterface = () =>  {
+	const state = useContext(Context);
+	const [cookies] = useCookies();
+
+	useEffect(()=> {
+		findAllTables(cookies.authorization.access_token)
+			.then(result => {
+				if(result.status === 200)
+					state.setContext({...state.context, tables: result.data });
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	},[]);
 
 	return (
 		<Consumer>

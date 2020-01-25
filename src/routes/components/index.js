@@ -1649,7 +1649,7 @@ const WaitingPaymentTable = props => {
 			</h2>
 			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
 				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', '_', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
+				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', 'Pagamento', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
 			</div>
 			<WaitingPaymentTableButtom
 				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}

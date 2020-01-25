@@ -1,15 +1,30 @@
-import React, {useRef, useState, useEffect, useContext} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 import PropTypes from 'prop-types';
 
 import logo from '../../assets/logo.png';
 import login from '../../functions';
-import loading from '../../assets/loading.gif';
-import { Context } from '../../context';
-import { LoginHolder, Loading, MessageBox, Input, LoadingMessage, LoadingTitle, Button} from '../components';
-import { fetchTables} from './functions';
-import io from 'socket.io-client';
+import { LoginHolder, Input, Button} from '../components';
+
+const {dialog} = window.require('electron').remote;
+
+
+const notAuthorized = {
+	type: 'warning',
+	buttons: ['Ok'],
+	title: 'Atenção',
+	message: 'Falha no login.',
+	detail: 'Seu usuário e/ou senha estão incorretos',
+};
+
+const error = {
+	type: 'error',
+	buttons: ['Ok'],
+	title: 'Erro',
+	message: 'Erro desconhecido.',
+	detail: 'O servidor retornou um status desconhecido, por favor, entre em contato com o administrador',
+};
 
 
 const Home = props =>{
@@ -20,28 +35,23 @@ const Home = props =>{
 	const [password, setPassword] = useState();
 	const closeButton = useRef();
   
-	const [message, setMessage] = useState({title: '', description: ''});
-	const [isLoading, setIsLoading] = useState(false);
-	const [isShowing, setIsShowing] = useState(false);
 	const [handler, setHandler] = useState({});
 
 
 	useEffect(() => {
-		setIsLoading(false);
 		if(handler.status){
 			switch(handler.status){
 			case 200:
 				setCookie('authorization', handler.load, { path: '/'});
 				global.auth = handler.load;
-				setIsShowing(false);
 				history.push('/home');
 				break;
 			case 403:
-				setMessage({title: 'Autenticação', description: 'Usuário ou senha incorretos, por favor, tente novamente'});
+				dialog.showMessageBox(notAuthorized);
 				break;
 			default: 
 				closeButton.current.focus();
-				setMessage({title: 'Erro desconhecido', description:'por favor, entre em contato com o administrador'});
+				dialog.showMessageBox(error);
 				break;
 			}
 		}
@@ -65,8 +75,6 @@ const Home = props =>{
 							login(username, password, e => {
 								setHandler(e);
 							});
-							setIsShowing(true);
-							setIsLoading(true);
 						}
 					}}/>
 				</div>
@@ -76,23 +84,8 @@ const Home = props =>{
 					login(username, password, e => {
 						setHandler(e);
 					});
-					setIsShowing(true);
-					setIsLoading(true);
 				}}>Entrar</Button>
 			</LoginHolder>
-			<Loading style={{display: isShowing ? 'flex' : 'none'}}>
-				<MessageBox>
-					<LoadingTitle>{message.title}</LoadingTitle>
-					<LoadingMessage>{message.description}</LoadingMessage>
-					<img id="loading-gif" alt="Loading gif" src={loading} height={40} width={40} style={{marginTop: 10, display: isLoading ? 'block' : 'none'}} />
-					<input ref={closeButton} style={{display: isLoading ? 'none' : 'block', height: 25, width: 'min-content'}} type="button" value="Fechar" onClick={
-						(e)=>{
-							e.preventDefault();
-							setIsShowing(false);
-						}
-					}/>
-				</MessageBox>
-			</Loading>
 		</div>);
 };
 
