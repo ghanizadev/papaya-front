@@ -31,12 +31,10 @@ const Home = props =>{
 	const { history } = props;
 	const [, setCookie] = useCookies('authorization');
 
-	const [username, setUsername] = useState();
-	const [password, setPassword] = useState();
-	const closeButton = useRef();
+	const [username, setUsername] = useState('jf.melo6@gmail.com');
+	const [password, setPassword] = useState('td4df2g5wp');
   
 	const [handler, setHandler] = useState({});
-
 
 	useEffect(() => {
 		if(handler.status){
@@ -44,13 +42,13 @@ const Home = props =>{
 			case 200:
 				setCookie('authorization', handler.load, { path: '/'});
 				global.auth = handler.load;
+				localStorage.setItem('token', handler.load.access_token);
 				history.push('/home');
 				break;
 			case 403:
 				dialog.showMessageBox(notAuthorized);
 				break;
 			default: 
-				closeButton.current.focus();
 				dialog.showMessageBox(error);
 				break;
 			}
@@ -68,8 +66,8 @@ const Home = props =>{
 			<LoginHolder>
 				<img src={logo} alt="La Solana Logo" style={{maxWidth: '75%', margin: 15}}/>
 				<div style={{width: '60%'}}>
-					<Input label="Email" type="email" onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
-					<Input label="Senha" type="password" onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
+					<Input label="Email" type="email" defaultValue={username} onChange={e => setUsername(e.target.value)} placeholder="e-mail" />
+					<Input label="Senha" type="password" defaultValue={password} onChange={e => setPassword(e.target.value)} placeholder="senha" onKeyPress={e=>{
 						if (e.key === 'Enter') {
 							e.preventDefault();
 							login(username, password, e => {

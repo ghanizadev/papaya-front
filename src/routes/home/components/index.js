@@ -58,9 +58,9 @@ export const SubHeader = styled.div`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: row;
+	justify-content: flex-end;
 	align-items: center;
 	margin: 3.5vw 0 0 18vw;
-	justify-content: flex-start;
 `;
 
 export const SideBar = styled.div`
@@ -142,6 +142,7 @@ const InputContainer = styled.div`
     border: .5px solid lightgray;
     border-radius: 5px;
     padding: 3px 5px;
+	max-height: 30px;
     flex: 1;
     display: flex;
     align-items: center;
@@ -171,12 +172,14 @@ const InputLabel = styled.span`
 const ButtonComponent = styled.button`
     height: 30px;
     border: none;
-    width: 120px;
+    min-width: 120px;
     margin: 0 0 0 5px;
     border-radius: 15px;
     color: white;
     font-weight: bold;
     background-color: #ed9140;
+	padding: 0 15px;
+	margin: 5px;
 `;
 
 const InputComponent = styled.input`

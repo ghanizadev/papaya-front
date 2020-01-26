@@ -7,7 +7,8 @@ import {
 	SubHeader,
 	SidebarButton,
 	Container,
-	Overlay
+	Overlay,
+	Button
 } from './components';
 import ProductInterface from './products';
 import ProviderInterface from './providers';
@@ -16,7 +17,6 @@ import TablesInterface from './tables';
 import SettingsInterface from './settings';
 import ManagementInterface from './management';
 import ClientsInterface from './clients';
-import WaitingListInterface from './waitinglist';
 import { Context } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
@@ -25,10 +25,11 @@ import { useHistory } from 'react-router-dom';
 import Axios from 'axios';
 import io from 'socket.io-client';
 
-const {dialog, app} = window.require('electron').remote;
+const {dialog, app } = window.require('electron').remote;
+const ipcRenderer = window.require('electron').ipcRenderer;
 
 const quitConfirm = {
-	type: 'warning',
+	type: 'question',
 	buttons: ['Cancelar', 'Trocar de usuário', 'Sair'],
 	defaultId: 0,
 	cancelId: 0,
@@ -108,8 +109,6 @@ const Home = () => {
 			return <ManagementInterface />;
 		case 'entregas':
 			return <DeliveryInterface />;
-		case 'lista de espera':
-			return <WaitingListInterface />;
 		default:
 			return <TablesInterface />;
 		}
@@ -149,11 +148,33 @@ const Home = () => {
 						</span>
 					</div>
 				</Header>
-				<SubHeader />
+				<SubHeader>
+					<Button onClick={()=> ipcRenderer.invoke('openModal', {
+						title: 'Abrir mesa',
+						size: {
+							width: 300,
+							height: 120,
+						},
+						modal: true,
+						url: '/home/tables/open?token=' + cookies.authorization.access_token,
+						resizable: false,
+						fulscreenable: false
+					})}>Abrir mesa (F2)</Button>
+					<Button onClick={()=> ipcRenderer.invoke('openModal', {
+						title: 'Lista de espera',
+						size: {
+							width: 500,
+							height: 800,
+						},
+						modal: true,
+						url: '/home/tables/list',
+						resizable: false,
+						fulscreenable: false
+					})}>Lista de espera (F3)</Button>
+				</SubHeader>
 				<SideBar>
 					<SidebarButton selected={page === 'Mesas'} onClick={() => setPage('Mesas')}>Mesas</SidebarButton>
 					<SidebarButton selected={page === 'Entregas'} onClick={() => setPage('Entregas')}>Entregas</SidebarButton>
-					<SidebarButton selected={page === 'Lista de espera'} onClick={() => setPage('Lista de espera')}>Lista de espera</SidebarButton>
 					<SidebarButton selected={page === 'Clientes'} onClick={() => setPage('Clientes')}>Clientes</SidebarButton>
 					<SidebarButton selected={page === 'Produtos'} onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
 					<SidebarButton selected={page === 'Fornecedores'} onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>

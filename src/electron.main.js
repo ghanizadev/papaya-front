@@ -1,11 +1,12 @@
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
+let token;
 
 const menuTemplate = [
 	{
-		label: 'Filter',
+		label: 'Arquivo',
 		submenu: [
 			{
 				label: 'Hello',
@@ -15,9 +16,63 @@ const menuTemplate = [
 				}
 			}
 		]
+	},
+	{
+		label: 'Mesas',
+		submenu: [
+			{
+				label: 'Abrir mesa',
+				accelerator: 'F2',
+				click() {
+					openWindow({modal: true, title: 'Abrir Mesa', size: {width: 300, height: 120}, resizable: false, url: '/home/tables/open', fullscreenable: false});
+				}
+			},
+			{
+				label: 'Lista de espera',
+				accelerator: 'F3',
+				click() {
+					openWindow({modal: true, title: 'Lista de espera', size: {width: 500, height: 800}, resizable: false, url: '/home/tables/list', fullscreenable:  false});
+				}
+			}
+		]
 	}
 ];
 const menuMain = Menu.buildFromTemplate(menuTemplate);
+
+const openWindow = args => {
+	const win = new BrowserWindow({
+		modal: args.modal || true,
+		title: args.title || null,
+		parent: mainWindow,
+		width: args.size.width || 1000,
+		height: args.size.height || 800,
+		webPreferences: {
+			nodeIntegration: true,
+			nodeIntegrationInSubFrames: true
+		}
+	});
+	win.on('page-title-updated', function(e) {
+		e.preventDefault();
+	});
+
+	win.loadURL('http://192.168.100.2:8080' + args.url);
+	win.setMenuBarVisibility(false);
+	win.setResizable(args.resizable || false);
+	win.setFullScreenable(args.fullscreenable || false);
+	win.center();
+};
+
+ipcMain.handle('openModal', (event, args) => {
+	event.preventDefault();
+	return new Promise((resolve, reject) => {
+		try {
+			openWindow(args);
+		}catch(e) {
+			reject(e);
+		}
+		resolve();
+	});
+});
 
 function createWindow () {
 	mainWindow = new BrowserWindow({
@@ -36,36 +91,9 @@ function createWindow () {
 	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
-
-	mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options) => {
-		if (frameName === 'Pagamento') {
-			// open window as modal
-			event.preventDefault();
-			Object.assign(options, {
-				modal: true,
-				title: 'Novo Pagamento',
-				parent: mainWindow,
-				width: 1000,
-				height: 800,
-			});
-			const win = new BrowserWindow(options);
-
-			win.on('page-title-updated', function(e) {
-				e.preventDefault();
-			});
-
-			win.setMenuBarVisibility(false);
-			win.fullScreenable = false;
-			win.resizable = false;
-			win.center();
-			
-			event.newGuest = win;
-		}
-	});
 }
 
 app.on('ready', () => {
-	console.log(path.join(__dirname, '../public/logo192.png'));
 	Menu.setApplicationMenu(menuMain);
 	createWindow();
 	mainWindow.maximize();

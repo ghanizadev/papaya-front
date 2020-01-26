@@ -841,7 +841,7 @@ const TableDescription = props => {
 	const state = useContext(Context);
 	return (
 		<div style={{width: '100%', position: 'relative'}}>
-			<h1>{order.tableNumber}.{order.costumer}</h1>
+			<h1>{order.tableNumber}.{order.customer}</h1>
 			<div style={{display: 'flex', flexDirection: 'column'}}>
 				<span>código: {order.orderId}</span>
 				<span>entrega: {order.deliver}</span>
@@ -1527,7 +1527,7 @@ const BusyTable = props => {
 			}}
 		>
 			<h2 style={{ color: '#888', height: 'min-content' }}>
-				{load.number}.{load.costumer}
+				{load.number}.{load.customer}
 			</h2>
 			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
 			<BusyTableProductContainer>
@@ -1621,13 +1621,13 @@ const WaitingListTable = props => {
 	return (
 		<WaitingPaymentTableContainer>
 			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-				{load.number}.{load.costumer}
+				{load.number}.{load.customer}
 			</h2>
 			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
 				<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
 				<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
 				<span>Próximo da lista</span>
-				<WaitingPaymentTableButtom>{load.order.costumer}</WaitingPaymentTableButtom>
+				<WaitingPaymentTableButtom>{load.order.customer}</WaitingPaymentTableButtom>
 			</div>
 			<WaitingPaymentTableButtom
 				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
@@ -1641,15 +1641,15 @@ const WaitingListTable = props => {
 const WaitingPaymentTable = props => {
 	const {load} = props;
 	const state = useContext(Context);
-	const history = useHistory();
+
 	return (
 		<WaitingPaymentTableContainer>
 			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-				{load.number}.{load.costumer}
+				{load.number}.{load.customer}
 			</h2>
 			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
 				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', 'Pagamento', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
+				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', 'payment', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
 			</div>
 			<WaitingPaymentTableButtom
 				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
@@ -1682,14 +1682,5 @@ export const Table = props => {
 		<TableContainer>
 			{status()}
 		</TableContainer>
-	);
-};
-
-const PaymentOverlay = props => {
-	const {table} = props;
-	return (
-		<div>
-			<h3>Pagamento</h3>
-		</div>
 	);
 };
