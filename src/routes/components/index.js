@@ -1,37 +1,69 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
-import { Context} from '../../../context';
+import { Context} from '../../context';
 import { findFlavor, addProduct } from './functions';
 
+import logo from '../../assets/logo.png';
+import { useHistory } from 'react-router';
+
+export const MessageBox = styled.div`
+	width: 30%;
+	height: min-content;
+	border-radius: 7px;
+	background-color: #fff;
+	border: none;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+`;
+
+export const Loading = styled.div`
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.35);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+export const LoadingMessage = styled.span`
+	font-size: 14pt;
+	color: #333;
+`;
+
+export const LoadingTitle = styled.span`
+	font-size: 11pt;
+	color: #444;
+`;
+
+
+export const LoginHolder = styled.div`
+	height: 45vh;
+	width: 45vh;
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 15px;
+	opacity: 1;
+`;
+
 export const Tables = styled.div`
-	padding: 65px 25px 25px 25px;
+	padding: 25px;
 	position: relative;
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-`;
-
-export const Header = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	height: 40px;
-	max-height: 40px;
-	background-color: #ffbe5b;
-	box-sizing: border-box;
-	padding: 0 15px;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	font-size: 14pt;
-	border-radius: 5px 5px 0 0;
-	color: #fdfdfd;
 `;
 
 const TableContainer = styled.div`
@@ -55,6 +87,15 @@ flex-direction: column;
     height: 100%;
 `;
 
+const WaitingPaymentTableContainer = styled.div`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	color: #666;
+`;
+
 const FreeTableContainer = styled.div`
 	min-height: 75%;
 	display: flex;
@@ -70,6 +111,16 @@ const FreeTableButtom = styled.button`
 	color: #40bd63;
 	border-bottom: 1px solid lightgreen;
 	font-size: 18pt;
+`;
+
+const WaitingPaymentTableButtom = styled.button`
+	height: min-content;
+	font-weight: bold;
+	background-color: transparent;
+	border: none;
+	color: #666;
+	border-bottom: 1px solid #666;
+	font-size: 16pt;
 `;
 
 const BusyTableProductContainer = styled.div`
@@ -197,6 +248,521 @@ const CloseButton = styled.button`
 	right: 0;
 `;
 
+export const Background = styled.div`
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	padding: calc(5.25vw + 45px) 45px 45px calc(18vw + 45px);
+	box-sizing: border-box;
+`;
+
+export const Logo = styled.div`
+	background-image: url(${logo});
+	background-size: 75%;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 25px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 12vw;
+	width: 18vw;
+	box-sizing: border-box;
+`;
+
+export const Header = styled.div`
+	height: 3.5vw;
+	color: #fff;
+	background-color: #ffbe5b;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0 25px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 0 0 18vw;
+	justify-content: space-between;
+`;
+
+export const SubHeader = styled.div`
+	height: 1.75vw;
+	color: #fff;
+	background-color: #f1f1f1;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0 25px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 3.5vw 0 0 18vw;
+	justify-content: flex-start;
+`;
+
+export const SideBar = styled.div`
+	width: 18vw;
+	padding: calc(12vw + 25px) 0 25px 0;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	box-sizing: border-box;
+	background-color: #fff;
+`;
+
+export const SidebarButton = styled.button`
+	width: 100%;
+	height: 58px;
+	font-size: 18pt;
+	color: #fdfdfd;
+	background-color: #ffbe5b;
+	text-align: center;
+	padding: 5px;
+	border: 0.25px solid #dcdcdc;
+`;
+
+export const Container = styled.div`
+	height: 100%;
+	width: 100%;
+	border-radius: 5px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+`;
+
+const OverlayBackground = styled.div`
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.35);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+const OverlayBox = styled.div`
+	min-width: 50%;
+	width: 50%;
+	height: min-content;
+	border-radius: 7px;
+	background-color: #fff;
+	border: none;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+`;
+
+const InputContainer = styled.div`
+	max-height: 30px;
+	min-height: 30px;
+	width: 100%;
+    border: .5px solid lightgray;
+    border-radius: 5px;
+    padding: 3px 5px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 5px;
+`;
+
+const TextAreaContainer = styled.div`
+    height: 100px;
+    border: .5px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin: 5px;
+`;
+
+const InputLabel = styled.span`
+    color: gray;
+    white-space: nowrap;
+`;
+
+const InputItemContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	right: 0;
+	left: 0;
+	top: 0;
+	margin: 36px 0 0 0;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 4px 10px 0 rgba(0,0,0,0.12);
+`;
+
+const InputItem = styled.button`
+	width: 100%;
+	height: 30px;
+	color: #444;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	background-color: #fbfbfb;
+	border: .25px solid whitesmoke;
+	padding: 5px;
+	box-sizing: border-box;
+
+	&:hover{
+		background-color: #ffbe5b;
+		color: #fbfbfb;
+	}
+`;
+
+const ButtonComponent = styled.button`
+    height: 30px;
+    border: none;
+    width: 120px;
+    margin: 0 0 0 5px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    background-color: #ed9140;
+`;
+
+const InputComponent = styled.input`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+    background-color: transparent;
+`;
+
+const TextAreaComponent = styled.textarea`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+	background-color: transparent;
+	padding: 3px;
+	resize: none;
+`;
+
+const SelectComponent = styled.select`
+    height: 100%;
+    border: none;
+    width: 100%;
+    margin: 0 0 0 5px;
+    background-color: transparent;
+`;
+
+export const ContentHeader = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 40px;
+	max-height: 40px;
+	background-color: #ffbe5b;
+	box-sizing: border-box;
+	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	font-size: 14pt;
+	border-radius: 5px 5px 0 0;
+	color: #fdfdfd;
+`;
+
+export const ContentContainer = styled.div`
+    padding: 65px 25px 25px 25px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ResultsTable = styled.div`
+	box-sizing: border-box;
+    width: 100%;
+	height: 100%;
+	overflow: hidden auto;
+`;
+
+const ResultsContainer = styled.div`
+	width: 100%;
+    flex: 1;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 5px;
+    box-sizing: border-box;
+    position: relative;
+
+`;
+
+export const Results = props => {
+	const {data, headerOptions, headerButtons, title} = props;
+	const [headerItems, setHeaderItems] = useState([]);
+	const [parentHeight, setParentHeight] = useState(500);
+
+	const resulttable = useRef();
+	const parent = useRef();
+
+	useEffect(()=>{
+		const keys = Object.keys(headerOptions);
+
+		let total = 0;
+		keys.forEach(key => {
+			total += headerOptions[key].size;
+		});
+
+		const localHeaderItems = headerItems;
+
+		keys.forEach(key => {
+			const headerItem = {};
+
+			headerItem.label = headerOptions[key].label;
+			headerItem.key = key;
+			headerItem.width = (resulttable.current.offsetWidth / total) * headerOptions[key].size;
+			localHeaderItems.push(headerItem);
+		});
+
+		setHeaderItems(localHeaderItems);
+		setParentHeight(parent.current.offsetHeight);
+
+	},[]);
+
+	return (
+		<ResultsContainer ref={parent}>
+			<div
+				style={{
+					backgroundColor: '#ed9140',
+					color: 'white',
+					position: 'absolute',
+					textAlign: 'center',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					top: 0,
+					right: 0,
+					left: 0,
+					height: 42,
+					display: 'flex',
+					flexDirection: 'row',
+					padding: '0 25px'
+				}}>
+				<h3>{title}</h3>
+				<div>
+					{(headerButtons && Array.isArray(headerItems)) && headerButtons.map((button, index) => {
+						return (
+							<button key={index} type="button" onClick={(e)=>{button.onButtonClick(e);}}>{button.title}</button>
+						);
+					})}
+				</div>
+
+			</div>
+			<div style={{
+				backgroundColor: 'whitesmoke',
+				color: '#444',
+				position: 'absolute',
+				textAlign: 'center',
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				top: 42,
+				right: 0,
+				left: 0,
+				height: 30,
+				display: headerButtons.length > 0 ? 'flex' : 'none',
+				flexDirection: 'row'
+			}}>
+				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
+			</div>
+
+			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight, padding: headerButtons.length > 0 ? '72px 5px 5px 5px' : '42px 5px 5px 5px'}}>
+				{data && data.map((item, index) => {
+					return (
+						<div style={{
+							backgroundColor: index & 1 ? 'whitesmoke': 'white',
+							color: '#444',
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							height: 30
+						}} key={index}>
+							{headerItems && headerItems.map((headerItem, index) => 
+								<div key={index} style={{textAlign: 'center', width: headerItem.width || null}}>
+									{headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
+								</div>
+							)}
+						</div>
+					);
+				})}
+			</ResultsTable>
+		</ResultsContainer>
+	);
+};
+
+Results.propTypes = {
+	headerButtons: PropTypes.arrayOf(
+		PropTypes.object
+	),
+	title: PropTypes.string
+};
+
+Results.defaultProps = {
+	headerButtons: [],
+	title: 'Resultados'
+};
+
+export const Input = props => {
+	const {label, containerStyle, disabled, proportion} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<InputComponent {...props} />
+		</InputContainer>
+	);
+};
+
+export const Search = props => {
+	const {label, containerStyle, disabled, proportion, data} = props;
+	const [visible, setVisible] = useState(false);
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+	currentContainerStyle.position = 'relative';
+
+	const ref = useRef(null);
+	const inputRef = useRef(null);
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+		  document.removeEventListener('mousedown', handleClickOutside);
+		};
+	  });
+
+	function handleClickOutside(event) {
+		if (ref.current &&
+			inputRef.current &&
+			(!ref.current.contains(event.target) &&
+			!inputRef.current.contains(event.target))){
+			setVisible(false);
+		}
+	}
+	  
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<InputComponent
+				ref={inputRef}
+				onKeyPress={e => {
+					if (inputRef.current.value === '')
+						return setVisible(false);
+					return setVisible(true);
+				}} {...props} />
+			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
+				{data && data.map((item, index) => (
+					<InputItem key={index} onClick={() => {props.onSelect(item); setVisible(false);}}>{item}</InputItem>
+				))}
+			</InputItemContainer>
+		</InputContainer>
+	);
+};
+
+Search.propTypes = {
+	onSelect: PropTypes.func
+};
+
+Search.defaultProps = {
+	onSelect: () => {}
+};
+
+export const TextArea = props => {
+	const {label, containerStyle, disabled, proportion} = props;
+
+	let currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<TextAreaContainer style={currentContainerStyle}>
+			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
+			<TextAreaComponent draggable={false} {...props} />
+		</TextAreaContainer>
+	);
+};
+
+export const Select = props => {
+	const {label, children, containerStyle, proportion} = props;
+
+	const currentContainerStyle = containerStyle ? containerStyle : {};
+	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+    
+	return (
+		<InputContainer style={currentContainerStyle}>
+			<InputLabel>{label}</InputLabel>
+			<SelectComponent {...props}>{children}</SelectComponent>
+		</InputContainer>
+	);
+};
+
+export const Button = props => {
+	return (
+		<ButtonComponent {...props} />
+	);
+};
+
+export const Overlay = () => {
+	return (
+		<Context.Consumer>
+			{({ context }) => {
+				return (
+					<OverlayBackground
+						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
+					>
+						<OverlayBox>{context.overlay.component}</OverlayBox>
+					</OverlayBackground>
+				);
+			}}
+		</Context.Consumer>
+	);
+};
+
+Results.propTypes = {
+	data: PropTypes.arrayOf(PropTypes.object)
+};
+
+Input.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	proportion: PropTypes.number,
+	multiline: PropTypes.bool
+};
+
+Input.defaultProps = {
+	proportion: 0,
+	multiline: false,
+};
+
+Select.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	children: PropTypes.any
+};
+
 const ProductDescription = props => {
 	const {product} = props;
 
@@ -212,7 +778,59 @@ const ProductDescription = props => {
 				<span>adicionais: {product.aditionals}</span>
 				<span>preço: {product.price}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
+		</div>
+	);
+};
+
+const ProductDescriptionCustomer = props => {
+	const {items, name} = props.customer;
+	const [list, setList] = useState([]);
+
+	const state = useContext(Context);
+	return (
+		<div style={{width: '100%', position: 'relative', padding: 25, boxSizing: 'border-box'}}>
+			<p style={{fontSize: 24, color: '#333', fontWeight:  'bold'}}>{name}</p>
+			<p style={{fontSize: 18, color: '#666', fontWeight:  'bold'}}>Produtos</p>
+			<div style={{display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh'}}>
+				{items && items.map((product, index) => (
+					<div key={index}
+						style={{
+							border: '1px solid whitesmoke',
+							margin: 8,
+							borderRadius: 5,
+							padding: 15,
+						}}>
+						<span style={{fontSize: 16, display: 'flex', color: '#444', fontWeight:  'bold', alignItems: 'center'}}>
+							<input
+								onClick={() => {
+									console.log(list);
+									const tmp = list;
+
+									if(list.includes(product)){
+										tmp.pop(product);
+										setList(tmp);
+										return;
+									}
+									tmp.push(product);
+									setList(tmp);
+									return;
+
+								}} type="checkbox"/>
+							{product.title}
+						</span>
+						<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+							<span style={{fontSize: 12, color: '#888', fontWeight:  'bold'}}>Descrição: {product.description.toString()}, adicionais: {product.aditionals}</span>
+							<span style={{fontSize: 20, color: '#1ad67e', fontWeight:  'bold'}}>R$ {product.price.toFixed(2).toString().replace('.', ',')}</span>
+						</div>
+					</div>
+				))}
+			</div>
+			<div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
+				<Button>Descontar</Button>
+				<Button>Pagar total</Button>
+			</div>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -223,14 +841,14 @@ const TableDescription = props => {
 	const state = useContext(Context);
 	return (
 		<div style={{width: '100%', position: 'relative'}}>
-			<h1>{order.tableNumber}.{order.costumer}</h1>
+			<h1>{order.tableNumber}.{order.customer}</h1>
 			<div style={{display: 'flex', flexDirection: 'column'}}>
 				<span>código: {order.orderId}</span>
 				<span>entrega: {order.deliver}</span>
 				<span>data de entrada: {new Date(order.createdAt).toLocaleDateString()}</span>
 				<span>última atualização: {new Date(order.updatedAt).toLocaleTimeString()}</span>
 			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, visible: false});}}>&times;</CloseButton>
+			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false }});}}>&times;</CloseButton>
 		</div>
 	);
 };
@@ -324,7 +942,7 @@ const AddProductComponent = props => {
 					borderRadius: 5,
 					color: '#fdfdfd'
 				}}>Adicionar</button>
-			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
 
 		</div>
 	);
@@ -402,7 +1020,7 @@ const AddPizzaComponent = props => {
 				position: 'relative'
 			}}
 		>
-			<CloseButton onClick={() => state.setContext({...state.context, visible: false})}>&times;</CloseButton>
+			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
 			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 				<h1>Pizza</h1>
 				<div
@@ -785,7 +1403,7 @@ const BusyTableProduct = props => {
 		<BusyTableProductButton
 			style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
 			onClick={() => {
-				state.setContext({...state.ontext, overlay: { visible: true, component: <ProductDescription {...props}/>}});
+				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescription {...props}/>}});
 			}}
 		>
 			<span
@@ -821,10 +1439,81 @@ BusyTableProduct.propTypes = {
 	product: PropTypes.object.isRequired
 };
 
+const BusyTableProductCustomer = props => {
+	const { items, name} = props.customer;
+
+	const state = useContext(Context);
+
+	return (
+		<BusyTableProductButton
+			onClick={() => {
+				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} />}});
+			}}
+		>
+			<span
+				style={{
+					textAlign: 'start',
+					color: '#444',
+					marginVertical: 3
+				}}
+			>
+				{name}
+			</span>
+			{items && items.map(({quantity, title, price, subtotal}, index) => (
+				<div key={index} style={{width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
+					<span
+						style={{
+							textAlign: 'end',
+							marginVertical: 3,
+							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
+							fontSize: '12pt'
+						}}
+					>
+						{`${quantity}x ${title}`}
+					</span>
+					<br/>
+					<span
+						style={{
+							textAlign: 'end',
+							marginVertical: 3,
+							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888'
+						}}
+					>
+						{`un R$ ${price
+							.toFixed(2)
+							.toString()
+							.replace('.', ',')}
+				=> sub R$ ${subtotal
+					.toFixed(2)
+					.toString()
+					.replace('.', ',')}`}
+					</span>
+				</div>
+			))}
+		</BusyTableProductButton>
+	);
+};
+
+BusyTableProduct.propTypes = {
+	product: PropTypes.object.isRequired
+};
+
 const BusyTable = props => {
 	const { load } = props;
 
 	const state = useContext(Context);
+	const [owners, setOwners] = useState(false);
+
+	let customers = {};
+	load.order.items.forEach( item => {
+		const keys = Object.keys(customers);
+
+		if (keys.includes(item.owner)){
+			customers[item.owner].push(item);
+		}else {
+			customers[item.owner] = [item];
+		}
+	});
 
 	return (
 		<div
@@ -838,15 +1527,24 @@ const BusyTable = props => {
 			}}
 		>
 			<h2 style={{ color: '#888', height: 'min-content' }}>
-				{load.number}.{load.order.costumer}
+				{load.number}.{load.customer}
 			</h2>
+			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
 			<BusyTableProductContainer>
-				{load.order.items.map((product, index) => (
-					<BusyTableProduct
-						key={index}
-						product={product}
-					/>
-				))}
+				{owners ? 
+					Object.keys(customers).map((customer, index) => (
+						<BusyTableProductCustomer
+							key={index}
+							customer={{ items: customers[customer], name: customer}}
+						/>
+					))
+					:
+					load.order.items.map((product, index) => (
+						<BusyTableProduct
+							key={index}
+							product={product}
+						/>
+					))}
 			</BusyTableProductContainer>
 			<div
 				style={{
@@ -884,7 +1582,7 @@ const BusyTable = props => {
 					onClick={() => {
 						state.setContext({
 							...state.context,
-							overlay:{
+							overlay: {
 								visible: true,
 								component: <AddComponent order={load.order} />
 							}
@@ -903,7 +1601,12 @@ const BusyTable = props => {
 };
 
 BusyTable.propTypes = {
-	load: PropTypes.object.isRequired
+	load: PropTypes.object.isRequired,
+	owners: PropTypes.bool,
+};
+
+BusyTable.defaultProps = {
+	owners: false,
 };
 
 const FreeTable = props => (
@@ -912,8 +1615,72 @@ const FreeTable = props => (
 	</FreeTableContainer>
 );
 
-export const Table = props => (
-	<TableContainer>
-		<BusyTable {...props} />
-	</TableContainer>
-);
+const WaitingListTable = props => {
+	const {load} = props;
+	const state = useContext(Context);
+	return (
+		<WaitingPaymentTableContainer>
+			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+				{load.number}.{load.customer}
+			</h2>
+			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+				<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+				<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
+				<span>Próximo da lista</span>
+				<WaitingPaymentTableButtom>{load.order.customer}</WaitingPaymentTableButtom>
+			</div>
+			<WaitingPaymentTableButtom
+				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+				style={{fontSize: 12}}>
+				detalhes
+			</WaitingPaymentTableButtom>
+		</WaitingPaymentTableContainer>
+	);
+};
+
+const WaitingPaymentTable = props => {
+	const {load} = props;
+	const state = useContext(Context);
+
+	return (
+		<WaitingPaymentTableContainer>
+			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+				{load.number}.{load.customer}
+			</h2>
+			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
+				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', 'payment', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
+			</div>
+			<WaitingPaymentTableButtom
+				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
+				style={{fontSize: 12}}>
+				detalhes
+			</WaitingPaymentTableButtom>
+		</WaitingPaymentTableContainer>
+	);
+};
+
+export const Table = props => {
+	const {load} = props;
+
+	const status = () => {
+		switch(load.status){
+		case 'FREE':
+			return <FreeTable {...props} />;
+		case 'BUSY':
+			return <BusyTable {...props} />;
+		case 'WAITING_PAYMENT':
+			return <WaitingPaymentTable {...props} />;
+		case 'ON_HOLD':
+			return <WaitingListTable {...props} />;
+		default:
+			return <FreeTable {...props} />;
+		}
+	};
+
+	return (
+		<TableContainer>
+			{status()}
+		</TableContainer>
+	);
+};

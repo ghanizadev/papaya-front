@@ -32,8 +32,7 @@ export default (username = '', password = '', handler = () => {}) => {
 		})
 		.then((responseToken, deny) => {
 			if(responseToken.status === 200){ 
-				global.token = responseToken.data.access_token;
-				   
+				global.token = responseToken.data.access_token;		   
 				return handler({
 					status: responseToken.status,
 					load: responseToken.data,
