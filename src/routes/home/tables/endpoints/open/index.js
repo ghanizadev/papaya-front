@@ -14,7 +14,7 @@ const OpenTableEndpoint = () => {
 				try{
 					const search = window.location.search;
 					const params = new URLSearchParams(search);
-					const token = params.get('token');
+					const token = params.get('access_token');
                     
 					openTable(token, body)
 						.then(result => {

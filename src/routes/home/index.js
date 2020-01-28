@@ -149,28 +149,44 @@ const Home = () => {
 					</div>
 				</Header>
 				<SubHeader>
-					<Button onClick={()=> ipcRenderer.invoke('openModal', {
-						title: 'Abrir mesa',
-						size: {
-							width: 300,
-							height: 120,
-						},
-						modal: true,
-						url: '/home/tables/open?token=' + cookies.authorization.access_token,
-						resizable: false,
-						fulscreenable: false
-					})}>Abrir mesa (F2)</Button>
-					<Button onClick={()=> ipcRenderer.invoke('openModal', {
-						title: 'Lista de espera',
-						size: {
-							width: 500,
-							height: 800,
-						},
-						modal: true,
-						url: '/home/tables/list',
-						resizable: false,
-						fulscreenable: false
-					})}>Lista de espera (F3)</Button>
+					{page && page === 'Mesas' ? (
+						<>
+							<Button onClick={()=> ipcRenderer.invoke('openModal', {
+								title: 'Abrir mesa',
+								size: {
+									width: 300,
+									height: 120,
+								},
+								modal: true,
+								url: '/home/tables/open',
+								resizable: false,
+								fulscreenable: false
+							})}>Abrir mesa (F2)</Button>
+							<Button onClick={()=> ipcRenderer.invoke('openModal', {
+								title: 'Lista de espera',
+								size: {
+									width: 500,
+									height: 800,
+								},
+								modal: true,
+								url: '/home/tables/list',
+								resizable: false,
+								fulscreenable: false
+							})}>Lista de espera (F3)</Button>
+							<Button onClick={()=> ipcRenderer.invoke('openModal', {
+								title: 'Adicionar produto',
+								size: {
+									width: 800,
+									height: 600,
+								},
+								modal: true,
+								url: '/home/tables/add',
+								resizable: false,
+								fulscreenable: false
+							})}>Adicionar produto (F4)</Button>
+							<Button onClick={()=> ipcRenderer.invoke('refresh', {})}>Atualizar mesas (F5)</Button>
+						</>
+					) : null}
 				</SubHeader>
 				<SideBar>
 					<SidebarButton selected={page === 'Mesas'} onClick={() => setPage('Mesas')}>Mesas</SidebarButton>
