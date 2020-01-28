@@ -25,7 +25,8 @@ const Provider = props =>{
 	return (
 		<Context.Provider value={state}>
 			{props.children}
-		</Context.Provider>);
+		</Context.Provider>
+	);
 };
 
 const Consumer = props => 

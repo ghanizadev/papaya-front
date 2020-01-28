@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, ipcMain } = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, session } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -31,7 +31,7 @@ const menuTemplate = [
 				label: 'Lista de espera',
 				accelerator: 'F3',
 				click() {
-					openWindow({modal: true, title: 'Lista de espera', size: {width: 500, height: 800}, resizable: false, url: '/home/tables/list', fullscreenable:  false});
+					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/home/tables/list', fullscreenable:  false});
 				}
 			}
 		]
@@ -40,29 +40,40 @@ const menuTemplate = [
 const menuMain = Menu.buildFromTemplate(menuTemplate);
 
 const openWindow = args => {
-	const win = new BrowserWindow({
-		modal: args.modal || true,
-		title: args.title || null,
-		parent: mainWindow,
-		width: args.size.width || 1000,
-		height: args.size.height || 800,
-		webPreferences: {
-			nodeIntegration: true,
-			nodeIntegrationInSubFrames: true
-		}
-	});
-	win.on('page-title-updated', function(e) {
-		e.preventDefault();
-	});
+	session.defaultSession.cookies.get({})
+		.then((cookies) => {
+			const auth = cookies.find(cookie => cookie.name = 'authorization');
+			const decoded = decodeURIComponent(auth.value);
+			const json = JSON.parse(decoded);
 
-	win.loadURL('http://192.168.100.2:8080' + args.url);
-	win.setMenuBarVisibility(false);
-	win.setResizable(args.resizable || false);
-	win.setFullScreenable(args.fullscreenable || false);
-	win.center();
+			const win = new BrowserWindow({
+				modal: args.modal || true,
+				title: args.title || null,
+				parent: mainWindow,
+				width: args.size.width || 1000,
+				height: args.size.height || 800,
+				webPreferences: {
+					nodeIntegration: true,
+					nodeIntegrationInSubFrames: true
+				}
+			});
+			win.on('page-title-updated', function(e) {
+				e.preventDefault();
+			});
+		
+			win.loadURL('http://192.168.100.2:8080' + args.url + '?access_token=' + json.access_token);
+			win.setMenuBarVisibility(false);
+			win.setResizable(args.resizable || false);
+			win.setFullScreenable(args.fullscreenable || false);
+			win.center();
+		}).catch((error) => {
+			console.log(error);
+		});
+	
 };
 
 ipcMain.handle('openModal', (event, args) => {
+  
 	event.preventDefault();
 	return new Promise((resolve, reject) => {
 		try {

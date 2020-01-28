@@ -365,7 +365,8 @@ const InputContainer = styled.div`
 	max-height: 30px;
 	min-height: 30px;
 	width: 100%;
-    border: .5px solid lightgray;
+	border: .5px solid lightgray;
+	box-sizing: border-box;
     border-radius: 5px;
     padding: 3px 5px;
     flex: 1;
@@ -373,7 +374,8 @@ const InputContainer = styled.div`
     align-items: center;
     justify-content: flex-start;
     flex-direction: row;
-    margin: 5px;
+	margin: 5px;
+	position: relative;
 `;
 
 const TextAreaContainer = styled.div`
@@ -612,12 +614,14 @@ Results.propTypes = {
 	headerButtons: PropTypes.arrayOf(
 		PropTypes.object
 	),
-	title: PropTypes.string
+	title: PropTypes.string,
+	headerOptions: PropTypes.object
 };
 
 Results.defaultProps = {
 	headerButtons: [],
-	title: 'Resultados'
+	title: 'Resultados',
+	headerOptions: {}
 };
 
 export const Input = props => {
@@ -635,12 +639,11 @@ export const Input = props => {
 };
 
 export const Search = props => {
-	const {label, containerStyle, disabled, proportion, data} = props;
+	const {label, containerStyle, disabled, proportion, data, onSelect} = props;
 	const [visible, setVisible] = useState(false);
 
-	let currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
-	currentContainerStyle.position = 'relative';
+	let currentContainerStyle = (containerStyle != null && containerStyle != {}) ? containerStyle : {};
+	if (proportion > 0) Object.defineProperty(currentContainerStyle,'flexGrow', {value: proportion});
 
 	const ref = useRef(null);
 	const inputRef = useRef(null);
@@ -648,9 +651,9 @@ export const Search = props => {
 	useEffect(() => {
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
-		  document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	  });
+	});
 
 	function handleClickOutside(event) {
 		if (ref.current &&
@@ -660,21 +663,20 @@ export const Search = props => {
 			setVisible(false);
 		}
 	}
-	  
     
 	return (
-		<InputContainer style={currentContainerStyle}>
+		<InputContainer style={{...currentContainerStyle, zIndex: 3}}>
 			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
 			<InputComponent
 				ref={inputRef}
-				onKeyPress={e => {
+				onKeyPress={() => {
 					if (inputRef.current.value === '')
 						return setVisible(false);
 					return setVisible(true);
 				}} {...props} />
 			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
-				{data && data.map((item, index) => (
-					<InputItem key={index} onClick={() => {props.onSelect(item); setVisible(false);}}>{item}</InputItem>
+				{data && data.map(item => (
+					<InputItem key={item.value} onClick={() => {onSelect(item); setVisible(false);}}>{item.label}</InputItem>
 				))}
 			</InputItemContainer>
 		</InputContainer>
@@ -682,11 +684,21 @@ export const Search = props => {
 };
 
 Search.propTypes = {
-	onSelect: PropTypes.func
+	onSelect: PropTypes.func,
+	label: PropTypes.string,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	proportion: PropTypes.number,
+	data: PropTypes.array,
 };
 
 Search.defaultProps = {
-	onSelect: () => {}
+	onSelect: () => {},
+	label: '',
+	containerStyle: {},
+	disabled: false,
+	proportion: 1,
+	data: [],
 };
 
 export const TextArea = props => {
@@ -703,6 +715,20 @@ export const TextArea = props => {
 	);
 };
 
+TextArea.propTypes = {
+	label: PropTypes.string,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	proportion: PropTypes.number,
+};
+
+TextArea.defaultProps = {
+	label: '',
+	containerStyle: {},
+	disabled: false,
+	proportion: 1,
+};
+
 export const Select = props => {
 	const {label, children, containerStyle, proportion} = props;
 
@@ -716,6 +742,23 @@ export const Select = props => {
 		</InputContainer>
 	);
 };
+
+Select.propTypes = {
+	label: PropTypes.string.isRequired,
+	containerStyle: PropTypes.object,
+	disabled: PropTypes.bool,
+	children: PropTypes.any,
+	proportion: PropTypes.number
+};
+
+Select.defaultProps = {
+	label: '',
+	containerStyle: {},
+	disaled: false,
+	children: [],
+	proportion: 1
+};
+
 
 export const Button = props => {
 	return (
@@ -756,12 +799,7 @@ Input.defaultProps = {
 	multiline: false,
 };
 
-Select.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	children: PropTypes.any
-};
+
 
 const ProductDescription = props => {
 	const {product} = props;
@@ -781,6 +819,14 @@ const ProductDescription = props => {
 			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
 		</div>
 	);
+};
+
+ProductDescription.propTypes = {
+	product: PropTypes.object,
+};
+
+ProductDescription.defaultProps = {
+	product: {code: '0', title: 'NO TITLE', group: 'NO GROUP', variation: 'NO VARIATION', description: ['NO DESCRIPTION'], aditionals: 'NO ADDITIONALS', price: 0}
 };
 
 const ProductDescriptionCustomer = props => {
@@ -835,6 +881,10 @@ const ProductDescriptionCustomer = props => {
 	);
 };
 
+ProductDescriptionCustomer.propTypes = {
+	customer: PropTypes.object.isRequired
+};
+
 const TableDescription = props => {
 	const {order} = props;
 
@@ -851,6 +901,10 @@ const TableDescription = props => {
 			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false }});}}>&times;</CloseButton>
 		</div>
 	);
+};
+
+TableDescription.propTypes = {
+	order: PropTypes.object.isRequired
 };
 
 
