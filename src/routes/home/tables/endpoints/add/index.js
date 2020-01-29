@@ -1,7 +1,7 @@
 import React, { useState, Children, useReducer, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Input, Button, Search} from '../../../../components';
+import { Input, Button, Search, TextArea} from '../../../../components';
 import { getFlavor } from './function';
 
 const Container = styled.div`
@@ -81,8 +81,8 @@ const FlavorBoxContainer = styled.div`
 `;
 
 const FlavorItemContainer = styled.div`
-	height: 300px;
-	width: 120px;
+	height: 150px;
+	width: 480px;
 	margin: 0 5px;
 	border-radius: 15px;
 	border: solid 1px whitesmoke;
@@ -91,85 +91,19 @@ const FlavorItemContainer = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	position: relative;
+	box-sizing: border-box;
 `;
-
-const ButtonLink = styled.button`
-	border: none;
-	height: 30px;
-	background-color: transparent;
-	color: #ed9140;
-	text-decoration: underline;
-	margin: 5px auto;
-`;
-
-const OverlayContainer = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`;
-
-const OverlayBox = styled.div`
-	width: 75%;
-	height: 75%;
-	background-color: white;
-	padding: 25px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	box-shadow: 5px 10px 8px #888888;
-`;
-
-const AdditionalOverlay = props => {
-	const {item, visible, onClose} = props;
-	const [open, setOpen] = useState(visible);
-
-	const setVisible = () => setOpen(true);
-
-	return (
-		<OverlayContainer style={{display: open ? 'flex' : 'none'}}>
-			<OverlayBox>
-				<h3>Adicionais</h3>
-				<Button onClick={()=> {setOpen(false); onClose();}}>Fechar</Button>
-			</OverlayBox>
-		</OverlayContainer>)
-	;
-};
-
-AdditionalOverlay.propTypes = {
-	item: PropTypes.object.isRequired,
-	visible: PropTypes.bool,
-	onClose: PropTypes.func
-};
-
-AdditionalOverlay.defaultProps = {
-	visible: false,
-	onClose: ()=>{}
-};
 
 const FlavorItem = props => {
-	const {flavor, onRemove, onAdditionalClick} = props;
+	const {flavor, onRemove} = props;
 
 	return (
 		<FlavorItemContainer>
-			<h3>{flavor.name}</h3>
+			<h3 style={{margin: 0}}>{flavor.name}</h3>
 			<h5 style={{margin: 0}}>{flavor.code}</h5>
-			<p>{flavor.description.join(', ')}</p>
+			<p style={{margin: 0, fontSize: 10, color: '#666'}}>{flavor.description.join(', ')}</p>
+			<TextArea label="Adicionais" />
 			<CloseButton onClose={onRemove} />
-			<ButtonLink style={{
-				position: 'absolute',
-				bottom: 0,
-				margin: '0 -15px',
-				boxSizing: 'border-box',
-				width: '100%'}}
-			onClick={() => {onAdditionalClick();}}
-			>Adicionais</ButtonLink>
 		</FlavorItemContainer>
 	);
 };
@@ -177,7 +111,6 @@ const FlavorItem = props => {
 FlavorItem.propTypes = {
 	flavor: PropTypes.object.isRequired,
 	onRemove: PropTypes.func.isRequired,
-	onAdditionalClick: PropTypes.func.isRequired
 };
 
 const Page = props => {
@@ -203,7 +136,7 @@ export const FlavorBox = props => {
 	const {children, onConfirm, onClean} = props;
 
 	const onItem = {
-		height: '360px',
+		height: '500px',
 		border: 'solid 1px whitesmoke',
 		padding: '15px',
 		margin: '15x auto',
@@ -212,7 +145,7 @@ export const FlavorBox = props => {
 
 	return (
 		<FlavorBoxContainer style={Children.count(children) > 0 ? onItem : {}}>
-			<div style={{display: 'flex', flexDirection: 'row', margin: 'auto'}}>
+			<div style={{display: 'flex', flexDirection: 'column', margin: 'auto'}}>
 				{children}
 			</div>
 			<div style={{display: 'flex', flexDirection: 'row', margin: '15px', width: '100%', justifyContent: 'flex-end'}}>
@@ -271,10 +204,6 @@ export const AddEndpoint = () => {
 
 	const getVisible = number => page === number;
 
-	const overlay = useRef();
-
-	useEffect(()=>{window.alert(selectedItem.name && selectedItem.name);},[selectedItem]);
-
 	return (
 		<Container>
 			<Page visible={getVisible('pick')}>
@@ -324,11 +253,10 @@ export const AddEndpoint = () => {
 					})}/>
 					<FlavorBox onClean={() => dispatchFlavors({type: 'clean'})} onConfirm={() => {setPage('confirm');}}>
 						{flavors && flavors.data.map((flavor, index) => {
-							return <FlavorItem onAdditionalClick={()=>{setSelectedItem(flavor); overlay.current.visible = true;}} onRemove={() => dispatchFlavors({type: 'del', payload: flavor})} flavor={flavor} key={index} />;
+							return <FlavorItem onAdditionalClick={()=>{setSelectedItem(flavor);}} onRemove={() => dispatchFlavors({type: 'del', payload: flavor})} flavor={flavor} key={index} />;
 						})}
 					</FlavorBox>
 				</div>
-				<AdditionalOverlay ref={overlay} onClose={()=>{setSelectedItem({});}} item={selectedItem} />
 			</Page>
 			<Page visible={getVisible('product')}>
 				<h2>Produtos</h2>

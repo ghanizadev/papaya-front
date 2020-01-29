@@ -2,6 +2,7 @@
   "name": "lasolana_front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
@@ -32,7 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "ELECTRON_START_URL=http://localhost:8080 electron ."
   },
   "main": "src/electron.main.js",
   "eslintConfig": {

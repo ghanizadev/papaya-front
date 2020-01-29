@@ -704,8 +704,8 @@ Search.defaultProps = {
 export const TextArea = props => {
 	const {label, containerStyle, disabled, proportion} = props;
 
-	let currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+	const currentContainerStyle = containerStyle || {};
+	if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
     
 	return (
 		<TextAreaContainer style={currentContainerStyle}>
@@ -732,8 +732,8 @@ TextArea.defaultProps = {
 export const Select = props => {
 	const {label, children, containerStyle, proportion} = props;
 
-	const currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+	const currentContainerStyle = containerStyle || {};
+	if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
     
 	return (
 		<InputContainer style={currentContainerStyle}>
@@ -753,7 +753,7 @@ Select.propTypes = {
 
 Select.defaultProps = {
 	label: '',
-	containerStyle: {},
+	containerStyle: null,
 	disaled: false,
 	children: [],
 	proportion: 1

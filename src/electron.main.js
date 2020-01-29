@@ -1,18 +1,19 @@
-const {app, BrowserWindow, Menu, ipcMain, session } = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, session, globalShortcut } = require('electron');
 const path = require('path');
+const url = require('url');
 
 let mainWindow;
-let token;
+let modals = [];
 
 const menuTemplate = [
 	{
 		label: 'Arquivo',
 		submenu: [
 			{
-				label: 'Hello',
-				accelerator: 'Shift+CmdOrCtrl+H',
+				label: 'Abrir',
+				accelerator: 'Shift+CmdOrCtrl+A',
 				click() {
-					console.log('Oh, hi there!');
+					console.log('Abrindo...');
 				}
 			}
 		]
@@ -52,6 +53,7 @@ const openWindow = args => {
 				parent: mainWindow,
 				width: args.size.width || 1000,
 				height: args.size.height || 800,
+				show: false,
 				webPreferences: {
 					nodeIntegration: true,
 					nodeIntegrationInSubFrames: true
@@ -60,12 +62,20 @@ const openWindow = args => {
 			win.on('page-title-updated', function(e) {
 				e.preventDefault();
 			});
+
+			win.on('close', () => {
+				modals = modals.filter(modal => modal !== win);
+			});
+
+			win.on('ready-to-show', () => win.show());
 		
 			win.loadURL('http://192.168.100.2:8080' + args.url + '?access_token=' + json.access_token);
 			win.setMenuBarVisibility(false);
-			win.setResizable(args.resizable || false);
-			win.setFullScreenable(args.fullscreenable || false);
+			win.resizable = args.resizable || false;
+			win.fullScreenable = args.fullscreenable || false;
 			win.center();
+
+			modals.push(win);
 		}).catch((error) => {
 			console.log(error);
 		});
@@ -78,6 +88,7 @@ ipcMain.handle('openModal', (event, args) => {
 	return new Promise((resolve, reject) => {
 		try {
 			openWindow(args);
+
 		}catch(e) {
 			reject(e);
 		}
@@ -97,7 +108,13 @@ function createWindow () {
 		}
 	});
 
-	mainWindow.loadURL('http://localhost:8080');
+	const startUrl = process.env.ELECTRON_START_URL || url.format({
+		pathname: path.join(__dirname, '/../build/index.html'),
+		protocol: 'file:',
+		slashes: true
+	});
+
+	mainWindow.loadURL(startUrl);
 
 	mainWindow.on('closed', function () {
 		mainWindow = null;
@@ -105,9 +122,21 @@ function createWindow () {
 }
 
 app.on('ready', () => {
+	globalShortcut.register('F4', () => {
+		openWindow({modal: true, title: 'Adicionar Produto', size: {width: 800, height: 600}, resizable: false, url: '/home/tables/add', fullscreenable:  false});
+	});
+
+	globalShortcut.register('Esc', ()=> {
+		modals.forEach(modal => modal.close());
+	});
+
 	Menu.setApplicationMenu(menuMain);
 	createWindow();
 	mainWindow.maximize();
+});
+
+app.on('will-quit', () => {
+	globalShortcut.unregisterAll();
 });
 
 app.on('window-all-closed', function () {
