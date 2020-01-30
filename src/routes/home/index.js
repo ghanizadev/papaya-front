@@ -46,23 +46,21 @@ const Home = props => {
 	const state = useContext(Context);
 
 	const updateUser = () => {
-		if (cookies.authorization) {
-			const decoded = jwtDecode(state.context.auth.access_token);
-			const email = decoded.email;
+		const decoded = jwtDecode(state.context.auth.access_token);
+		const email = decoded.email;
 
-			const headers = {
-				'Authorization': `Bearer ${state.context.auth.access_token}`,
-				'Content-Type': 'application/json'
-			};
-		
-			axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
-				headers
+		const headers = {
+			'Authorization': `Bearer ${state.context.auth.access_token}`,
+			'Content-Type': 'application/json'
+		};
+	
+		axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
+			headers
+		})
+			.then(({data}) => {
+				setUser(data[0].name);
 			})
-				.then(({data}) => {
-					setUser(data[0].name);
-				})
-				.catch(error => console.log(error));
-		}
+			.catch(error => console.log(error));
 	};
 
 	const ioConnection = () => {
@@ -156,7 +154,7 @@ const Home = props => {
 										height: 120,
 									},
 									modal: true,
-									url: '/home/tables/open',
+									url: '/open',
 									resizable: false,
 									fulscreenable: false
 								})
@@ -169,7 +167,7 @@ const Home = props => {
 									height: 800,
 								},
 								modal: true,
-								url: '/home/tables/list',
+								url: '/list',
 								resizable: false,
 								fulscreenable: false
 							})
@@ -182,7 +180,7 @@ const Home = props => {
 									height: 600,
 								},
 								modal: true,
-								url: '/home/tables/add',
+								url: '/add',
 								resizable: false,
 								fulscreenable: false
 							})

@@ -5551,6 +5551,11 @@ rcedit@^1.0.0:
   resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-1.1.2.tgz#7a28edf981953f75b5f3e5d4cbc1f9ffa0abbc78"
   integrity sha512-z2ypB4gbINhI6wVe0JJMmdpmOpmNc4g90sE6/6JSuch5kYnjfz9CxvVPqqhShgR6GIkmtW3W2UlfiXhWljA0Fw==
 
+reach-router-hash-history@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/reach-router-hash-history/-/reach-router-hash-history-0.0.3.tgz#3dd7139f027ddc141393c5623aef172ba039827c"
+  integrity sha512-Vg6GIj25DhF15LqlZpdtWJl0uKiwC1pg8uGxEAow+lN2G5nIjwJxEJItGUhUG5MLJgxIu+lbIqoCsuHjSRG42g==
+
 react-cookie@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-cookie/-/react-cookie-4.0.3.tgz#ba8e5ea0047c916516e1181a3ad394c9b7580b56"

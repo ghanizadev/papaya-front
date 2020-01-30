@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Input, Button } from '../../../components';
 import {openTable} from './functions';
 import {useCookies} from 'react-cookie';
+import { Context } from '../../../../../context';
 
 const {dialog} = window.require('electron').remote;
 const ipcRenderer = window.require('electron').ipcRenderer;
 
 const OpenTableEndpoint = props => {
-	const { navigate, token } = props;
+	const { navigate } = props;
 	const [body, setBody] = useState({tableNumber: 1});
+
+	const state = useContext(Context);
 
 	return(
 		<div style={{width: 300, height: 120, display: 'flex', alignContent: 'space-between', alignItems: 'center', flexDirection: 'column'}}>
@@ -16,8 +19,7 @@ const OpenTableEndpoint = props => {
 			<Input containerStyle={{width: 270}} label="Usuário" placeholder="Visitante" onChange={e => setBody({...body, customer: e.target.value})} />
 			<Button onClick={()=>{
 				try{
-					                    
-					openTable(token, body)
+					openTable(state.context.auth.access_token, body)
 						.then(result => {
 							if (result.status === 201){
 								dialog.showMessageBox({

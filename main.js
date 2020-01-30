@@ -38,14 +38,21 @@ const menuTemplate = [
 				label: 'Abrir mesa',
 				accelerator: 'F2',
 				click() {
-					openWindow({modal: true, title: 'Abrir Mesa', size: {width: 300, height: 120}, resizable: false, url: '/home/tables/open', fullscreenable: false});
+					openWindow({modal: true, title: 'Abrir Mesa', size: {width: 300, height: 120}, resizable: false, url: '/open', fullscreenable: false});
 				}
 			},
 			{
 				label: 'Lista de espera',
 				accelerator: 'F3',
 				click() {
-					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/home/tables/list', fullscreenable:  false});
+					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/list', fullscreenable:  false});
+				}
+			},
+			{
+				label: 'Adicionar Produtos',
+				accelerator: 'F4',
+				click() {
+					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/add', fullscreenable:  false});
 				}
 			}
 		]
@@ -54,61 +61,55 @@ const menuTemplate = [
 const menuMain = Menu.buildFromTemplate(menuTemplate);
 
 const openWindow = args => {
-	session.defaultSession.cookies.get({}, (error, cookies) => {
 
-			const auth = cookies.find(cookie => cookie.name = 'authorization');
-			const decoded = decodeURIComponent(auth.value);
-			const json = JSON.parse(decoded);
+  const win = new BrowserWindow({
+    modal: args.modal || true,
+    title: args.title || null,
+    parent: mainWindow,
+    width: args.size.width || 1000,
+    height: args.size.height || 800,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      nodeIntegrationInSubFrames: true
+    }
+  });
+  win.on('page-title-updated', function(e) {
+    e.preventDefault();
+  });
 
-			const win = new BrowserWindow({
-				modal: args.modal || true,
-				title: args.title || null,
-				parent: mainWindow,
-				width: args.size.width || 1000,
-				height: args.size.height || 800,
-				show: false,
-				webPreferences: {
-					nodeIntegration: true,
-					nodeIntegrationInSubFrames: true
-				}
-			});
-			win.on('page-title-updated', function(e) {
-				e.preventDefault();
-			});
+  win.on('close', () => {
+    modals = modals.filter(modal => modal !== win);
+  });
 
-			win.on('close', () => {
-				modals = modals.filter(modal => modal !== win);
-			});
+  win.on('ready-to-show', () => win.show());
+  
+  let openURL;
+  if ( dev && process.argv.indexOf('--noDevServer') === -1 ) {
+    openURL = url.format({
+      protocol: 'http:',
+      host: 'localhost:8080/',
+      hash: args.url,
+      slashes: true
+    });
+  } else {
+    openURL = url.format({
+      protocol: 'file:',
+      host: path.join(__dirname, 'dist', 'index.html'),
+      hash: args.url,
+      slashes: true
+    });
+  }
 
-      win.on('ready-to-show', () => win.show());
-      
-      let openURL;
-      if ( dev && process.argv.indexOf('--noDevServer') === -1 ) {
-        openURL = url.format({
-          protocol: 'http:',
-          host: 'localhost:8080',
-          hash: args.url + '?access_token=' + json.access_token,
-          slashes: true
-        });
-      } else {
-        openURL = url.format({
-          protocol: 'file:',
-          hash: args.url + '?access_token=' + json.access_token,
-          slashes: true
-        });
-      }
+  console.log(openURL)
 
-      console.log(openURL)
-		
-      win.loadURL(openURL);
-			win.setMenuBarVisibility(false);
-			win.setResizable(args.resizable || false);
-			win.setFullScreenable(args.fullscreenable || false);
-			win.center();
+  win.loadURL(openURL);
+  win.setMenuBarVisibility(false);
+  win.setResizable(args.resizable || false);
+  win.setFullScreenable(args.fullscreenable || false);
+  win.center();
 
-			modals.push(win);
-		})
-	
+  modals.push(win);	
 };
 
 ipcMain.on('log', (event, arg) => {
@@ -150,7 +151,7 @@ function createWindow() {
   } else {
     indexPath = url.format({
       protocol: 'file:',
-      pathname: path.join(__dirname, 'dist', 'index.html'),
+      hash: path.join(__dirname, 'dist', 'index.html'),
       slashes: true
     });
   }
@@ -185,16 +186,13 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  globalShortcut.register('F4', () => {
-		openWindow({modal: true, title: 'Adicionar Produto', size: {width: 800, height: 600}, resizable: false, url: '/home/tables/add', fullscreenable:  false});
-	});
 
 	globalShortcut.register('Esc', ()=> {
 		modals.forEach(modal => modal.close());
 	});
 
 	globalShortcut.register('F12', () => {
-    dev && mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   });
 
 	Menu.setApplicationMenu(menuMain);
