@@ -15,10 +15,9 @@ const getData = data => {
 
 const TablesInterface = () =>  {
 	const state = useContext(Context);
-	const [cookies] = useCookies();
 
 	useEffect(()=> {
-		findAllTables(cookies.authorization.access_token)
+		findAllTables(state.context.auth.access_token)
 			.then(result => {
 				if(result.status === 200)
 					state.setContext({...state.context, tables: result.data });

@@ -9,6 +9,7 @@ const config = {
 			callback: ()=> {}
 		},
 		tables: [],
+		auth: {},
 	},
 	setContext: () => {},
 };

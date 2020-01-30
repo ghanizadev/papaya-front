@@ -1,25 +1,26 @@
 import React, {useState} from 'react';
 import { Input, Button } from '../../../components';
 import {openTable} from './functions';
+import {useCookies} from 'react-cookie';
 
 const {dialog} = window.require('electron').remote;
+const ipcRenderer = window.require('electron').ipcRenderer;
 
-const OpenTableEndpoint = () => {
+const OpenTableEndpoint = props => {
+	const { navigate, token } = props;
 	const [body, setBody] = useState({tableNumber: 1});
+
 	return(
 		<div style={{width: 300, height: 120, display: 'flex', alignContent: 'space-between', alignItems: 'center', flexDirection: 'column'}}>
 			<Input containerStyle={{width: 270}} label="Mesa" type="number" defaultValue={1} onChange={e => setBody({...body, tableNumber: e.target.value})}/>
 			<Input containerStyle={{width: 270}} label="Usuário" placeholder="Visitante" onChange={e => setBody({...body, customer: e.target.value})} />
 			<Button onClick={()=>{
 				try{
-					const search = window.location.search;
-					const params = new URLSearchParams(search);
-					const token = params.get('access_token');
-                    
+					                    
 					openTable(token, body)
 						.then(result => {
 							if (result.status === 201){
-								dialog.showMessageBoxSync({
+								dialog.showMessageBox({
 									type: 'info',
 									defaultId: 0,
 									cancelId: 0,
