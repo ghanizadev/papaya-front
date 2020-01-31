@@ -1,18 +1,16 @@
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {find, save} from './functions';
 import {Results, Input, Select, Button, TextArea} from '../../components';
-import { useCookies } from 'react-cookie';
-import { useHistory } from 'react-router';
 import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { Context } from '../../../context';
 
 
-const ProductInterface = () => {
-	const [cookies] = useCookies('authorization');
+const ProductInterface = props => {
 	const [data, setData] = useState([]);
+	const { navigate } = props;
 	
-	const history = useHistory();
 	const [body, setBody] = useState({
 		code: 0,
 		price: 0,
@@ -25,10 +23,11 @@ const ProductInterface = () => {
 
 	const [provider, setProvider] = useState({name: '', cnpj: ''});
 
+	const state = useContext(Context)
+
 
 	const getProvider = provider => {
-		if(cookies.authorization){
-			fetch(process.env.REACT_APP_API + '/api/v1/provider?providerId=' + provider)
+		fetch(process.env.REACT_APP_API + '/api/v1/provider?providerId=' + provider)
 				.then(result => {
 					if(result.status === 200){
 						result.json()
@@ -39,12 +38,11 @@ const ProductInterface = () => {
 							});
 					}
 				});
-		}
 	};
 
 	useEffect(() => {
-		if(data.length === 0 && cookies.authorization)
-			find(cookies.authorization.access_token)
+		if(data.length === 0)
+			find(state.context.auth.token)
 				.then(response => {
 					if(response.status === 200){
 						setData(response.data);
@@ -53,7 +51,7 @@ const ProductInterface = () => {
 					window.alert('Você não tem permissão para cessar este conteúdo');
 				});
 		else
-		if (!cookies.authorization) history.push('/');
+		if (!cookies.authorization) navigate('/');
 	}, []);
 
 	const subgroups = {
@@ -691,7 +689,7 @@ const ProductInterface = () => {
 							local.final = local.price * (1 + (local.tax * 0.01));
 						}
 
-						save(global.token || cookies.authorization.access_token, local)
+						save(state.context.auth.token, local)
 							.then(() => {
 								window.alert('Produto salvo com sucesso!');
 							}).catch(error => {

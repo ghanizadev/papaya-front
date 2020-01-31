@@ -21,9 +21,10 @@ import { Context } from '../../context';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
 import {findAllTables} from '../components/functions';
-import { useHistory } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import io from 'socket.io-client';
+
+import {LoadNullMenu, loadTablesMenu} from './utils/menus';
 
 const {dialog, app } = window.require('electron').remote;
 const ipcRenderer = window.require('electron').ipcRenderer;
@@ -38,38 +39,37 @@ const quitConfirm = {
 	detail: 'Escolha sua opção:',
 };
 
-const Home = () => {
+const Home = props => {
 	const [user, setUser] = useState('Jean');
 	const [page, setPage] = useState('Mesas');
-	const [cookies, , removeCookies] = useCookies('authorization');
-	const history = useHistory();
+	const [cookies, setCookies, removeCookies] = useCookies();
+	const { navigate } = props;
 
 	const state = useContext(Context);
 
-	const updateUser = () => {
-		if (cookies.authorization) {
-			const decoded = jwtDecode(cookies.authorization.access_token);
-			const email = decoded.email;
 
-			const headers = {
-				'Authorization': `Bearer ${global.token}`,
-				'Content-Type': 'application/json'
-			};
-		
-			Axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
-				headers
+	const updateUser = () => {
+		const decoded = jwtDecode(state.context.auth.access_token);
+		const email = decoded.email;
+
+		const headers = {
+			'Authorization': `Bearer ${state.context.auth.access_token}`,
+			'Content-Type': 'application/json'
+		};
+	
+		axios.get(`${process.env.REACT_APP_API}/api/v1/user?email=${email}`, {
+			headers
+		})
+			.then(({data}) => {
+				setUser(data[0].name);
 			})
-				.then(({data}) => {
-					setUser(data[0].name);
-				})
-				.catch(error => console.log(error));
-		}
+			.catch(error => console.log(error));
 	};
 
 	const ioConnection = () => {
 		const socket = io.connect(process.env.REACT_APP_API);
 		socket.on('update', () => {
-			findAllTables(cookies.authorization.access_token)
+			findAllTables(state.context.auth.access_token)
 				.then(result => {
 					if(result.status === 200)
 						state.setContext({...state.context, tables: result.data });
@@ -82,7 +82,7 @@ const Home = () => {
 
 	useEffect(()=> {
 		updateUser();
-		findAllTables(cookies.authorization.access_token)
+		findAllTables(state.context.auth.access_token)
 			.then(answer => {
 				if(answer.status === 200){
 					state.setContext({...state.context, tables: answer.data});
@@ -91,11 +91,10 @@ const Home = () => {
 			});
 	}, []);
 
-	// const state = useContext(Context);
-
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {
 		case 'mesas':
+			loadTablesMenu(state.context.auth.access_token);
 			return <TablesInterface />;
 		case 'produtos':
 			return <ProductInterface />;
@@ -108,6 +107,7 @@ const Home = () => {
 		case 'gerenciamento':
 			return <ManagementInterface />;
 		case 'entregas':
+			LoadNullMenu();
 			return <DeliveryInterface />;
 		default:
 			return <TablesInterface />;
@@ -127,16 +127,14 @@ const Home = () => {
 							<a
 								href="#"
 								onClick={() => {
-									const id = dialog.showMessageBoxSync(quitConfirm);
-
-									console.log(id);
+									const id = dialog.showMessageBox(quitConfirm);
 									switch(id){
 									case 2:
 										app.quit();
 										break;
 									case 1:
-										history.push('/');
-										removeCookies('authorization');
+										LoadNullMenu();
+										navigate('/');
 										break;
 									default:
 										break;
@@ -149,28 +147,52 @@ const Home = () => {
 					</div>
 				</Header>
 				<SubHeader>
-					<Button onClick={()=> ipcRenderer.invoke('openModal', {
-						title: 'Abrir mesa',
-						size: {
-							width: 300,
-							height: 120,
-						},
-						modal: true,
-						url: '/home/tables/open?token=' + cookies.authorization.access_token,
-						resizable: false,
-						fulscreenable: false
-					})}>Abrir mesa (F2)</Button>
-					<Button onClick={()=> ipcRenderer.invoke('openModal', {
-						title: 'Lista de espera',
-						size: {
-							width: 500,
-							height: 800,
-						},
-						modal: true,
-						url: '/home/tables/list',
-						resizable: false,
-						fulscreenable: false
-					})}>Lista de espera (F3)</Button>
+					{page && page === 'Mesas' ? (
+						<>
+							<Button onClick={()=> 
+								ipcRenderer.send('openModal', {
+									title: 'Abrir mesa',
+									size: {
+										width: 300,
+										height: 120,
+									},
+									modal: true,
+									url: `/open?access_token=${state.context.auth.access_token}`,
+									resizable: false,
+									fulscreenable: false
+								})
+							}>Abrir mesa (F2)</Button>
+							<Button onClick={()=> 
+							ipcRenderer.send('openModal', {
+								title: 'Lista de espera',
+								size: {
+									width: 500,
+									height: 800,
+								},
+								modal: true,
+								url: `/list?access_token=${state.context.auth.access_token}`,
+								resizable: false,
+								fulscreenable: false
+							})
+							}>Lista de espera (F3)</Button>
+							<Button onClick={()=> 
+							ipcRenderer.send('openModal', {
+								title: 'Adicionar produto',
+								size: {
+									width: 800,
+									height: 600,
+								},
+								modal: true,
+								url: `/add?access_token=${state.context.auth.access_token}`,
+								resizable: false,
+								fulscreenable: false
+							})
+							}>Adicionar produto (F4)</Button>
+							<Button onClick={()=>
+								ipcRenderer.send('refresh', {})
+							}>Atualizar mesas (F5)</Button>
+						</>
+					) : null}
 				</SubHeader>
 				<SideBar>
 					<SidebarButton selected={page === 'Mesas'} onClick={() => setPage('Mesas')}>Mesas</SidebarButton>
