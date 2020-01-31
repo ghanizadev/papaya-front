@@ -1,11 +1,12 @@
-import React, { useState, useEffect} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { useState, useEffect, useContext} from 'react';
+//import {withRouter} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 import PropTypes from 'prop-types';
 
 import logo from '../../assets/logo.png';
 import login from '../../functions';
 import { LoginHolder, Input, Button} from '../components';
+import { Context } from '../../context';
 
 const {dialog} = window.require('electron').remote;
 
@@ -27,8 +28,8 @@ const error = {
 };
 
 
-const Home = props =>{
-	const { history } = props;
+const Login = props =>{
+	const { navigate } = props;
 	const [, setCookie] = useCookies('authorization');
 
 	const [username, setUsername] = useState('jf.melo6@gmail.com');
@@ -36,14 +37,14 @@ const Home = props =>{
   
 	const [handler, setHandler] = useState({});
 
+	const state = useContext(Context);
+
 	useEffect(() => {
 		if(handler.status){
 			switch(handler.status){
 			case 200:
-				setCookie('authorization', handler.load, { path: '/'});
-				global.auth = handler.load;
-				localStorage.setItem('token', handler.load.access_token);
-				history.push('/home');
+				state.setContext({...state.context, auth: handler.load});
+				navigate('/home');
 				break;
 			case 403:
 				dialog.showMessageBox(notAuthorized);
@@ -53,7 +54,7 @@ const Home = props =>{
 				break;
 			}
 		}
-	}, [handler, history, setCookie]);
+	}, [handler, setCookie]);
 
 	return (
 		<div style={{
@@ -87,8 +88,4 @@ const Home = props =>{
 		</div>);
 };
 
-Home.propTypes = {
-	history: PropTypes.any.isRequired
-};
-
-export default withRouter(Home);
+export default Login;

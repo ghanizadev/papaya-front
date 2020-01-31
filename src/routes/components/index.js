@@ -1,12 +1,10 @@
 import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useCookies } from 'react-cookie';
 import { Context} from '../../context';
 import { findFlavor, addProduct } from './functions';
 
 import logo from '../../assets/logo.png';
-import { useHistory } from 'react-router';
 
 export const MessageBox = styled.div`
 	width: 30%;
@@ -79,10 +77,10 @@ const TableContainer = styled.div`
 
 export const ScrollView = styled.div`    display: flex;
 flex-direction: column;
-    overflow: scroll hidden;
+    overflow: auto;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start
+    justify-content: flex-start;
     width: 100%;
     height: 100%;
 `;
@@ -495,7 +493,7 @@ const ResultsTable = styled.div`
 	box-sizing: border-box;
     width: 100%;
 	height: 100%;
-	overflow: hidden auto;
+	overflow: auto;
 `;
 
 const ResultsContainer = styled.div`
@@ -924,7 +922,6 @@ const AddComponent = props => {
 const AddProductComponent = props => {
 	const {order} = props;
 	const state = useContext(Context);
-	const [cookies] = useCookies();
 
 	const searchField = useRef();
 
@@ -948,7 +945,7 @@ const AddProductComponent = props => {
 							return setProducts([]);
 						}
 						findFlavor(
-							cookies.authorization.access_token,
+							state.context.auth.token,
 							searchField.current.value
 						).then(result => {
 							setProducts(result.data);
@@ -1048,7 +1045,7 @@ const AddPizzaComponent = props => {
 
 		const body = [{ quantity, code, aditionals }];
 
-		addProduct(cookies.authorization.access_token, order.orderId, body)
+		addProduct(state.context.auth.token, order.orderId, body)
 			.then(() => {
 
 				setOpenFlavors('');
@@ -1235,7 +1232,7 @@ const AddPizzaComponent = props => {
 							onChange={() => {
 								setOpenFlavors('');
 								findFlavor(
-									cookies.authorization.access_token,
+									state.context.auth.token,
 									code.current.value
 								).then(result => {
 									setFlavors(result.data);
