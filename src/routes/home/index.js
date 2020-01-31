@@ -94,7 +94,7 @@ const Home = props => {
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {
 		case 'mesas':
-			loadTablesMenu();
+			loadTablesMenu(state.context.auth.access_token);
 			return <TablesInterface />;
 		case 'produtos':
 			return <ProductInterface />;
@@ -128,16 +128,13 @@ const Home = props => {
 								href="#"
 								onClick={() => {
 									const id = dialog.showMessageBox(quitConfirm);
-
-									console.log(id);
 									switch(id){
 									case 2:
 										app.quit();
 										break;
 									case 1:
-										navigate('/');
 										LoadNullMenu();
-										removeCookies('authorization');
+										navigate('/');
 										break;
 									default:
 										break;
