@@ -8,7 +8,7 @@ const {dialog} = window.require('electron').remote;
 const ipcRenderer = window.require('electron').ipcRenderer;
 
 const OpenTableEndpoint = props => {
-	const { navigate } = props;
+	const { navigate, location } = props;
 	const [body, setBody] = useState({tableNumber: 1});
 
 	const state = useContext(Context);
@@ -17,9 +17,13 @@ const OpenTableEndpoint = props => {
 		<div style={{width: 300, height: 120, display: 'flex', alignContent: 'space-between', alignItems: 'center', flexDirection: 'column'}}>
 			<Input containerStyle={{width: 270}} label="Mesa" type="number" defaultValue={1} onChange={e => setBody({...body, tableNumber: e.target.value})}/>
 			<Input containerStyle={{width: 270}} label="Usuário" placeholder="Visitante" onChange={e => setBody({...body, customer: e.target.value})} />
-			<Button onClick={()=>{
+			<Button onClick={()=>{''
 				try{
-					openTable(state.context.auth.access_token, body)
+					const search = location.pathname.substring(location.pathname.indexOf('?'));
+					const params = new URLSearchParams(search);
+					const access_token = params.get('access_token');
+
+					openTable(access_token, body)
 						.then(result => {
 							if (result.status === 201){
 								dialog.showMessageBox({

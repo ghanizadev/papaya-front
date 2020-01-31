@@ -45,6 +45,7 @@ const Home = props => {
 
 	const state = useContext(Context);
 
+
 	const updateUser = () => {
 		const decoded = jwtDecode(state.context.auth.access_token);
 		const email = decoded.email;
@@ -154,7 +155,7 @@ const Home = props => {
 										height: 120,
 									},
 									modal: true,
-									url: '/open',
+									url: `/open?access_token=${state.context.auth.access_token}`,
 									resizable: false,
 									fulscreenable: false
 								})
@@ -167,7 +168,7 @@ const Home = props => {
 									height: 800,
 								},
 								modal: true,
-								url: '/list',
+								url: `/list?access_token=${state.context.auth.access_token}`,
 								resizable: false,
 								fulscreenable: false
 							})
@@ -180,7 +181,7 @@ const Home = props => {
 									height: 600,
 								},
 								modal: true,
-								url: '/add',
+								url: `/add?access_token=${state.context.auth.access_token}`,
 								resizable: false,
 								fulscreenable: false
 							})
