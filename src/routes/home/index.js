@@ -24,6 +24,8 @@ import {findAllTables} from '../components/functions';
 import axios from 'axios';
 import io from 'socket.io-client';
 
+import {LoadNullMenu, loadTablesMenu} from './utils/menus';
+
 const {dialog, app } = window.require('electron').remote;
 const ipcRenderer = window.require('electron').ipcRenderer;
 
@@ -92,6 +94,7 @@ const Home = props => {
 	const getCurrentPage = () => {
 		switch (page.toLowerCase()) {
 		case 'mesas':
+			loadTablesMenu();
 			return <TablesInterface />;
 		case 'produtos':
 			return <ProductInterface />;
@@ -104,6 +107,7 @@ const Home = props => {
 		case 'gerenciamento':
 			return <ManagementInterface />;
 		case 'entregas':
+			LoadNullMenu();
 			return <DeliveryInterface />;
 		default:
 			return <TablesInterface />;
@@ -132,6 +136,7 @@ const Home = props => {
 										break;
 									case 1:
 										navigate('/');
+										LoadNullMenu();
 										removeCookies('authorization');
 										break;
 									default:

@@ -1,9 +1,10 @@
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {find, save} from './functions';
 import {Results, Input, Select, Button, TextArea} from '../../components';
 import {Tab, TabList, Tabs, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { Context } from '../../../context';
 
 
 const ProductInterface = props => {
@@ -21,6 +22,8 @@ const ProductInterface = props => {
 	});
 
 	const [provider, setProvider] = useState({name: '', cnpj: ''});
+
+	const state = useContext(Context)
 
 
 	const getProvider = provider => {

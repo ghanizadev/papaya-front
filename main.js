@@ -14,48 +14,6 @@ if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) 
   dev = true;
 }
 
-const menuTemplate = [
-	{
-		label: 'Arquivo',
-		submenu: [
-			{
-				label: 'Abrir',
-				accelerator: 'Shift+CmdOrCtrl+A',
-				click() {
-					console.log('Abrindo...');
-				}
-			}
-		]
-	},
-	{
-		label: 'Mesas',
-		submenu: [
-			{
-				label: 'Abrir mesa',
-				accelerator: 'F2',
-				click() {
-					openWindow({modal: true, title: 'Abrir Mesa', size: {width: 300, height: 120}, resizable: false, url: '/open', fullscreenable: false});
-				}
-			},
-			{
-				label: 'Lista de espera',
-				accelerator: 'F3',
-				click() {
-					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/list', fullscreenable:  false});
-				}
-			},
-			{
-				label: 'Adicionar Produtos',
-				accelerator: 'F4',
-				click() {
-					openWindow({modal: true, title: 'Lista de espera', size: {width: 400, height: 600}, resizable: false, url: '/add', fullscreenable:  false});
-				}
-			}
-		]
-	}
-];
-const menuMain = Menu.buildFromTemplate(menuTemplate);
-
 const openWindow = args => {
 
   const win = new BrowserWindow({
@@ -170,13 +128,13 @@ app.on('ready', () => {
 
 	globalShortcut.register('Esc', ()=> {
 		modals.forEach(modal => modal.close());
-	});
+  });
 
 	globalShortcut.register('F12', () => {
     mainWindow.webContents.openDevTools()
   });
 
-	Menu.setApplicationMenu(menuMain);
+	Menu.setApplicationMenu(null);
 	createWindow();
 	mainWindow.maximize();
 });

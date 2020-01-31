@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import { Input, Button, Search, TextArea} from '../../../../components';
 import { getFlavor } from './function';
 
+const search = location.pathname.substring(location.pathname.indexOf('?'));
+const params = new URLSearchParams(search);
+const access_token = params.get('access_token');
+
 const Container = styled.div`
 	width: 800px;
 	height: 600px;

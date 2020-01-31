@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import { Tables, Table, ScrollView} from '../../components';
 import {findAllTables} from '../../components/functions';
 import {Consumer, Context} from '../../../context';
-import { useCookies } from 'react-cookie';
 
 const getData = data => {
 	let result = [];
