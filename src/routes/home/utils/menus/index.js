@@ -40,12 +40,34 @@ export const loadTablesMenu = (token) => {
 					label: 'Lista de espera',
 					accelerator: 'F3',
 					click() {
+						ipcRenderer.send('openModal', {
+							title: 'Lista de espera',
+							size: {
+								width: 500,
+								height: 800,
+							},
+							modal: true,
+							url: `/list?access_token=${token}`,
+							resizable: false,
+							fulscreenable: false
+						})
 					}
 				},
 				{
 					label: 'Adicionar Produtos',
 					accelerator: 'F4',
 					click() {
+						ipcRenderer.send('openModal', {
+							title: 'Adicionar produto',
+							size: {
+								width: 800,
+								height: 600,
+							},
+							modal: true,
+							url: `/add?access_token=${token}`,
+							resizable: false,
+							fulscreenable: false
+						});
 					}
 				}
 			]

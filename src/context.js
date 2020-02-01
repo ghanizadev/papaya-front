@@ -9,6 +9,7 @@ const config = {
 			callback: ()=> {}
 		},
 		tables: [],
+		waitinglist: [],
 		auth: {},
 	},
 	setContext: () => {},

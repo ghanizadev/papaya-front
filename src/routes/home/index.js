@@ -18,7 +18,6 @@ import SettingsInterface from './settings';
 import ManagementInterface from './management';
 import ClientsInterface from './clients';
 import { Context } from '../../context';
-import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
 import {findAllTables} from '../components/functions';
 import axios from 'axios';
@@ -39,10 +38,19 @@ const quitConfirm = {
 	detail: 'Escolha sua opção:',
 };
 
+const lostConnection = {
+	type: 'warning',
+	buttons: ['Ok'],
+	defaultId: 0,
+	cancelId: 0,
+	title: 'Aviso',
+	message: 'Conexão perdida',
+	detail: 'A sua conexão com o servidor foi perdida, você será redirecionado à tela de login',
+};
+
 const Home = props => {
 	const [user, setUser] = useState('Jean');
 	const [page, setPage] = useState('Mesas');
-	const [cookies, setCookies, removeCookies] = useCookies();
 	const { navigate } = props;
 
 	const state = useContext(Context);
@@ -77,6 +85,11 @@ const Home = props => {
 				.catch(error => {
 					console.log(error);
 				});
+			
+		});
+		socket.on('disconnect', () => {
+			state.setContext({...state.context, auth: {}})
+			dialog.showMessageBox(lostConnection, () => navigate('/'));
 		});
 	};
 

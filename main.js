@@ -83,6 +83,7 @@ function createWindow() {
     width: 1024,
     height: 768,
     show: false,
+    icon: path.join(__dirname, 'src', 'assets',  'config', 'ic_launcher.png'),
     webPreferences: {
 			nativeWindowOpen: true,
 			nodeIntegration: true,

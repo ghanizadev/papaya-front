@@ -1,8 +1,4 @@
 import React, { useState, useEffect, useContext} from 'react';
-//import {withRouter} from 'react-router-dom';
-import {useCookies} from 'react-cookie';
-import PropTypes from 'prop-types';
-
 import logo from '../../assets/logo.png';
 import login from '../../functions';
 import { LoginHolder, Input, Button} from '../components';
@@ -30,7 +26,6 @@ const error = {
 
 const Login = props =>{
 	const { navigate } = props;
-	const [, setCookie] = useCookies('authorization');
 
 	const [username, setUsername] = useState('jf.melo6@gmail.com');
 	const [password, setPassword] = useState('td4df2g5wp');
@@ -54,7 +49,7 @@ const Login = props =>{
 				break;
 			}
 		}
-	}, [handler, setCookie]);
+	}, [handler]);
 
 	return (
 		<div style={{
