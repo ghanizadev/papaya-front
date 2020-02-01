@@ -102,11 +102,12 @@ function createWindow() {
   } else {
     indexPath = url.format({
       protocol: 'file:',
-      hash: path.join(__dirname, 'dist', 'index.html'),
+      pathname: path.join(__dirname, 'dist', 'index.html'),
       slashes: true
     });
   }
   mainWindow.loadURL( indexPath );
+  console.log(indexPath);
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
