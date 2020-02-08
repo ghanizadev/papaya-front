@@ -107,7 +107,6 @@ function createWindow() {
     });
   }
   mainWindow.loadURL( indexPath );
-  console.log(indexPath);
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();

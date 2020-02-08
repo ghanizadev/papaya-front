@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 
 export const getUserData = (email, token) => {
 	console.log(email, token) ; 
@@ -19,7 +19,7 @@ export default (username = '', password = '', handler = () => {}) => {
 	body.append('password', password);
 	body.append('grant_type', 'password');
         
-	Axios.post(`${process.env.REACT_APP_API}/oauth/token`,
+	axios.post(`${process.env.REACT_APP_API}/oauth/token`,
 		body,
 		{
 			headers:{
@@ -28,25 +28,20 @@ export default (username = '', password = '', handler = () => {}) => {
 			auth: {
 				username: process.env.REACT_APP_ID,
 				password: process.env.REACT_APP_SECRET
-			}
+			},
+			validateStatus: status => status < 500
 		})
-		.then((responseToken, deny) => {
-			if(responseToken.status === 200){ 
-				global.token = responseToken.data.access_token;		   
-				return handler({
-					status: responseToken.status,
-					load: responseToken.data,
-					user: {email: username}
-				});
-			}else if(deny) {
-				return handler({
-					status: responseToken.status,
-					isLoading: false,
-				});
-			}
+		.then(responseToken => {
+			return handler({
+				status: responseToken.status,
+				load: responseToken.data,
+				user: {email: username},
+				isLoading: false,
+			});
+
 		}).catch((error) => {
 			return handler({
-				status: error.response && error.response.status ? error.response.status : 500,
+				status: error.response.status || 500,
 				isLoading: false,
 			});
 		});

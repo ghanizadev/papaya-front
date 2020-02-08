@@ -137,25 +137,34 @@ const Home = props => {
 					<div>
 						<span>
 							Bem vindo {user}!{' '}
-							<a
-								href="#"
+							<button
+								style={{
+									color: '#f5f5f5',
+									backgroundColor: 'transparent',
+									border: 'none',
+									textDecoration: 'underline'
+								}}
 								onClick={() => {
-									const id = dialog.showMessageBox(quitConfirm);
-									switch(id){
-									case 2:
-										app.quit();
-										break;
-									case 1:
-										LoadNullMenu();
-										navigate('/');
-										break;
-									default:
-										break;
-									}
+									dialog.showMessageBox(quitConfirm)
+									.then(({response}) => {
+
+										switch(response){
+											case 2:
+												app.quit();
+												break;
+											case 1:
+												LoadNullMenu();
+												navigate('/');
+												break;
+											default:
+												break;
+											}
+									})
+					
 								}}
 							>
 								sair
-							</a>
+							</button>
 						</span>
 					</div>
 				</Header>

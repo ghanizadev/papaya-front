@@ -25,9 +25,13 @@ const openFlow = (access_token, body, id) => {
 						if(result.status === 200)
 							window.close();
 						else 
-							window.alert('Erro ao tentar atualizar lista!');
+							window.alert(`Erro ao tentar atualizar lista! (${result.status})`);
+							window.close();
 						})
-						.catch(() => window.alert('Erro ao tentar atualizar lista!'));
+						.catch(() => {
+							window.alert('Erro ao tentar atualizar lista!');
+							window.close();
+						});
 					else
 						window.close();
 					
@@ -107,7 +111,7 @@ const OpenTableEndpoint = props => {
 		<div style={{width: 300, height: 120, display: 'flex', alignContent: 'space-between', alignItems: 'center', flexDirection: 'column'}}>
 			<Input containerStyle={{width: 270}} label="Mesa" type="number" defaultValue={1} onChange={e => setBody({...body, tableNumber: e.target.value})}/>
 			<Input containerStyle={{width: 270}} label="Usuário" defaultValue={name !== '' ? name : null} placeholder="Visitante" onChange={e => setBody({...body, customer: e.target.value})} />
-			<Button onClick={()=>{''
+			<Button onClick={()=>{
 				openFlow(access_token, body, id);
 			}}>Abrir Mesa</Button>
 		</div>

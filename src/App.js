@@ -14,15 +14,6 @@ import '../src/assets/style.css';
 let source = createHashSource()
 let history = createHistory(source)
 
-const ProtectedHome = () => {
-	if(cookies.authorization && cookies.authorization.access_token){
-		return <Home />;
-	}
-	else if(global.load && global.access_token){
-		return <Home />;
-	}
-	return <Login />;
-};
 
 const App = () => (
 	<div>

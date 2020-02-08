@@ -37,7 +37,7 @@ const Login = props =>{
 	useEffect(() => {
 		if(handler.status){
 			switch(handler.status){
-			case 200:
+			case 201:
 				state.setContext({...state.context, auth: handler.load});
 				navigate('/home');
 				break;
