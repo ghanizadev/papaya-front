@@ -18,8 +18,8 @@ const openFlow = (access_token, body, id) => {
 						title: 'Sucesso',
 						message: `A mesa ${result.data.number} foi aberta!`,
 						detail: `A ordem do pedido é o ${result.data.order.orderId}`,
-					});
-					if (id !== '')
+					}).then(() => {
+						if (id !== '')
 						removeWaitingList(access_token, id)
 						.then(result => {
 						if(result.status === 200)
@@ -34,6 +34,7 @@ const openFlow = (access_token, body, id) => {
 						});
 					else
 						window.close();
+					})
 					
 				}else if(result.status === 403){
 					dialog.showMessageBox({

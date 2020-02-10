@@ -57,8 +57,8 @@ const openWindow = args => {
 
   win.loadURL(openURL);
   win.setMenuBarVisibility(false);
-  win.setResizable(args.resizable || false);
-  win.setFullScreenable(args.fullscreenable || false);
+  win.resizable = args.resizable || false;
+  win.fullScreenable = args.fullscreenable || false;
   win.center();
 
   modals.push(win);	

@@ -89,7 +89,10 @@ const Home = props => {
 		});
 		socket.on('disconnect', () => {
 			state.setContext({...state.context, auth: {}})
-			dialog.showMessageBox(lostConnection, () => navigate('/'));
+			dialog.showMessageBox(lostConnection).then(() => {
+				navigate('/');
+				socket.close();
+			});
 		});
 	};
 
