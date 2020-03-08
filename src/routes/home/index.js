@@ -6,6 +6,7 @@ import {
 	Header,
 	SubHeader,
 	SidebarButton,
+	ServerInfoButton,
 	Container,
 	Overlay,
 	Button
@@ -22,6 +23,7 @@ import jwtDecode from 'jwt-decode';
 import {findAllTables} from '../components/functions';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { getServer } from './functions';
 
 import {LoadNullMenu, loadTablesMenu} from './utils/menus';
 
@@ -175,58 +177,59 @@ const Home = props => {
 					{page && page === 'Mesas' ? (
 						<>
 							<Button onClick={()=> 
-								ipcRenderer.send('openModal', {
+								ipcRenderer.invoke('openModal', {
 									title: 'Abrir mesa',
 									size: {
 										width: 300,
 										height: 120,
 									},
 									modal: true,
-									url: `/open?access_token=${state.context.auth.access_token}`,
+									url: 'open?access_token=' + state.context.auth.access_token,
 									resizable: false,
 									fulscreenable: false
 								})
 							}>Abrir mesa (F2)</Button>
 							<Button onClick={()=> 
-							ipcRenderer.send('openModal', {
+							ipcRenderer.invoke('openModal', {
 								title: 'Lista de espera',
 								size: {
 									width: 500,
 									height: 800,
 								},
 								modal: true,
-								url: `/list?access_token=${state.context.auth.access_token}`,
+								url: 'list?access_token=' + state.context.auth.access_token,
 								resizable: false,
 								fulscreenable: false
 							})
 							}>Lista de espera (F3)</Button>
 							<Button onClick={()=> 
-							ipcRenderer.send('openModal', {
+							ipcRenderer.invoke('openModal', {
 								title: 'Adicionar produto',
 								size: {
 									width: 800,
 									height: 600,
 								},
 								modal: true,
-								url: `/add?access_token=${state.context.auth.access_token}`,
+								url: 'add?access_token=' + state.context.auth.access_token,
 								resizable: false,
 								fulscreenable: false
 							})
 							}>Adicionar produto (F4)</Button>
 							<Button onClick={()=>
-								ipcRenderer.send('refresh', {})
+								ipcRenderer.invoke('refresh', {})
 							}>Atualizar mesas (F5)</Button>
 						</>
 					) : null}
 				</SubHeader>
 				<SideBar>
 					<SidebarButton selected={page === 'Mesas'} onClick={() => setPage('Mesas')}>Mesas</SidebarButton>
-					<SidebarButton selected={page === 'Entregas'} onClick={() => setPage('Entregas')}>Entregas</SidebarButton>
+					{/*<SidebarButton selected={page === 'Entregas'} onClick={() => setPage('Entregas')}>Entregas</SidebarButton>*/}
 					<SidebarButton selected={page === 'Clientes'} onClick={() => setPage('Clientes')}>Clientes</SidebarButton>
 					<SidebarButton selected={page === 'Produtos'} onClick={() => setPage('Produtos')}>Produtos</SidebarButton>
 					<SidebarButton selected={page === 'Fornecedores'} onClick={() => setPage('Fornecedores')}>Fornecedores</SidebarButton>
 					<SidebarButton selected={page === 'Gerenciamento'} onClick={() => setPage('Gerenciamento')}>Gerenciamento</SidebarButton>
 					<SidebarButton selected={page === 'Configurações'} onClick={() => setPage('Configurações')}>Configurações</SidebarButton>
+					<ServerInfoButton onClick={() => {}}>Servidor ID: {getServer()}</ServerInfoButton>
 				</SideBar>
 				<Logo />
 				<Container>{getCurrentPage()}</Container>

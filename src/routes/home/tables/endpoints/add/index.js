@@ -1,12 +1,21 @@
-import React, { useState, Children, useReducer, useEffect, useRef} from 'react';
+import React, {
+  useState, Children, useReducer, useEffect, useRef,
+} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Input, Button, Search, TextArea} from '../../../../components';
-import { getFlavor } from './function';
+import path from 'path';
+import {
+  Input, Button, Search, TextArea,
+} from '../../../../components';
+import { getFlavor, getTables, getPizzaSizes } from './function';
+import { Select } from '../../../components';
 
-const search = location.pathname.substring(location.pathname.indexOf('?'));
-const params = new URLSearchParams(search);
-const access_token = params.get('access_token');
+import arrow from '../../../../../assets/arrow.png';
+import addPizza from '../../../../../assets/add_pizza.png';
+import addOthers from '../../../../../assets/add_others.png';
+import addSmall from '../../../../../assets/add_small.png';
+import addMedium from '../../../../../assets/add_medium.png';
+import addLarge from '../../../../../assets/add_large.png';
 
 const Container = styled.div`
 	width: 800px;
@@ -34,6 +43,7 @@ const ProductButton = styled.button`
 	width: 120px;
 	margin: 15px;
 	border: none;
+  background-color: transparent;
 	transition: all .2s ease-in;
 
 	&:hover {
@@ -58,15 +68,15 @@ const CloseButtonContainer = styled.button`
 	font-weight: bold;
 `;
 
-const CloseButton = props => {
-	const {onClose} = props;
-	return (
-		<CloseButtonContainer onClick={() => onClose()}>&times;</CloseButtonContainer>
-	);
+const CloseButton = (props) => {
+  const { onClose } = props;
+  return (
+    <CloseButtonContainer onClick={() => onClose()}>&times;</CloseButtonContainer>
+  );
 };
 
 CloseButton.propTypes = {
-	onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
 
 const FlavorBoxContainer = styled.div`
@@ -98,187 +108,251 @@ const FlavorItemContainer = styled.div`
 	box-sizing: border-box;
 `;
 
-const FlavorItem = props => {
-	const {flavor, onRemove} = props;
+const NextButton = styled.button`
+	height: 42px;
+	width: 42px;
+	margin: 0 5px;
+	border: none;
+  background-color: transparent;
+	padding: 5px;
+	box-sizing: border-box;
+`;
 
-	return (
-		<FlavorItemContainer>
-			<h3 style={{margin: 0}}>{flavor.name}</h3>
-			<h5 style={{margin: 0}}>{flavor.code}</h5>
-			<p style={{margin: 0, fontSize: 10, color: '#666'}}>{flavor.description.join(', ')}</p>
-			<TextArea label="Adicionais" />
-			<CloseButton onClose={onRemove} />
-		</FlavorItemContainer>
-	);
+const FlavorItem = (props) => {
+  const { flavor, onRemove } = props;
+
+  return (
+    <FlavorItemContainer>
+      <h3 style={{ margin: 0 }}>{flavor.name}</h3>
+      <h5 style={{ margin: 0 }}>{flavor.code}</h5>
+      <p style={{ margin: 0, fontSize: 10, color: '#666' }}>{flavor.description.join(', ')}</p>
+      <TextArea label="Adicionais" />
+      <CloseButton onClose={onRemove} />
+    </FlavorItemContainer>
+  );
 };
 
 FlavorItem.propTypes = {
-	flavor: PropTypes.object.isRequired,
-	onRemove: PropTypes.func.isRequired,
+  flavor: PropTypes.object.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
-const Page = props => {
-	const {children, visible} = props;
+const Page = (props) => {
+  const { children, visible } = props;
 
-	return (
-		<Wrapper style={{height: visible ? 600 : 0}}>
-			{children}
-		</Wrapper>
-	);
+  return (
+    <Wrapper style={{ height: visible ? 600 : 0 }}>
+      {children}
+    </Wrapper>
+  );
 };
 
 Page.propTypes = {
-	children: PropTypes.any,
-	visible: PropTypes.bool.isRequired
+  children: PropTypes.any,
+  visible: PropTypes.bool.isRequired,
 };
 
 Page.defaultProps = {
-	children: []
+  children: [],
 };
 
-export const FlavorBox = props => {
-	const {children, onConfirm, onClean} = props;
+export const FlavorBox = (props) => {
+  const { children, onConfirm, onClean } = props;
 
-	const onItem = {
-		height: '500px',
-		border: 'solid 1px whitesmoke',
-		padding: '15px',
-		margin: '15x auto',
-		opacity: 1,
-	};
+  const onItem = {
+    height: '500px',
+    border: 'solid 1px whitesmoke',
+    padding: '15px',
+    margin: '15x auto',
+    opacity: 1,
+  };
 
-	return (
-		<FlavorBoxContainer style={Children.count(children) > 0 ? onItem : {}}>
-			<div style={{display: 'flex', flexDirection: 'column', margin: 'auto'}}>
-				{children}
-			</div>
-			<div style={{display: 'flex', flexDirection: 'row', margin: '15px', width: '100%', justifyContent: 'flex-end'}}>
-				<Button onClick={onClean}>Limpar</Button>
-				<Button onClick={onConfirm}>Confirmar</Button>
-			</div>
-		</FlavorBoxContainer>
-	);
+  return (
+    <FlavorBoxContainer style={Children.count(children) > 0 ? onItem : {}}>
+      <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto' }}>
+        {children}
+      </div>
+      <div style={{
+        display: 'flex', flexDirection: 'row', margin: '15px', width: '100%', justifyContent: 'flex-end',
+      }}
+      >
+        <Button onClick={onClean}>Limpar</Button>
+        <Button onClick={onConfirm}>Confirmar</Button>
+      </div>
+    </FlavorBoxContainer>
+  );
 };
 
 FlavorBox.propTypes = {
-	children: PropTypes.any,
-	onClean: PropTypes.func,
-	onConfirm: PropTypes.func,
+  children: PropTypes.any,
+  onClean: PropTypes.func,
+  onConfirm: PropTypes.func,
 };
 
 FlavorBox.defaultProps = {
-	children: [],
-	onClean: () => {},
-	onConfirm: () => {},
+  children: [],
+  onClean: () => {},
+  onConfirm: () => {},
 };
 
 function reducer(state, action) {
-	switch (action.type) {
-	case 'add':{
-		const tmp = state.data;
-		tmp.push(action.payload);
-		return {data: tmp};
-	}
-	case 'del':{
-		const data = state.data.filter(item => item !== action.payload);
-		return {data};
-	}
-	case 'clean':{
-		return {data: []};
-	}
-	default:
-		throw new Error();
-	}
+  switch (action.type) {
+    case 'add': {
+      const tmp = state.data;
+      tmp.push(action.payload);
+      return { data: tmp };
+    }
+    case 'del': {
+      const data = state.data.filter((item) => item !== action.payload);
+      return { data };
+    }
+    case 'clean': {
+      return { data: [] };
+    }
+    default:
+      throw new Error();
+  }
 }
 
-const initialState = {data: []};
+const initialState = { data: [] };
 
 
 export const AddEndpoint = () => {
-	const [page, setPage] = useState('pick');
+  const [page, setPage] = useState('table');
 
-	const [searchItems, setSearchItems] = useState([]);
-	const [selectedItem, setSelectedItem] = useState({});
+  const [searchItems, setSearchItems] = useState([]);
+  const [query, setQuery] = useState({});
+  const [Item, setItem] = useState({});
+  const [tables, setTables] = useState([]);
+  const [pizzaSizes, setPizzaSizes] = useState([]);
 
-	const [flavors, dispatchFlavors] = useReducer(reducer, initialState);
-	
-	const search = window.location.search;
-	const params = new URLSearchParams(search);
-	const token = params.get('access_token');
+  const [flavors, dispatchFlavors] = useReducer(reducer, initialState);
 
-	const getVisible = number => page === number;
+  const { search } = window.location;
+  const params = new URLSearchParams(search);
+  const token = params.get('access_token');
 
-	return (
-		<Container>
-			<Page visible={getVisible('pick')}>
-				<h2>Escolha o produto:</h2>
-				<div style={{width: 50}} />
-				<ProductButton onClick={() => setPage('pizzasize')}/>
-				<ProductButton onClick={() => setPage('product')}/>
-			</Page>
-			<Page visible={getVisible('pizzasize')}>
-				<h2>Tamanho da pizza</h2>
-				<div style={{width: 50}} />
-				<div style={{display: 'flex', flexDirection: 'row'}}>
-					<ProductButton onClick={() => setPage('pizzaflavor')}/>
-					<ProductButton onClick={() => setPage('pizzaflavor')}/>
-					<ProductButton onClick={() => setPage('pizzaflavor')}/>
-				</div>
-			</Page>
-			<Page visible={getVisible('pizzaflavor')}>
-				<h2>Quais os sabores?</h2>
-				<div style={{width: 50}} />
+  useEffect(() => {
+    getTables(token)
+      .then((answer) => {
+        const T = answer.data;
 
-				<div style={{display: 'flex', flexDirection: 'column'}}>
-					<Search label="Pesquisar" onSelect={item => {
-						if(item.value){
-							const currentItem = searchItems.find(({code}) => code === item.value);
-							dispatchFlavors({type: 'add', payload: currentItem});
-						}
+        setTables(T);
+      })
+      .catch((error) => {
+        window.alert('Erro!', error.message);
+      });
+    
+    getPizzaSizes(token)
+      .then((answer) => {
+        const T = answer.data;
 
-					}}
-					onChange={e => {
-						getFlavor(token, e.target.value)
-							.then( result => {
+        setPizzaSizes(T);
+      })
+      .catch((error) => {
+        window.alert('Erro!', error.message);
+      });
+  }, []);
 
-								if(result.status === 200){
-									setSearchItems(result.data);
-									return;
-								}
+  const getVisible = (number) => page === number;
 
-								window.alert('Falhou com o código' + result.status);
-							});
-					}}
-					data={searchItems.map(item => {
-						return {
-							label: `${item.name}${item.variation !== 'UNICO' ? ` (${item.variation})` : ''}`,
-							value: item.code
-						};
-					})}/>
-					<FlavorBox onClean={() => dispatchFlavors({type: 'clean'})} onConfirm={() => {setPage('confirm');}}>
-						{flavors && flavors.data.map((flavor, index) => {
-							return <FlavorItem onAdditionalClick={()=>{setSelectedItem(flavor);}} onRemove={() => dispatchFlavors({type: 'del', payload: flavor})} flavor={flavor} key={index} />;
-						})}
-					</FlavorBox>
-				</div>
-			</Page>
-			<Page visible={getVisible('product')}>
-				<h2>Produtos</h2>
-				<div style={{width: 50}} />
+  return (
+    <Container>
+      <Page visible={getVisible('table')}>
+        <h2>Qual a mesa?</h2>
+        <div style={{ width: 50 }} />
+        <Select onChange={ e => setQuery({...query, orderId: e.target.value}) } containerStyle={{ maxWidth: 250 }}>
+          <option value={null}>Selecione...</option>
+          {tables.map((table) => <option value={table.orderId}>{table.number}</option>)}
+        </Select>
+        <NextButton onClick={() => {
+          if(query.orderId)
+            setPage('pick');
+          else
+            window.alert('Selecione uma mesa!');
+        }}>
+          <img src={arrow} style={{ objectFit: 'contain', width: 32, height: 32 }} />
+        </NextButton>
+      </Page>
+      <Page visible={getVisible('pick')}>
+        <h2>Escolha o produto:</h2>
+        <div style={{ width: 50 }} />
+        <ProductButton onClick={() => { setPage('pizzasize') ; setItem({...Item, type: 'pizza'}); }}>
+          <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        </ProductButton>
+        <ProductButton onClick={() => {setPage('product'); setItem({...Item, type: 'product'}); }} >
+        <img src={addOthers} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        </ProductButton>
+      </Page>
+      <Page visible={getVisible('pizzasize')}>
+        <h2>Tamanho da pizza</h2>
+        <div style={{ width: 50 }} />
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+        {pizzaSizes && pizzaSizes.map(({code, name, description, flavorLimit}) => {
+          return (
+          <ProductButton onClick={() => {setPage('pizzaflavor'); setItem({...Item, code}); }}>
+            <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            <p>
+              <div>{name}</div>
+              <div>({description})</div>
+            </p>
+          </ProductButton>
+          )
+        })}
+        </div>
+      </Page>
+      <Page visible={getVisible('pizzaflavor')}>
+        <h2>Quais os sabores?</h2>
+        <div style={{ width: 50 }} />
 
-				<div style={{display: 'flex', flexDirection: 'row'}}>
-					<Input labl="Pesquisar" placeholder="Digite aqui sua pesquisa..." />
-				</div>
-			</Page>
-			<Page visible={getVisible('confirm')}>
-				<h2>Confirmar?</h2>
-				<div style={{width: 50}} />
-				<div style={{display: 'flex', flexDirection: 'row'}}>
-					<Input labl="Pesquisar" placeholder="Digite aqui sua pesquisa..." />
-				</div>
-			</Page>
-		</Container>
-	);
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Search
+            label="Pesquisar"
+            onSelect={(item) => {
+              if (item.value) {
+                const currentItem = searchItems.find(({ code }) => code === item.value);
+                dispatchFlavors({ type: 'add', payload: currentItem });
+                setItem({...Item, code: `${Item.code}${item.value}`});
+              }
+            }}
+            onChange={(e) => {
+					  getFlavor(token, e.target.value)
+					    .then((result) => {
+					      if (result.status === 200) {266
+					        setSearchItems(result.data);
+					        return;
+					      }
+
+					      window.alert(`Falhou com o código${result.status}`);
+					    });
+            }}
+            data={searchItems.map((item) => ({
+              label: `${item.name}${item.variation !== 'UNICO' ? ` (${item.variation})` : ''}`,
+              value: item.code,
+            }))}
+          />
+          <FlavorBox onClean={() => dispatchFlavors({ type: 'clean' })} onConfirm={() => { setPage('confirm'); }}>
+            {flavors && flavors.data.map((flavor, index) => <FlavorItem onRemove={() => { setItem({...Item, flavors: Item.flavors.filter(flavor), code: Item.code.split(flavor.code).join('')}); dispatchFlavors({ type: 'del', payload: flavor }); }} flavor={flavor} key={index} />)}
+          </FlavorBox>
+        </div>
+      </Page>
+      <Page visible={getVisible('product')}>
+        <h2>Produtos</h2>
+        <div style={{ width: 50 }} />
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <Input label="Pesquisar" placeholder="Digite aqui sua pesquisa..." />
+        </div>
+      </Page>
+      <Page visible={getVisible('confirm')}>
+        <h2>Confirmar?</h2>
+        <div style={{ width: 50 }} />
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          <span>{`Código: ${Item.code}`}</span>
+        </div>
+      </Page>
+    </Container>
+  );
 };
 
 export default AddEndpoint;

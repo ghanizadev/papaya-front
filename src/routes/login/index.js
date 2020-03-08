@@ -23,12 +23,17 @@ const error = {
 	detail: 'O servidor retornou um status desconhecido, por favor, entre em contato com o administrador',
 };
 
+const credentials = {
+	username: process.env.NODE_ENV === 'development' ? 'admin@admin.com' : '',
+	password: process.env.NODE_ENV === 'development' ? 'tr4df2g5wp' : '',
+}
+
 
 const Login = props =>{
 	const { navigate } = props;
 
-	const [username, setUsername] = useState('jf.melo6@gmail.com');
-	const [password, setPassword] = useState('td4df2g5wp');
+	const [username, setUsername] = useState(credentials.username);
+	const [password, setPassword] = useState(credentials.password);
   
 	const [handler, setHandler] = useState({});
 

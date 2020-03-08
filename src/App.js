@@ -21,11 +21,11 @@ const App = () => (
 			<LocationProvider history={history}>
 				<Router>
 					<Login path="/" />
-					<Home path="home" />
-					<WaitingListEndpoint path="list" />
-					<OpenTableEndpoint path="open" />
-					<AddEndpoint path="add" />
-					<Checkout path="test" />
+					<Home path="/home" />
+					<WaitingListEndpoint path="/list" />
+					<OpenTableEndpoint path="/open" />
+					<AddEndpoint path="/add" />
+					<Checkout path="/test" />
 				</Router>
 			</LocationProvider>
 		</Provider>

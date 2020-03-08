@@ -41,9 +41,9 @@ const openWindow = args => {
   let openURL;
   if ( dev && process.argv.indexOf('--noDevServer') === -1 ) {
     openURL = url.format({
-      protocol: 'http:',
-      host: 'localhost:8080/',
-      hash: args.url,
+      protocol: 'http',
+      host: 'localhost:8080',
+      pathname: args.url,
       slashes: true
     });
   } else {
@@ -55,6 +55,8 @@ const openWindow = args => {
     });
   }
 
+  console.log(openURL)
+
   win.loadURL(openURL);
   win.setMenuBarVisibility(false);
   win.resizable = args.resizable || false;
@@ -64,14 +66,19 @@ const openWindow = args => {
   modals.push(win);	
 };
 
-ipcMain.on('log', (event, arg) => {
+ipcMain.handle('log', (event, arg) => {
   event.preventDefault();
   console.log(arg);
 })
 
-ipcMain.on('openModal', (event, args) => {
+ipcMain.handle('refresh', event => {
+  event.preventDefault();
+  mainWindow.webContents.reload();
+})
+
+ipcMain.handle('openModal', (event, args) => {
   
-	event.preventDefault();	
+  event.preventDefault();	
   openWindow(args);
   
 });

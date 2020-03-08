@@ -9,7 +9,11 @@ const getData = data => {
 		result = data.map((table, index) => <Table key={index} load={table} />);
 		return result;
 	}
-	return <span>Nenhuma mesa aberta!</span>;
+	return (
+		<div>
+			<span>Nenhuma mesa aberta!</span>
+		</div>
+	);
 };
 
 const TablesInterface = () =>  {

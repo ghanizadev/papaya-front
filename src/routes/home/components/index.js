@@ -104,6 +104,27 @@ SidebarButton.defaultProps = {
 	selected: false
 };
 
+export const ServerInfoButton = styled.button`
+	width: 100%;
+	height: 58px;
+	font-size: 18pt;
+	color: #333;
+	background-color: whitesmoke;
+	text-align: center;
+	padding: 5px;
+	border: 0.25px solid #dcdcdc;
+`;
+
+
+
+ServerInfoButton.propTypes = {
+	selected: PropTypes.bool
+};
+
+ServerInfoButton.defaultProps = {
+	selected: false
+};
+
 export const Container = styled.div`
 	height: 100%;
 	width: 100%;
