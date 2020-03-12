@@ -1,7 +1,9 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, {
+  useContext, useRef, useState, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Context} from '../../context';
+import { Context } from '../../context';
 import { findFlavor, addProduct } from './functions';
 
 import logo from '../../assets/logo.png';
@@ -507,1231 +509,1354 @@ const ResultsContainer = styled.div`
 
 `;
 
-export const Results = props => {
-	const {data, headerOptions, headerButtons, title} = props;
-	const [headerItems, setHeaderItems] = useState([]);
-	const [parentHeight, setParentHeight] = useState(500);
+export const Results = (props) => {
+  const {
+    data, headerOptions, headerButtons, title,
+  } = props;
+  const [headerItems, setHeaderItems] = useState([]);
+  const [parentHeight, setParentHeight] = useState(500);
 
-	const resulttable = useRef();
-	const parent = useRef();
+  const resulttable = useRef();
+  const parent = useRef();
 
-	useEffect(()=>{
-		const keys = Object.keys(headerOptions);
+  useEffect(() => {
+    const keys = Object.keys(headerOptions);
 
-		let total = 0;
-		keys.forEach(key => {
-			total += headerOptions[key].size;
-		});
+    let total = 0;
+    keys.forEach((key) => {
+      total += headerOptions[key].size;
+    });
 
-		const localHeaderItems = headerItems;
+    const localHeaderItems = headerItems;
 
-		keys.forEach(key => {
-			const headerItem = {};
+    keys.forEach((key) => {
+      const headerItem = {};
 
-			headerItem.label = headerOptions[key].label;
-			headerItem.key = key;
-			headerItem.width = (resulttable.current.offsetWidth / total) * headerOptions[key].size;
-			localHeaderItems.push(headerItem);
-		});
+      headerItem.label = headerOptions[key].label;
+      headerItem.key = key;
+      headerItem.width = (resulttable.current.offsetWidth / total) * headerOptions[key].size;
+      localHeaderItems.push(headerItem);
+    });
 
-		setHeaderItems(localHeaderItems);
-		setParentHeight(parent.current.offsetHeight);
+    setHeaderItems(localHeaderItems);
+    setParentHeight(parent.current.offsetHeight);
+  }, []);
 
-	},[]);
+  return (
+    <ResultsContainer ref={parent}>
+      <div
+        style={{
+				  backgroundColor: '#ed9140',
+				  color: 'white',
+				  position: 'absolute',
+				  textAlign: 'center',
+				  alignItems: 'center',
+				  justifyContent: 'space-between',
+				  top: 0,
+				  right: 0,
+				  left: 0,
+				  height: 42,
+				  display: 'flex',
+				  flexDirection: 'row',
+				  padding: '0 25px',
+        }}
+      >
+        <h3>{title}</h3>
+        <div>
+          {(headerButtons && Array.isArray(headerItems)) && headerButtons.map((button, index) => (
+            <button key={index} type="button" onClick={(e) => { button.onButtonClick(e); }}>{button.title}</button>
+          ))}
+        </div>
 
-	return (
-		<ResultsContainer ref={parent}>
-			<div
-				style={{
-					backgroundColor: '#ed9140',
-					color: 'white',
-					position: 'absolute',
-					textAlign: 'center',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					top: 0,
-					right: 0,
-					left: 0,
-					height: 42,
-					display: 'flex',
-					flexDirection: 'row',
-					padding: '0 25px'
-				}}>
-				<h3>{title}</h3>
-				<div>
-					{(headerButtons && Array.isArray(headerItems)) && headerButtons.map((button, index) => {
-						return (
-							<button key={index} type="button" onClick={(e)=>{button.onButtonClick(e);}}>{button.title}</button>
-						);
-					})}
-				</div>
+      </div>
+      <div style={{
+			  backgroundColor: 'whitesmoke',
+			  color: '#444',
+			  position: 'absolute',
+			  textAlign: 'center',
+			  alignItems: 'center',
+			  justifyContent: 'flex-end',
+			  top: 42,
+			  right: 0,
+			  left: 0,
+			  height: 30,
+			  display: headerButtons.length > 0 ? 'flex' : 'none',
+			  flexDirection: 'row',
+      }}
+      >
+        {headerItems && headerItems.map((item, index) => <div key={index} style={{ width: item.width }}>{item.label}</div>)}
+      </div>
 
-			</div>
-			<div style={{
-				backgroundColor: 'whitesmoke',
-				color: '#444',
-				position: 'absolute',
-				textAlign: 'center',
-				alignItems: 'center',
-				justifyContent: 'flex-end',
-				top: 42,
-				right: 0,
-				left: 0,
-				height: 30,
-				display: headerButtons.length > 0 ? 'flex' : 'none',
-				flexDirection: 'row'
-			}}>
-				{headerItems && headerItems.map((item, index)=> <div key={index} style={{width: item.width}}>{item.label}</div>)}
-			</div>
-
-			<ResultsTable ref={resulttable} style={{maxHeight: parentHeight, padding: headerButtons.length > 0 ? '72px 5px 5px 5px' : '42px 5px 5px 5px'}}>
-				{data && data.map((item, index) => {
-					return (
-						<div style={{
-							backgroundColor: index & 1 ? 'whitesmoke': 'white',
-							color: '#444',
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							height: 30
-						}} key={index}>
-							{headerItems && headerItems.map((headerItem, index) => 
-								<div key={index} style={{textAlign: 'center', width: headerItem.width || null}}>
-									{headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
-								</div>
-							)}
-						</div>
-					);
-				})}
-			</ResultsTable>
-		</ResultsContainer>
-	);
+      <ResultsTable ref={resulttable} style={{ maxHeight: parentHeight, padding: headerButtons.length > 0 ? '72px 5px 5px 5px' : '42px 5px 5px 5px' }}>
+        {data && data.map((item, index) => (
+          <div
+            style={{
+						  backgroundColor: index & 1 ? 'whitesmoke' : 'white',
+						  color: '#444',
+						  display: 'flex',
+						  flexDirection: 'row',
+						  alignItems: 'center',
+						  height: 30,
+            }}
+            key={index}
+          >
+            {headerItems && headerItems.map((headerItem, index) => (
+              <div key={index} style={{ textAlign: 'center', width: headerItem.width || null }}>
+                {headerOptions[headerItem.key].format !== undefined ? headerOptions[headerItem.key].format(item[headerItem.key]) : item[headerItem.key]}
+              </div>
+            ))}
+          </div>
+        ))}
+      </ResultsTable>
+    </ResultsContainer>
+  );
 };
 
 Results.propTypes = {
-	headerButtons: PropTypes.arrayOf(
-		PropTypes.object
-	),
-	title: PropTypes.string,
-	headerOptions: PropTypes.object
+  headerButtons: PropTypes.arrayOf(
+    PropTypes.object,
+  ),
+  title: PropTypes.string,
+  headerOptions: PropTypes.object,
 };
 
 Results.defaultProps = {
-	headerButtons: [],
-	title: 'Resultados',
-	headerOptions: {}
+  headerButtons: [],
+  title: 'Resultados',
+  headerOptions: {},
 };
 
-export const Input = props => {
-	const {label, containerStyle, disabled, proportion} = props;
+export const Input = (props) => {
+  const {
+    label, containerStyle, disabled, proportion,
+  } = props;
 
-	let currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
-    
-	return (
-		<InputContainer style={currentContainerStyle}>
-			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
-			<InputComponent {...props} />
-		</InputContainer>
-	);
+  const currentContainerStyle = containerStyle || {};
+  if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+
+  return (
+    <InputContainer style={currentContainerStyle}>
+      <InputLabel style={{ backgroundColor: disabled ? '#fff' : null }}>{label}</InputLabel>
+      <InputComponent {...props} />
+    </InputContainer>
+  );
 };
 
-export const Search = props => {
-	const {label, containerStyle, disabled, proportion, data, onSelect} = props;
-	const [visible, setVisible] = useState(false);
+export const Search = (props) => {
+  const {
+    label, containerStyle, disabled, proportion, data, onSelect,
+  } = props;
+  const [visible, setVisible] = useState(false);
 
-	let currentContainerStyle = (containerStyle != null && containerStyle != {}) ? containerStyle : {};
-	if (proportion > 0) Object.defineProperty(currentContainerStyle,'flexGrow', {value: proportion});
+  const currentContainerStyle = (containerStyle != null && containerStyle != {}) ? containerStyle : {};
+  if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
 
-	const ref = useRef(null);
-	const inputRef = useRef(null);
+  const ref = useRef(null);
+  const inputRef = useRef(null);
 
-	useEffect(() => {
-		document.addEventListener('mousedown', handleClickOutside);
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	});
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
-	function handleClickOutside(event) {
-		if (ref.current &&
-			inputRef.current &&
-			(!ref.current.contains(event.target) &&
-			!inputRef.current.contains(event.target))){
-			setVisible(false);
-		}
-	}
-    
-	return (
-		<InputContainer style={{...currentContainerStyle, zIndex: 3}}>
-			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
-			<InputComponent
-				ref={inputRef}
-				onKeyPress={() => {
-					if (inputRef.current.value === '')
-						return setVisible(false);
-					return setVisible(true);
-				}} {...props} />
-			<InputItemContainer ref={ref} style={{display: visible ? 'flex' : 'none'}}>
-				{data && data.map(item => (
-					<InputItem key={item.value} onClick={() => {onSelect(item); setVisible(false);}}>{item.label}</InputItem>
-				))}
-			</InputItemContainer>
-		</InputContainer>
-	);
+  function handleClickOutside(event) {
+    if (ref.current
+			&& inputRef.current
+			&& (!ref.current.contains(event.target)
+			&& !inputRef.current.contains(event.target))) {
+      setVisible(false);
+    }
+  }
+
+  return (
+    <InputContainer style={{ ...currentContainerStyle, zIndex: 3 }}>
+      <InputLabel style={{ backgroundColor: disabled ? '#fff' : null }}>{label}</InputLabel>
+      <InputComponent
+        ref={inputRef}
+        onKeyPress={() => {
+          if (inputRef.current.value === '') return setVisible(false);
+          return setVisible(true);
+        }}
+        {...props}
+      />
+      <InputItemContainer ref={ref} style={{ display: visible ? 'flex' : 'none' }}>
+        {data && data.map((item) => (
+          <InputItem key={item.value} onClick={() => { onSelect(item); setVisible(false); }}>{item.label}</InputItem>
+        ))}
+      </InputItemContainer>
+    </InputContainer>
+  );
 };
 
 Search.propTypes = {
-	onSelect: PropTypes.func,
-	label: PropTypes.string,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	proportion: PropTypes.number,
-	data: PropTypes.array,
+  onSelect: PropTypes.func,
+  label: PropTypes.string,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  proportion: PropTypes.number,
+  data: PropTypes.array,
 };
 
 Search.defaultProps = {
-	onSelect: () => {},
-	label: '',
-	containerStyle: {},
-	disabled: false,
-	proportion: 1,
-	data: [],
+  onSelect: () => {},
+  label: '',
+  containerStyle: {},
+  disabled: false,
+  proportion: 1,
+  data: [],
 };
 
-export const TextArea = props => {
-	const {label, containerStyle, disabled, proportion} = props;
+export const TextArea = (props) => {
+  const {
+    label, containerStyle, disabled, proportion,
+  } = props;
 
-	const currentContainerStyle = containerStyle || {};
-	if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
-    
-	return (
-		<TextAreaContainer style={currentContainerStyle}>
-			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
-			<TextAreaComponent draggable={false} {...props} />
-		</TextAreaContainer>
-	);
+  const currentContainerStyle = containerStyle || {};
+  if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
+
+  return (
+    <TextAreaContainer style={currentContainerStyle}>
+      <InputLabel style={{ backgroundColor: disabled ? '#fff' : null }}>{label}</InputLabel>
+      <TextAreaComponent draggable={false} {...props} />
+    </TextAreaContainer>
+  );
 };
 
 TextArea.propTypes = {
-	label: PropTypes.string,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	proportion: PropTypes.number,
+  label: PropTypes.string,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  proportion: PropTypes.number,
 };
 
 TextArea.defaultProps = {
-	label: '',
-	containerStyle: {},
-	disabled: false,
-	proportion: 1,
+  label: '',
+  containerStyle: {},
+  disabled: false,
+  proportion: 1,
 };
 
-export const Select = props => {
-	const {label, children, containerStyle, proportion} = props;
+export const Select = (props) => {
+  const {
+    label, children, containerStyle, proportion,
+  } = props;
 
-	const currentContainerStyle = containerStyle || {};
-	if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
-    
-	return (
-		<InputContainer style={currentContainerStyle}>
-			<InputLabel>{label}</InputLabel>
-			<SelectComponent {...props}>{children}</SelectComponent>
-		</InputContainer>
-	);
+  const currentContainerStyle = containerStyle || {};
+  if (proportion > 0) Object.defineProperty(currentContainerStyle, 'flexGrow', { value: proportion });
+
+  return (
+    <InputContainer style={currentContainerStyle}>
+      <InputLabel>{label}</InputLabel>
+      <SelectComponent {...props}>{children}</SelectComponent>
+    </InputContainer>
+  );
 };
 
 Select.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	children: PropTypes.any,
-	proportion: PropTypes.number
+  label: PropTypes.string.isRequired,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  children: PropTypes.any,
+  proportion: PropTypes.number,
 };
 
 Select.defaultProps = {
-	label: '',
-	containerStyle: null,
-	disaled: false,
-	children: [],
-	proportion: 1
+  label: '',
+  containerStyle: null,
+  disaled: false,
+  children: [],
+  proportion: 1,
 };
 
 
-export const Button = props => {
-	return (
-		<ButtonComponent {...props} />
-	);
-};
+export const Button = (props) => (
+  <ButtonComponent {...props} />
+);
 
-export const Overlay = () => {
-	return (
-		<Context.Consumer>
-			{({ context }) => {
-				return (
-					<OverlayBackground
-						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
-					>
-						<OverlayBox>{context.overlay.component}</OverlayBox>
-					</OverlayBackground>
-				);
-			}}
-		</Context.Consumer>
-	);
-};
+export const Overlay = () => (
+  <Context.Consumer>
+    {({ context }) => (
+      <OverlayBackground
+        style={{ display: context.overlay.visible ? 'flex' : 'none' }}
+      >
+        <OverlayBox>{context.overlay.component}</OverlayBox>
+      </OverlayBackground>
+    )}
+  </Context.Consumer>
+);
 
 Results.propTypes = {
-	data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.arrayOf(PropTypes.object),
 };
 
 Input.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	proportion: PropTypes.number,
-	multiline: PropTypes.bool
+  label: PropTypes.string.isRequired,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  proportion: PropTypes.number,
+  multiline: PropTypes.bool,
 };
 
 Input.defaultProps = {
-	proportion: 0,
-	multiline: false,
+  proportion: 0,
+  multiline: false,
 };
 
 
+const ProductDescription = (props) => {
+  const { product } = props;
 
-const ProductDescription = props => {
-	const {product} = props;
-
-	const state = useContext(Context);
-	return (
-		<div style={{width: '100%', position: 'relative'}}>
-			<h1>{product.title}</h1>
-			<div style={{display: 'flex', flexDirection: 'column'}}>
-				<span>código: {product.code}</span>
-				<span>grupo: {product.group}</span>
-				<span>variação: {product.variation}</span>
-				<span>descrição: {product.description.toString()}</span>
-				<span>adicionais: {product.aditionals}</span>
-				<span>preço: {product.price}</span>
-			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
-		</div>
-	);
+  const state = useContext(Context);
+  return (
+    <div style={{ width: '100%', position: 'relative' }}>
+      <h1>{product.title}</h1>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span>
+          código:
+          {' '}
+          {product.code}
+        </span>
+        <span>
+          grupo:
+          {' '}
+          {product.group}
+        </span>
+        <span>
+          variação:
+          {' '}
+          {product.variation}
+        </span>
+        <span>
+          descrição:
+          {' '}
+          {product.description.toString()}
+        </span>
+        <span>
+          adicionais:
+          {' '}
+          {product.aditionals}
+        </span>
+        <span>
+          preço:
+          {' '}
+          {product.price}
+        </span>
+      </div>
+      <CloseButton onClick={() => { state.setContext({ ...state.context, overlay: { visible: false } }); }}>&times;</CloseButton>
+    </div>
+  );
 };
 
 ProductDescription.propTypes = {
-	product: PropTypes.object,
+  product: PropTypes.object,
 };
 
 ProductDescription.defaultProps = {
-	product: {code: '0', title: 'NO TITLE', group: 'NO GROUP', variation: 'NO VARIATION', description: ['NO DESCRIPTION'], aditionals: 'NO ADDITIONALS', price: 0}
+  product: {
+    code: '0', title: 'NO TITLE', group: 'NO GROUP', variation: 'NO VARIATION', description: ['NO DESCRIPTION'], aditionals: 'NO ADDITIONALS', price: 0,
+  },
 };
 
-const ProductDescriptionCustomer = props => {
-	const {items, name} = props.customer;
-	const [list, setList] = useState([]);
+const ProductDescriptionCustomer = (props) => {
+  const { items, name } = props.customer;
+  const [list, setList] = useState([]);
 
-	const state = useContext(Context);
-	return (
-		<div style={{width: '100%', position: 'relative', padding: 25, boxSizing: 'border-box'}}>
-			<p style={{fontSize: 24, color: '#333', fontWeight:  'bold'}}>{name}</p>
-			<p style={{fontSize: 18, color: '#666', fontWeight:  'bold'}}>Produtos</p>
-			<div style={{display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh'}}>
-				{items && items.map((product, index) => (
-					<div key={index}
-						style={{
-							border: '1px solid whitesmoke',
-							margin: 8,
-							borderRadius: 5,
-							padding: 15,
-						}}>
-						<span style={{fontSize: 16, display: 'flex', color: '#444', fontWeight:  'bold', alignItems: 'center'}}>
-							<input
-								onClick={() => {
-									console.log(list);
-									const tmp = list;
+  const state = useContext(Context);
+  return (
+    <div style={{
+      width: '100%', position: 'relative', padding: 25, boxSizing: 'border-box',
+    }}
+    >
+      <p style={{ fontSize: 24, color: '#333', fontWeight: 'bold' }}>{name}</p>
+      <p style={{ fontSize: 18, color: '#666', fontWeight: 'bold' }}>Produtos</p>
+      <div style={{
+        display: 'flex', flexDirection: 'column', overflow: 'hidden auto', maxHeight: '45vh',
+      }}
+      >
+        {items && items.map((product, index) => (
+          <div
+            key={index}
+            style={{
+						  border: '1px solid whitesmoke',
+						  margin: 8,
+						  borderRadius: 5,
+						  padding: 15,
+            }}
+          >
+            <span style={{
+              fontSize: 16, display: 'flex', color: '#444', fontWeight: 'bold', alignItems: 'center',
+            }}
+            >
+              <input
+                onClick={() => {
+                  console.log(list);
+                  const tmp = list;
 
-									if(list.includes(product)){
-										tmp.pop(product);
-										setList(tmp);
-										return;
-									}
-									tmp.push(product);
-									setList(tmp);
-									return;
-
-								}} type="checkbox"/>
-							{product.title}
-						</span>
-						<div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-							<span style={{fontSize: 12, color: '#888', fontWeight:  'bold'}}>Descrição: {product.description.toString()}, adicionais: {product.aditionals}</span>
-							<span style={{fontSize: 20, color: '#1ad67e', fontWeight:  'bold'}}>R$ {product.price.toFixed(2).toString().replace('.', ',')}</span>
-						</div>
-					</div>
-				))}
-			</div>
-			<div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
-				<Button>Descontar</Button>
-				<Button>Pagar total</Button>
-			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false } });}}>&times;</CloseButton>
-		</div>
-	);
+                  if (list.includes(product)) {
+                    tmp.pop(product);
+                    setList(tmp);
+                    return;
+                  }
+                  tmp.push(product);
+                  setList(tmp);
+                }}
+                type="checkbox"
+              />
+              {product.title}
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 12, color: '#888', fontWeight: 'bold' }}>
+                Descrição:
+                {' '}
+                {product.description.toString()}
+                , adicionais:
+                {' '}
+                {product.aditionals}
+              </span>
+              <span style={{ fontSize: 20, color: '#1ad67e', fontWeight: 'bold' }}>
+                R$
+                {' '}
+                {product.price.toFixed(2).toString().replace('.', ',')}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{
+        width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15,
+      }}
+      >
+        <Button>Descontar</Button>
+        <Button>Pagar total</Button>
+      </div>
+      <CloseButton onClick={() => { state.setContext({ ...state.context, overlay: { visible: false } }); }}>&times;</CloseButton>
+    </div>
+  );
 };
 
 ProductDescriptionCustomer.propTypes = {
-	customer: PropTypes.object.isRequired
+  customer: PropTypes.object.isRequired,
 };
 
-const TableDescription = props => {
-	const {order} = props;
+const TableDescription = (props) => {
+  const { order } = props;
 
-	const state = useContext(Context);
-	return (
-		<div style={{width: '100%', position: 'relative'}}>
-			<h1>{order.tableNumber}.{order.customer}</h1>
-			<div style={{display: 'flex', flexDirection: 'column'}}>
-				<span>código: {order.orderId}</span>
-				<span>entrega: {order.deliver}</span>
-				<span>data de entrada: {new Date(order.createdAt).toLocaleDateString()}</span>
-				<span>última atualização: {new Date(order.updatedAt).toLocaleTimeString()}</span>
-			</div>
-			<CloseButton onClick={()=>{state.setContext({...state.context, overlay: { visible: false }});}}>&times;</CloseButton>
-		</div>
-	);
+  const state = useContext(Context);
+  return (
+    <div style={{ width: '100%', position: 'relative' }}>
+      <h1>
+        {order.tableNumber}
+        .
+        {order.customer}
+      </h1>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span>
+          código:
+          {' '}
+          {order.orderId}
+        </span>
+        <span>
+          entrega:
+          {' '}
+          {order.deliver}
+        </span>
+        <span>
+          data de entrada:
+          {' '}
+          {new Date(order.createdAt).toLocaleDateString()}
+        </span>
+        <span>
+          última atualização:
+          {' '}
+          {new Date(order.updatedAt).toLocaleTimeString()}
+        </span>
+      </div>
+      <CloseButton onClick={() => { state.setContext({ ...state.context, overlay: { visible: false } }); }}>&times;</CloseButton>
+    </div>
+  );
 };
 
 TableDescription.propTypes = {
-	order: PropTypes.object.isRequired
+  order: PropTypes.object.isRequired,
 };
 
 
-const AddComponent = props => {
-	const state = useContext(Context);
+const AddComponent = (props) => {
+  const state = useContext(Context);
 
-	return (
-		<div style={{position: 'relative', width: '100%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row'}}>
-			<AddPizza onClick={()=> state.setContext({...state.context, overlay: { visible: true, component: <AddPizzaComponent {...props} />}}) } />
-			<AddProduct onClick={()=> state.setContext({...state.context, overlay: { visible: true, component: <AddProductComponent {...props} />}}) } />
-			<CloseButton onClick={() => state.setContext({...state.context, overlay: {visible: false}})}>&times;</CloseButton>
-		</div>
-	);
-
+  return (
+    <div style={{
+      position: 'relative', width: '100%', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row',
+    }}
+    >
+      <AddPizza onClick={() => state.setContext({ ...state.context, overlay: { visible: true, component: <AddPizzaComponent {...props} /> } })} />
+      <AddProduct onClick={() => state.setContext({ ...state.context, overlay: { visible: true, component: <AddProductComponent {...props} /> } })} />
+      <CloseButton onClick={() => state.setContext({ ...state.context, overlay: { visible: false } })}>&times;</CloseButton>
+    </div>
+  );
 };
 
-const AddProductComponent = props => {
-	const {order} = props;
-	const state = useContext(Context);
+const AddProductComponent = (props) => {
+  const { order } = props;
+  const state = useContext(Context);
 
-	const searchField = useRef();
+  const searchField = useRef();
 
-	const [products, setProducts] = useState([]);
-	const [selectedProduct, setSelectedProducts] = useState('');
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProducts] = useState('');
 
-	return (
-		<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', width:'100%', height: '165px', position: 'relative'}}>
-			<h1 style={{whiteSpace: 'nowrap'}}>Produtos | </h1>
-			<br/>
-			<input type="number" min={1} defaultValue={1} step={1} style={{width: 40, marginLeft: '5px'}}/>
-			<div style={{width: '100%', padding: '0 10px', position: 'relative', boxSizing: 'border-box'}}>
-				<input
-					type="text" 
-					ref={searchField}
-					placeholder="Pesquise pelo seu produto..." 
-					style={{width: '100%', boxSizing: 'border-box'}}
-					onClick={() => {searchField.current.value = '';}}
-					onChange={() => {
-						if(searchField.current.value === ''){
-							return setProducts([]);
-						}
-						findFlavor(
-							state.context.auth.token,
-							searchField.current.value
-						).then(result => {
-							setProducts(result.data);
-						});
-					}}
-				/>
-				<div
-					style={{
-						position: 'absolute', 
-						top: 30,
-						width: 'calc(100% - 20px)',
-						boxSizing: 'border-box',
-						display: products.length > 0 ? 'flex': 'none',
-						flexDirection: 'column',
-						height: 'min-content',
-						maxHeight: 200,
-						overflowY: 'auto',
-						backgroundColor: '#fdfdfd', 
-						boxShadow: '3px 3px 8px 3px #888888aa', 
-						border: '.5px solid #ddd',
-						padding: 8
-					}}>
-					{products && products.map(
-						(product, index) => 
-							<button
-								style={{
-									backgroundColor: 'transparent',
-									width: '100%',
-									border: 'none'
-								}}
-								onClick={() => {
-									setSelectedProducts(product.code);
-									setProducts([]);
-									searchField.current.value = `${product.code} - ${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`;
-								}}
-								key={index}>{`${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`}</button>)}
-				</div>
-			</div>
-			<button
-				type='submit'
-				style={{
-					backgroundColor: '#ffbe5b',
-					border:'none',
-					height: 30,
-					borderRadius: 5,
-					color: '#fdfdfd'
-				}}>Adicionar</button>
-			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: '165px', position: 'relative',
+    }}
+    >
+      <h1 style={{ whiteSpace: 'nowrap' }}>Produtos | </h1>
+      <br />
+      <input type="number" min={1} defaultValue={1} step={1} style={{ width: 40, marginLeft: '5px' }} />
+      <div style={{
+        width: '100%', padding: '0 10px', position: 'relative', boxSizing: 'border-box',
+      }}
+      >
+        <input
+          type="text"
+          ref={searchField}
+          placeholder="Pesquise pelo seu produto..."
+          style={{ width: '100%', boxSizing: 'border-box' }}
+          onClick={() => { searchField.current.value = ''; }}
+          onChange={() => {
+					  if (searchField.current.value === '') {
+					    return setProducts([]);
+					  }
+					  findFlavor(
+					    state.context.auth.token,
+					    searchField.current.value,
+					  ).then((result) => {
+					    setProducts(result.data);
+					  });
+          }}
+        />
+        <div
+          style={{
+					  position: 'absolute',
+					  top: 30,
+					  width: 'calc(100% - 20px)',
+					  boxSizing: 'border-box',
+					  display: products.length > 0 ? 'flex' : 'none',
+					  flexDirection: 'column',
+					  height: 'min-content',
+					  maxHeight: 200,
+					  overflowY: 'auto',
+					  backgroundColor: '#fdfdfd',
+					  boxShadow: '3px 3px 8px 3px #888888aa',
+					  border: '.5px solid #ddd',
+					  padding: 8,
+          }}
+        >
+          {products && products.map(
+					  (product, index) => (
+  <button
+    style={{
+								  backgroundColor: 'transparent',
+								  width: '100%',
+								  border: 'none',
+    }}
+    onClick={() => {
+								  setSelectedProducts(product.code);
+								  setProducts([]);
+								  searchField.current.value = `${product.code} - ${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`;
+    }}
+    key={index}
+  >
+    {`${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`}
+  </button>
+            ),
+          )}
+        </div>
+      </div>
+      <button
+        type="submit"
+        style={{
+				  backgroundColor: '#ffbe5b',
+				  border: 'none',
+				  height: 30,
+				  borderRadius: 5,
+				  color: '#fdfdfd',
+        }}
+      >
+        Adicionar
 
-		</div>
-	);
+      </button>
+      <CloseButton onClick={() => state.setContext({ ...state.context, overlay: { visible: false } })}>&times;</CloseButton>
+
+    </div>
+  );
 };
 
-const AddPizzaComponent = props => {
-	const { order } = props;
-	const state = useContext(Context);
+const AddPizzaComponent = (props) => {
+  const { order } = props;
+  const state = useContext(Context);
 
-	const [cookies] = useCookies();
+  const [cookies] = useCookies();
 
-	const code = useRef();
-	const quantity = useRef();
+  const code = useRef();
+  const quantity = useRef();
 
-	const [pizzaSize, setPizzaSize] = useState('12');
-	const [pizzaFlavors, setPizzaFlavors] = useState([]);
-	const [pizzaAditionals, setPizzaAditionals] = useState([]);
+  const [pizzaSize, setPizzaSize] = useState('12');
+  const [pizzaFlavors, setPizzaFlavors] = useState([]);
+  const [pizzaAditionals, setPizzaAditionals] = useState([]);
 
-	const [currentAditional, setCurrentAditional] = useState('');
-	const [aditionalsItems, setAditionalsItems] = useState([]);
+  const [currentAditional, setCurrentAditional] = useState('');
+  const [aditionalsItems, setAditionalsItems] = useState([]);
 
-	const [flavors, setFlavors] = useState([]);
-	const [openFlavor, setOpenFlavors] = useState('');
+  const [flavors, setFlavors] = useState([]);
+  const [openFlavor, setOpenFlavors] = useState('');
 
-	const getPizzaTitle = () => {
+  const getPizzaTitle = () => {
+    switch (pizzaSize) {
+      case '12':
+        return 'Uma pizza grande com os sabores:';
 
-		switch (pizzaSize) {
-		case '12':
-			return 'Uma pizza grande com os sabores:';
+      case '11':
+        return 'Uma pizza média com os sabores:';
 
-		case '11':
-			return 'Uma pizza média com os sabores:';
+      case '10':
+        return 'Uma pizza pequena com os sabores:';
 
-		case '10':
-			return 'Uma pizza pequena com os sabores:';
+      default:
+        return 'Uma pizza grande com os sabores:';
+    }
+  };
 
-		default:
-			return 'Uma pizza grande com os sabores:';
-		}
-	};
+  const callback = () => {
+    const code = `${pizzaSize}*${pizzaFlavors.map((item) => item.code).join('')}`;
 
-	const callback = () => {
-		
-		let code = `${pizzaSize}*${pizzaFlavors.map(item => item.code).join('')}`;
+    const quantity = 1;
 
-		const quantity = 1;
+    const aditionals = pizzaAditionals;
 
-		const aditionals = pizzaAditionals;
+    const body = [{ quantity, code, aditionals }];
 
-		const body = [{ quantity, code, aditionals }];
+    addProduct(state.context.auth.token, order.orderId, body)
+      .then(() => {
+        setOpenFlavors('');
+        setAditionalsItems([]);
+        setCurrentAditional('');
 
-		addProduct(state.context.auth.token, order.orderId, body)
-			.then(() => {
+        state.setContext({ ...state.context, overlay: { visible: false } });
+      })
+      .catch((error) => {
+        window.alert(`Error: \n${error}`);
+      });
+  };
 
-				setOpenFlavors('');
-				setAditionalsItems([]);
-				setCurrentAditional('');
+  return (
+    <div
+      style={{
+			  display: 'inherited',
+			  height: 'auto',
+			  alignItems: 'center',
+			  justifyContent: 'center',
+			  width: '100%',
+			  borderSizing: 'border-box',
+			  position: 'relative',
+      }}
+    >
+      <CloseButton onClick={() => state.setContext({ ...state.context, overlay: { visible: false } })}>&times;</CloseButton>
+      <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <h1>Pizza</h1>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+        >
+          <div
+            style={{
+						  display: 'flex',
+						  flexDirection: 'row',
+						  width: '100%',
+						  justifyContent: 'center',
+            }}
+          >
+            <button
+              style={{
+							  display: 'flex',
+							  flexDirection: 'column',
+							  justifyContent: 'center',
+							  alignItems: 'center',
+							  margin: 15,
+							  width: 150,
+							  height: 200,
+							  border: pizzaSize === '12' ? '1px solid #d2d2d2' : 'none',
+							  backgroundColor: 'transparent',
+              }}
+              onClick={() => {
+							  setPizzaSize('12');
+              }}
+            >
+              <div
+                className="pizzaImageHolder"
+                style={{
+								  height: '100px',
+								  width: '100px',
+								  backgroundColor: 'gray',
+                }}
+              />
+              <span>Grande</span>
+              <span>Até 12 fatias</span>
+              <span>3 sabores</span>
+              <span>R$ 00,00</span>
+            </button>
+            <button
+              style={{
+							  display: 'flex',
+							  flexDirection: 'column',
+							  justifyContent: 'center',
+							  alignItems: 'center',
+							  margin: 15,
+							  width: 150,
+							  height: 200,
+							  border: pizzaSize === '11' ? '1px solid #d2d2d2' : 'none',
+							  backgroundColor: 'transparent',
+              }}
+              onClick={() => {
+							  setPizzaSize('11');
+              }}
+            >
+              <div
+                className="pizzaImageHolder"
+                style={{
+								  height: '85px',
+								  width: '85px',
+								  backgroundColor: 'gray',
+                }}
+              />
+              <span>Média</span>
+              <span>Até 9 fatias</span>
+              <span>3 sabores</span>
+              <span>R$ 00,00</span>
+            </button>
+            <button
+              style={{
+							  display: 'flex',
+							  flexDirection: 'column',
+							  justifyContent: 'center',
+							  alignItems: 'center',
+							  margin: 15,
+							  width: 150,
+							  height: 200,
+							  border: pizzaSize === '10' ? '1px solid #d2d2d2' : 'none',
+							  backgroundColor: 'transparent',
+              }}
+              onClick={() => {
+							  setPizzaSize('10');
+              }}
+            >
+              <div
+                className="pizzaImageHolder"
+                style={{
+								  height: '60px',
+								  width: '60px',
+								  backgroundColor: 'gray',
+                }}
+              />
+              <span>Pequena</span>
+              <span>Até 8 fatias</span>
+              <span>2 sabores</span>
+              <span>R$ 00,00</span>
+            </button>
+          </div>
+        </div>
+        <span>{getPizzaTitle()}</span>
 
-				state.setContext({ ...state.context,  overlay: { visible: false } });
-			})
-			.catch(error => {
-				window.alert(`Error: \n${error}`);
-			});
-	};
+        <div
+          style={{
+					  height: 60,
+					  width: '100%',
+					  padding: 15,
+					  border: '.25px solid #d2d2d2',
+					  boxSizing: 'border-box',
+					  display: 'flex',
+					  flexDirection: 'row',
+          }}
+        >
+          {pizzaFlavors.map((flavor, index) => (
+            <div
+              key={index}
+              style={{
+							  height: 30,
+							  color: '#333',
+							  fontSize: '11pt',
+							  border: '1px solid #ddd',
+							  borderRadius: 3,
+							  display: 'flex',
+							  alignItems: 'center',
+							  justifyContent: 'center',
+							  margin: '0 5px',
+              }}
+            >
+              <span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{flavor.name}</span>
+              <button
+                type="button"
+                style={{ border: 'none', backgroundColor: 'transparent' }}
+                onClick={() => {
+								  setPizzaFlavors(pizzaFlavors.filter((item) => item !== flavor));
+                }}
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
 
-	return (
-		<div
-			style={{
-				display: 'inherited',
-				height: 'auto',
-				alignItems: 'center',
-				justifyContent: 'center',
-				width: '100%',
-				borderSizing: 'border-box',
-				position: 'relative'
-			}}
-		>
-			<CloseButton onClick={() => state.setContext({...state.context, overlay: { visible: false }})}>&times;</CloseButton>
-			<div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-				<h1>Pizza</h1>
-				<div
-					style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-				>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							width: '100%',
-							justifyContent: 'center'
-						}}
-					>
-						<button
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-								margin: 15,
-								width: 150,
-								height: 200,
-								border: pizzaSize === '12' ? '1px solid #d2d2d2' : 'none',
-								backgroundColor: 'transparent'
-							}}
-							onClick={() => {
-								setPizzaSize('12');
-							}}
-						>
-							<div
-								className="pizzaImageHolder"
-								style={{
-									height: '100px',
-									width: '100px',
-									backgroundColor: 'gray'
-								}}
-							/>
-							<span>Grande</span>
-							<span>Até 12 fatias</span>
-							<span>3 sabores</span>
-							<span>R$ 00,00</span>
-						</button>
-						<button
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-								margin: 15,
-								width: 150,
-								height: 200,
-								border: pizzaSize === '11' ? '1px solid #d2d2d2' : 'none',
-								backgroundColor: 'transparent'
-							}}
-							onClick={() => {
-								setPizzaSize('11');
-							}}
-						>
-							<div
-								className="pizzaImageHolder"
-								style={{
-									height: '85px',
-									width: '85px',
-									backgroundColor: 'gray'
-								}}
-							/>
-							<span>Média</span>
-							<span>Até 9 fatias</span>
-							<span>3 sabores</span>
-							<span>R$ 00,00</span>
-						</button>
-						<button
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-								margin: 15,
-								width: 150,
-								height: 200,
-								border: pizzaSize === '10' ? '1px solid #d2d2d2' : 'none',
-								backgroundColor: 'transparent'
-							}}
-							onClick={() => {
-								setPizzaSize('10');
-							}}
-						>
-							<div
-								className="pizzaImageHolder"
-								style={{
-									height: '60px',
-									width: '60px',
-									backgroundColor: 'gray'
-								}}
-							/>
-							<span>Pequena</span>
-							<span>Até 8 fatias</span>
-							<span>2 sabores</span>
-							<span>R$ 00,00</span>
-						</button>
-					</div>
-				</div>
-				<span>{getPizzaTitle()}</span>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
 
-				<div
-					style={{
-						height: 60,
-						width: '100%',
-						padding: 15,
-						border: '.25px solid #d2d2d2',
-						boxSizing: 'border-box',
-						display: 'flex',
-						flexDirection: 'row',
-					}}
-				>
-					{pizzaFlavors.map((flavor, index) => (
-						<div
-							key={index}
-							style={{
-								height: 30,
-								color: '#333',
-								fontSize: '11pt',
-								border: '1px solid #ddd',
-								borderRadius: 3,
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								margin: '0 5px',
-							}}
-						>
-							<span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{flavor.name}</span>
-							<button
-								type="button"
-								style={{ border: 'none', backgroundColor: 'transparent' }}
-								onClick={() => {
-									setPizzaFlavors(pizzaFlavors.filter(item => item !== flavor));
-								}}
-							>
-								&times;
-							</button>
-						</div>
-					))}
-				</div>
-				
-				<div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+          <div style={{ width: '100%' }}>
+            <input
+              type="text"
+              ref={code}
+              defaultValue=""
+              placeholder="Digite sua pesquisa aqui"
+              style={{
+							  width: '100%',
+							  boxSizing: 'border-box',
+							  margin: '15px 0',
+              }}
+              onChange={() => {
+							  setOpenFlavors('');
+							  findFlavor(
+							    state.context.auth.token,
+							    code.current.value,
+							  ).then((result) => {
+							    setFlavors(result.data);
+							  });
+              }}
+            />
+            <div
+              style={{
+							  height: '300px',
+							  overflow: 'hidden scroll',
+							  display: 'flex',
+							  flexDirection: 'column',
+							  width: '100%',
+							  padding: '0 25px',
+							  boxSizing: 'border-box',
+              }}
+            >
+              {flavors
+								&& flavors.map((flavor) => (
+  <div
+    key={flavors.indexOf(flavor)}
+    style={{
+										  height: 'min-content',
+										  width: '100%',
+										  margin: '5px 0',
+    }}
+  >
+    <AddProductFlavor
+      type="button"
+      onClick={() => {
+											  setOpenFlavors(
+											    openFlavor === flavor.code ? '' : flavor.code,
+											  );
+      }}
+    >
+      {`${flavor.name}${
+											  flavor.variation === 'UNICO'
+											    ? ''
+											    : ` (${flavor.variation})`
+      }`}
+    </AddProductFlavor>
+    <div
+      style={{
+											  display: openFlavor === flavor.code ? 'block' : 'none',
+											  boxSizing: 'border-box',
+											  border: '0.25px solid #d2d2d2',
+											  color: '#333',
+											  height: 'min-content',
+											  overflow: 'hidden',
+											  width: '90%',
+											  padding: 15,
+											  margin: 'auto',
+      }}
+    >
+      <span>
+        grupo:
+        <span style={{ color: '#666' }}>{flavor.group}</span>
+      </span>
+      <br />
+      <span>
+        código:
+        <span style={{ color: '#666' }}>{flavor.code}</span>
+      </span>
+      <br />
+      <span>
+        variação:
+        <span style={{ color: '#666' }}>
+          {flavor.variation}
+        </span>
+      </span>
+      <br />
+      <span>
+        ingredientes:
+        <span style={{ color: '#666' }}>
+          {flavor.description.map((ingredient, index, arr) => {
+													  if (index === arr.length - 1) {
+													    return `E ${ingredient}.`;
+													  }
+													  return `${ingredient}, `;
+          })}
+        </span>
+      </span>
+      <br />
+      <span>adicionais: </span>
+      <div
+        style={{
+												  height: 60,
+												  width: '100%',
+												  border: '0.25px solid #d2d2d2',
+												  display: 'flex',
+												  padding: 5,
+												  flexWrap: 'wrap',
+												  overflow: 'hidden scroll',
+        }}
+      >
+        {aditionalsItems.map((aditional, index) => (
+          <div
+            key={index}
+            style={{
+															  height: 30,
+															  color: '#333',
+															  fontSize: '11pt',
+															  border: '1px solid #ddd',
+															  borderRadius: 3,
+															  display: 'flex',
+															  alignItems: 'center',
+															  justifyContent: 'center',
+															  margin: '0 0 0 5px',
+            }}
+          >
+            <span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{aditional}</span>
+            <button
+              type="button"
+              style={{ border: 'none', backgroundColor: 'transparent' }}
+              onClick={() => {
+																  setAditionalsItems(aditionalsItems.filter((item) => item !== aditional));
+              }}
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <input
+          onChange={(e) => {
+													  setCurrentAditional(e.target.value);
+													  if (e.target.value == ',') e.target.value = '';
+          }}
+          type="text"
+          value={currentAditional}
+          style={{
+            border: 'none', padding: '0 0 0 6px', margin: 0, flex: 1, outline: 'none',
+          }}
+          onKeyPress={(e) => {
+													  if (e.key == 'Enter') {
+													    const temp = aditionalsItems;
+													    temp.push(currentAditional.replace(',', '').trim().toLocaleUpperCase());
+													    setAditionalsItems(temp);
+													    setCurrentAditional('');
+													  }
+          }}
+        />
+      </div>
 
-					<div style={{ width: '100%' }}>
-						<input
-							type="text"
-							ref={code}
-							defaultValue=""
-							placeholder="Digite sua pesquisa aqui"
-							style={{
-								width: '100%',
-								boxSizing: 'border-box',
-								margin: '15px 0'
-							}}
-							onChange={() => {
-								setOpenFlavors('');
-								findFlavor(
-									state.context.auth.token,
-									code.current.value
-								).then(result => {
-									setFlavors(result.data);
-								});
-							}}
-						/>
-						<div
-							style={{
-								height: '300px',
-								overflow: 'hidden scroll',
-								display: 'flex',
-								flexDirection: 'column',
-								width: '100%',
-								padding: '0 25px',
-								boxSizing: 'border-box'
-							}}
-						>
-							{flavors &&
-								flavors.map(flavor => (
-									<div
-										key={flavors.indexOf(flavor)}
-										style={{
-											height: 'min-content',
-											width: '100%',
-											margin: '5px 0'
-										}}
-									>
-										<AddProductFlavor
-											type="button"
-											onClick={() => {
-												setOpenFlavors(
-													openFlavor === flavor.code ? '' : flavor.code
-												);
-											}}
-										>
-											{`${flavor.name}${
-												flavor.variation === 'UNICO'
-													? ''
-													: ` (${flavor.variation})`
-											}`}
-										</AddProductFlavor>
-										<div
-											style={{
-												display: openFlavor === flavor.code ? 'block' : 'none',
-												boxSizing: 'border-box',
-												border: '0.25px solid #d2d2d2',
-												color: '#333',
-												height: 'min-content',
-												overflow: 'hidden',
-												width: '90%',
-												padding: 15,
-												margin: 'auto'
-											}}
-										>
-											<span>
-												grupo:
-												<span style={{ color: '#666' }}>{flavor.group}</span>
-											</span>
-											<br />
-											<span>
-												código:
-												<span style={{ color: '#666' }}>{flavor.code}</span>
-											</span>
-											<br />
-											<span>
-												variação:
-												<span style={{ color: '#666' }}>
-													{flavor.variation}
-												</span>
-											</span>
-											<br />
-											<span>
-												ingredientes:
-												<span style={{ color: '#666' }}>
-													{flavor.description.map((ingredient, index, arr) => {
-														if (index === arr.length - 1) {
-															return `E ${ingredient}.`;
-														}
-														return `${ingredient}, `;
-													})}
-												</span>
-											</span>
-											<br />
-											<span>adicionais: </span>
-											<div
-												style={{
-													height: 60,
-													width: '100%',
-													border: '0.25px solid #d2d2d2',
-													display: 'flex',
-													padding: 5,
-													flexWrap: 'wrap',
-													overflow: 'hidden scroll'
-												}}
-											>
-												{aditionalsItems.map((aditional, index) => {
-													return (
-														<div
-															key={index}
-															style={{
-																height: 30,
-																color: '#333',
-																fontSize: '11pt',
-																border: '1px solid #ddd',
-																borderRadius: 3,
-																display: 'flex',
-																alignItems: 'center',
-																justifyContent: 'center',
-																margin: '0 0 0 5px'
-															}}
-														>
-															<span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{aditional}</span>
-															<button
-																type="button"
-																style={{ border: 'none', backgroundColor: 'transparent' }}
-																onClick={() => {
-																	setAditionalsItems(aditionalsItems.filter(item => item !== aditional));
-																}}
-															>
-																&times;
-															</button>
-														</div>
-													);
-												})}
-												<input
-													onChange={(e) => {
-														setCurrentAditional(e.target.value);
-														if (e.target.value == ',') e.target.value = '';
-													}}
-													type="text"
-													value={currentAditional}
-													style={{ border: 'none', padding: '0 0 0 6px', margin: 0, flex: 1, outline: 'none' }}
-													onKeyPress={(e) => {
-														if (e.key == 'Enter') {
-															const temp = aditionalsItems;
-															temp.push(currentAditional.replace(',', '').trim().toLocaleUpperCase());
-															setAditionalsItems(temp);
-															setCurrentAditional('');
-														}
-													}}
-												/>
-											</div>
+      <AddProductFlavorSubmit
+        onClick={() => {
+												  switch (pizzaSize) {
+												    case '10':
+												      if (pizzaFlavors.length === 2) return window.alert('Máximo de 2 sabores para pizza pequena');
+												      break;
+												    case '11':
+												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza média');
+												      break;
+												    case '12':
+												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
+												      break;
+												    default:
+												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
+												      break;
+												  }
 
-											<AddProductFlavorSubmit
-												onClick={() => {
+												  const f = pizzaFlavors;
+												  f.push(flavor);
+												  setPizzaFlavors(f);
 
-													switch(pizzaSize){
-													case '10':
-														if(pizzaFlavors.length === 2) return window.alert('Máximo de 2 sabores para pizza pequena');
-														break;
-													case '11':
-														if(pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza média');
-														break;
-													case '12':
-														if(pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
-														break;
-													default: 
-														if(pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
-														break;
-													}
+												  if (aditionalsItems.length !== 0) {
+												    const a = pizzaAditionals;
 
-													const f = pizzaFlavors;
-													f.push(flavor);
-													setPizzaFlavors(f);
+												    aditionalsItems.forEach((item) => {
+												      const add = `${flavor.code}:${item}`;
+												      pizzaAditionals.push(add);
+												    });
 
-													if (aditionalsItems.length !== 0) {
-														const a = pizzaAditionals;
+												    setPizzaAditionals(a);
+												  }
 
-														aditionalsItems.forEach(item => {
-															const add = `${flavor.code}:${item}`;
-															pizzaAditionals.push(add);
-														});
+												  setOpenFlavors('');
+												  setAditionalsItems([]);
+												  code.current.value = '';
+												  setCurrentAditional('');
+        }}
+      >
+        Adicionar
 
-														setPizzaAditionals(a);
-													}
-
-													setOpenFlavors('');
-													setAditionalsItems([]);
-													code.current.value = '';
-													setCurrentAditional('');
-
-												}}>Adicionar</AddProductFlavorSubmit>
-										</div>
-									</div>
+      </AddProductFlavorSubmit>
+    </div>
+  </div>
 								))}
-						</div>
-					</div>
-				</div>
-			</div>
-			<AddProductSubmit
-				onClick={() => {
-					callback();
-				}}
-			>
-				Adicionar
-			</AddProductSubmit>
-			<AddProductClose
-				onClick={() => {
-					state.setContext({ ...state.context,  overlay: { visible: false } });
-				}}
-			>
-				Fechar
-			</AddProductClose>
-		</div>
-	);
+            </div>
+          </div>
+        </div>
+      </div>
+      <AddProductSubmit
+        onClick={() => {
+				  callback();
+        }}
+      >
+        Adicionar
+      </AddProductSubmit>
+      <AddProductClose
+        onClick={() => {
+				  state.setContext({ ...state.context, overlay: { visible: false } });
+        }}
+      >
+        Fechar
+      </AddProductClose>
+    </div>
+  );
 };
 
 AddProductComponent.propTypes = {
-	order: PropTypes.object.isRequired
+  order: PropTypes.object.isRequired,
 };
 
-const BusyTableProduct = props => {
-	const { quantity, title, price, subtotal } = props.product;
-	const minus = /(REMOVIDO)/gi.test(title);
+const BusyTableProduct = (props) => {
+  const {
+    quantity, title, price, subtotal,
+  } = props.product;
+  const minus = /(REMOVIDO)/gi.test(title);
 
-	const state = useContext(Context);
+  const state = useContext(Context);
 
-	return (
-		<BusyTableProductButton
-			style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
-			onClick={() => {
-				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescription {...props}/>}});
-			}}
-		>
-			<span
-				style={{
-					textAlign: 'start',
-					color: minus ? 'tomato' : '#333',
-					marginVertical: 3
-				}}
-			>
-				{`${quantity}x ${title}`}
-			</span>
-			<span
-				style={{
-					textAlign: 'end',
-					marginVertical: 3,
-					color: minus ? '#ff745b' : '#aaa'
-				}}
-			>
-				{`un R$ ${price
-					.toFixed(2)
-					.toString()
-					.replace('.', ',')}
+  return (
+    <BusyTableProductButton
+      style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
+      onClick={() => {
+			  state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescription {...props} /> } });
+      }}
+    >
+      <span
+        style={{
+				  textAlign: 'start',
+				  color: minus ? 'tomato' : '#333',
+				  marginVertical: 3,
+        }}
+      >
+        {`${quantity}x ${title}`}
+      </span>
+      <span
+        style={{
+				  textAlign: 'end',
+				  marginVertical: 3,
+				  color: minus ? '#ff745b' : '#aaa',
+        }}
+      >
+        {`un R$ ${price
+				  .toFixed(2)
+				  .toString()
+				  .replace('.', ',')}
              => sub R$ ${subtotal
-			.toFixed(2)
-			.toString()
-			.replace('.', ',')}`}
-			</span>
-		</BusyTableProductButton>
-	);
+				  .toFixed(2)
+				  .toString()
+				  .replace('.', ',')}`}
+      </span>
+    </BusyTableProductButton>
+  );
 };
 
 BusyTableProduct.propTypes = {
-	product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
 };
 
-const BusyTableProductCustomer = props => {
-	const { items, name} = props.customer;
+const BusyTableProductCustomer = (props) => {
+  const { items, name } = props.customer;
 
-	const state = useContext(Context);
+  const state = useContext(Context);
 
-	return (
-		<BusyTableProductButton
-			onClick={() => {
-				state.setContext({...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} />}});
-			}}
-		>
-			<span
-				style={{
-					textAlign: 'start',
-					color: '#444',
-					marginVertical: 3
-				}}
-			>
-				{name}
-			</span>
-			{items && items.map(({quantity, title, price, subtotal}, index) => (
-				<div key={index} style={{width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
-					<span
-						style={{
-							textAlign: 'end',
-							marginVertical: 3,
-							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
-							fontSize: '12pt'
-						}}
-					>
-						{`${quantity}x ${title}`}
-					</span>
-					<br/>
-					<span
-						style={{
-							textAlign: 'end',
-							marginVertical: 3,
-							color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888'
-						}}
-					>
-						{`un R$ ${price
-							.toFixed(2)
-							.toString()
-							.replace('.', ',')}
+  return (
+    <BusyTableProductButton
+      onClick={() => {
+			  state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} /> } });
+      }}
+    >
+      <span
+        style={{
+				  textAlign: 'start',
+				  color: '#444',
+				  marginVertical: 3,
+        }}
+      >
+        {name}
+      </span>
+      {items && items.map(({
+        quantity, title, price, subtotal,
+      }, index) => (
+        <div key={index} style={{ width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
+          <span
+            style={{
+						  textAlign: 'end',
+						  marginVertical: 3,
+						  color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
+						  fontSize: '12pt',
+            }}
+          >
+            {`${quantity}x ${title}`}
+          </span>
+          <br />
+          <span
+            style={{
+						  textAlign: 'end',
+						  marginVertical: 3,
+						  color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888',
+            }}
+          >
+            {`un R$ ${price
+						  .toFixed(2)
+						  .toString()
+						  .replace('.', ',')}
 				=> sub R$ ${subtotal
-					.toFixed(2)
-					.toString()
-					.replace('.', ',')}`}
-					</span>
-				</div>
-			))}
-		</BusyTableProductButton>
-	);
+						  .toFixed(2)
+						  .toString()
+						  .replace('.', ',')}`}
+          </span>
+        </div>
+      ))}
+    </BusyTableProductButton>
+  );
 };
 
 BusyTableProduct.propTypes = {
-	product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
 };
 
-const BusyTable = props => {
-	const { load } = props;
+const BusyTable = (props) => {
+  const { load } = props;
 
-	const state = useContext(Context);
-	const [owners, setOwners] = useState(false);
+  const state = useContext(Context);
+  const [owners, setOwners] = useState(false);
 
-	let customers = {};
-	load.order.items.forEach( item => {
-		const keys = Object.keys(customers);
+  const customers = {};
+  load.order.items.forEach((item) => {
+    const keys = Object.keys(customers);
 
-		if (keys.includes(item.owner)){
-			customers[item.owner].push(item);
-		}else {
-			customers[item.owner] = [item];
-		}
-	});
+    if (keys.includes(item.owner)) {
+      customers[item.owner].push(item);
+    } else {
+      customers[item.owner] = [item];
+    }
+  });
 
-	return (
-		<div
-			style={{
-				boxSizing: 'border-box',
-				width: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				flexGrow: 1,
-				maxHeight: '100%'
-			}}
-		>
-			<h2 style={{ color: '#888', height: 'min-content' }}>
-				{load.number}.{load.customer}
-			</h2>
-			<span><input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} /> Mostar integrantes</span>
-			<BusyTableProductContainer>
-				{owners ? 
-					Object.keys(customers).map((customer, index) => (
-						<BusyTableProductCustomer
-							key={index}
-							customer={{ items: customers[customer], name: customer}}
-						/>
-					))
-					:
-					load.order.items.map((product, index) => (
-						<BusyTableProduct
-							key={index}
-							product={product}
-						/>
-					))}
-			</BusyTableProductContainer>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: 'min-content',
-					textAlign: 'right',
-					padding: '10px 0'
-				}}
-			>
-				<span style={{ fontSize: '10pt', color: '#888' }}>
-					Total de produtos R${' '}
-					{load.order.total
-						.toFixed(2)
-						.toString()
-						.replace('.', ',')}
-				</span>
-				<span style={{ fontSize: '10pt', color: '#888' }}>
-					Taxa de Serviço R${' '}
-					{load.order.serviceTax
-						.toFixed(2)
-						.toString()
-						.replace('.', ',')}
-				</span>
-				<span style={{ fontSize: '14pt', color: '#666' }}>
-					Final R${' '}
-					{load.order.final
-						.toFixed(2)
-						.toString()
-						.replace('.', ',')}
-				</span>
-			</div>
-			<div style={{ minWidth: '100%', height: 'min-content' }}>
-				<BusyTableAddProduct
-					onClick={() => {
-						state.setContext({
-							...state.context,
-							overlay: {
-								visible: true,
-								component: <AddComponent order={load.order} />
-							}
-						});
-					}}
-				>
-					Adicionar
-				</BusyTableAddProduct>
-				<BusyTableDetails
-					onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
-				>Detalhes</BusyTableDetails>
-				<BusyTableCheckout>Fechar</BusyTableCheckout>
-			</div>
-		</div>
-	);
+  return (
+    <div
+      style={{
+			  boxSizing: 'border-box',
+			  width: '100%',
+			  display: 'flex',
+			  flexDirection: 'column',
+			  flexGrow: 1,
+			  maxHeight: '100%',
+      }}
+    >
+      <h2 style={{ color: '#888', height: 'min-content' }}>
+        {load.number}
+        .
+        {load.customer}
+      </h2>
+      <span>
+        <input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} />
+        {' '}
+        Mostar integrantes
+      </span>
+      <BusyTableProductContainer>
+        {owners
+          ? Object.keys(customers).map((customer, index) => (
+            <BusyTableProductCustomer
+              key={index}
+              customer={{ items: customers[customer], name: customer }}
+            />
+				  ))
+          :					load.order.items.map((product, index) => (
+            <BusyTableProduct
+              key={index}
+              product={product}
+            />
+				  ))}
+      </BusyTableProductContainer>
+      <div
+        style={{
+				  display: 'flex',
+				  flexDirection: 'column',
+				  height: 'min-content',
+				  textAlign: 'right',
+				  padding: '10px 0',
+        }}
+      >
+        <span style={{ fontSize: '10pt', color: '#888' }}>
+          Total de produtos R$
+          {' '}
+          {load.order.total
+					  .toFixed(2)
+					  .toString()
+					  .replace('.', ',')}
+        </span>
+        <span style={{ fontSize: '10pt', color: '#888' }}>
+          Taxa de Serviço R$
+          {' '}
+          {load.order.serviceTax
+					  .toFixed(2)
+					  .toString()
+					  .replace('.', ',')}
+        </span>
+        <span style={{ fontSize: '14pt', color: '#666' }}>
+          Final R$
+          {' '}
+          {load.order.final
+					  .toFixed(2)
+					  .toString()
+					  .replace('.', ',')}
+        </span>
+      </div>
+      <div style={{ minWidth: '100%', height: 'min-content' }}>
+        <BusyTableAddProduct
+          onClick={() => {
+					  state.setContext({
+					    ...state.context,
+					    overlay: {
+					      visible: true,
+					      component: <AddComponent order={load.order} />,
+					    },
+					  });
+          }}
+        >
+          Adicionar
+        </BusyTableAddProduct>
+        <BusyTableDetails
+          onClick={() => { state.setContext({ ...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> } }); }}
+        >
+          Detalhes
+
+        </BusyTableDetails>
+        <BusyTableCheckout>Fechar</BusyTableCheckout>
+      </div>
+    </div>
+  );
 };
 
 BusyTable.propTypes = {
-	load: PropTypes.object.isRequired,
-	owners: PropTypes.bool,
+  load: PropTypes.object.isRequired,
+  owners: PropTypes.bool,
 };
 
 BusyTable.defaultProps = {
-	owners: false,
+  owners: false,
 };
 
-const FreeTable = props => (
-	<FreeTableContainer>
-		<FreeTableButtom> Abrir Mesa </FreeTableButtom>
-	</FreeTableContainer>
+const FreeTable = (props) => (
+  <FreeTableContainer>
+    <FreeTableButtom> Abrir Mesa </FreeTableButtom>
+  </FreeTableContainer>
 );
 
-const WaitingListTable = props => {
-	const {load} = props;
-	const state = useContext(Context);
-	return (
-		<WaitingPaymentTableContainer>
-			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-				{load.number}.{load.customer}
-			</h2>
-			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-				<img src={require('../../assets/hourglass.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-				<h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
-				<span>Próximo da lista</span>
-				<WaitingPaymentTableButtom>{load.order.customer}</WaitingPaymentTableButtom>
-			</div>
-			<WaitingPaymentTableButtom
-				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
-				style={{fontSize: 12}}>
-				detalhes
-			</WaitingPaymentTableButtom>
-		</WaitingPaymentTableContainer>
-	);
+const WaitingListTable = (props) => {
+  const { load } = props;
+  const state = useContext(Context);
+  return (
+    <WaitingPaymentTableContainer>
+      <h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+        {load.number}
+        .
+        {load.customer}
+      </h2>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+        <img
+          src={require('../../assets/hourglass.png')}
+          style={{
+            height: 80, width: 80, objectFit: 'contain', marginBottom: 15,
+          }}
+        />
+        <h4 style={{ color: '#444', margin: 0, width: '100%' }}>Lista de espera</h4>
+        <span>Próximo da lista</span>
+        <WaitingPaymentTableButtom>{load.order.customer}</WaitingPaymentTableButtom>
+      </div>
+      <WaitingPaymentTableButtom
+        onClick={() => { state.setContext({ ...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> } }); }}
+        style={{ fontSize: 12 }}
+      >
+        detalhes
+      </WaitingPaymentTableButtom>
+    </WaitingPaymentTableContainer>
+  );
 };
 
-const WaitingPaymentTable = props => {
-	const {load} = props;
-	const state = useContext(Context);
+const WaitingPaymentTable = (props) => {
+  const { load } = props;
+  const state = useContext(Context);
 
-	return (
-		<WaitingPaymentTableContainer>
-			<h2 style={{ color: '#444', margin: 0, width: '100%' }}>
-				{load.number}.{load.customer}
-			</h2>
-			<div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-				<img src={require('../../assets/draft.png')} style={{height: 80, width: 80, objectFit: 'contain', marginBottom: 15}} />
-				<WaitingPaymentTableButtom onClick={()=>{window.open('/test', 'payment', '');}}>Aguardando pagamento...</WaitingPaymentTableButtom>
-			</div>
-			<WaitingPaymentTableButtom
-				onClick={()=>{state.setContext({...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> }});}}
-				style={{fontSize: 12}}>
-				detalhes
-			</WaitingPaymentTableButtom>
-		</WaitingPaymentTableContainer>
-	);
+  return (
+    <WaitingPaymentTableContainer>
+      <h2 style={{ color: '#444', margin: 0, width: '100%' }}>
+        {load.number}
+        .
+        {load.customer}
+      </h2>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+        <img
+          src={require('../../assets/draft.png')}
+          style={{
+            height: 80, width: 80, objectFit: 'contain', marginBottom: 15,
+          }}
+        />
+        <WaitingPaymentTableButtom onClick={() => { window.open('/test', 'payment', ''); }}>Aguardando pagamento...</WaitingPaymentTableButtom>
+      </div>
+      <WaitingPaymentTableButtom
+        onClick={() => { state.setContext({ ...state.context, overlay: { visible: true, component: <TableDescription order={load.order} /> } }); }}
+        style={{ fontSize: 12 }}
+      >
+        detalhes
+      </WaitingPaymentTableButtom>
+    </WaitingPaymentTableContainer>
+  );
 };
 
-export const Table = props => {
-	const {load} = props;
+export const Table = (props) => {
+  const { load } = props;
 
-	const status = () => {
-		switch(load.status){
-		case 'FREE':
-			return <FreeTable {...props} />;
-		case 'BUSY':
-			return <BusyTable {...props} />;
-		case 'WAITING_PAYMENT':
-			return <WaitingPaymentTable {...props} />;
-		case 'ON_HOLD':
-			return <WaitingListTable {...props} />;
-		default:
-			return <FreeTable {...props} />;
-		}
-	};
+  const status = () => {
+    switch (load.status) {
+      case 'FREE':
+        return <FreeTable {...props} />;
+      case 'BUSY':
+        return <BusyTable {...props} />;
+      case 'WAITING_PAYMENT':
+        return <WaitingPaymentTable {...props} />;
+      case 'ON_HOLD':
+        return <WaitingListTable {...props} />;
+      default:
+        return <FreeTable {...props} />;
+    }
+  };
 
-	return (
-		<TableContainer>
-			{status()}
-		</TableContainer>
-	);
+  return (
+    <TableContainer>
+      {status()}
+    </TableContainer>
+  );
 };

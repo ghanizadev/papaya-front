@@ -1,77 +1,82 @@
 import React, {
-  useState, Children, useReducer, useEffect, useRef,
+  useState,
+  Children,
+  useReducer,
+  useEffect,
 } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import path from 'path';
 import {
   Input, Button, Search, TextArea,
 } from '../../../../components';
-import { getFlavor, getTables, getPizzaSizes } from './function';
-import { Select } from '../../../components';
+import {
+  getFlavor, getTables, getPizzaSizes, getMembers, addProduct,
+} from './function';
 
 import arrow from '../../../../../assets/arrow.png';
 import addPizza from '../../../../../assets/add_pizza.png';
 import addOthers from '../../../../../assets/add_others.png';
-import addSmall from '../../../../../assets/add_small.png';
-import addMedium from '../../../../../assets/add_medium.png';
-import addLarge from '../../../../../assets/add_large.png';
+
+const { ipcRenderer } = require('electron');
 
 const Container = styled.div`
-	width: 800px;
-	height: 600px;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
+  width: 800px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const Wrapper = styled.div`
-	width: 800px;
-	height: 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	overflow: hidden;
-	box-sizing: border-box;
-	transition: all .3s;
-	position: relative;
+  width: 100%;
+  height: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  position: relative;
 `;
 
 const ProductButton = styled.button`
-	height: 120px;
-	width: 120px;
-	margin: 15px;
-	border: none;
+  height: 120px;
+  width: 120px;
+  margin: 15px;
+  border: none;
   background-color: transparent;
-	transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
 
-	&:hover {
-		transform: scale(1.05);
-		box-shadow: 5px 10px 8px #888888;
-	}
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 10px 8px #888888;
+  }
 `;
 
 const CloseButtonContainer = styled.button`
-	width: 30px;
-	height: 30px;
-	border-radius: 15px;
-	border: none;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	background-color: tomato;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #fff;
-	font-weight: bold;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: tomato;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
 `;
 
 const CloseButton = (props) => {
   const { onClose } = props;
   return (
-    <CloseButtonContainer onClick={() => onClose()}>&times;</CloseButtonContainer>
+    <CloseButtonContainer onClick={() => onClose()}>
+      &times;
+    </CloseButtonContainer>
   );
 };
 
@@ -80,80 +85,93 @@ CloseButton.propTypes = {
 };
 
 const FlavorBoxContainer = styled.div`
-	height: 0;
-	opacity: 0;
-	border: none;
-	border-radius: 15px;
-	width: 500px;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-evenly;
-	transition: all 500ms ease-in;
-	overflow: hidden;
+  height: 0;
+  opacity: 0;
+  border: none;
+  border-radius: 15px;
+  width: 420px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  transition: all 500ms ease-in;
+  overflow: hidden;
 `;
 
 const FlavorItemContainer = styled.div`
-	height: 150px;
-	width: 480px;
-	margin: 0 5px;
-	border-radius: 15px;
-	border: solid 1px whitesmoke;
-	padding: 15px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	position: relative;
-	box-sizing: border-box;
+  height: 150px;
+  width: 400px;
+  margin: 0 5px;
+  border-radius: 15px;
+  border: solid 1px whitesmoke;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
 `;
 
 const NextButton = styled.button`
-	height: 42px;
-	width: 42px;
-	margin: 0 5px;
-	border: none;
+  height: 42px;
+  width: 42px;
+  margin: 0 5px;
+  border: none;
   background-color: transparent;
-	padding: 5px;
-	box-sizing: border-box;
+  padding: 5px;
+  box-sizing: border-box;
 `;
 
 const FlavorItem = (props) => {
-  const { flavor, onRemove } = props;
+  const { flavor, onRemove, onAdditional } = props;
 
   return (
     <FlavorItemContainer>
       <h3 style={{ margin: 0 }}>{flavor.name}</h3>
       <h5 style={{ margin: 0 }}>{flavor.code}</h5>
-      <p style={{ margin: 0, fontSize: 10, color: '#666' }}>{flavor.description.join(', ')}</p>
-      <TextArea label="Adicionais" />
+      <p style={{ margin: 0, fontSize: 10, color: '#666' }}>
+        {flavor.description.join(', ')}
+      </p>
+      <TextArea
+        label="Adicionais"
+        onChange={(e) => {
+          onAdditional(e.target.value, flavor);
+        }}
+      />
       <CloseButton onClose={onRemove} />
     </FlavorItemContainer>
   );
 };
 
 FlavorItem.propTypes = {
-  flavor: PropTypes.object.isRequired,
+  flavor: PropTypes.shape({
+    description: PropTypes.arrayOf(PropTypes.string),
+    group: PropTypes.string,
+    variation: PropTypes.string,
+    small: PropTypes.number,
+    medium: PropTypes.number,
+    large: PropTypes.number,
+    code: PropTypes.string,
+    name: PropTypes.string,
+    provider: PropTypes.string,
+  }).isRequired,
+  onAdditional: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
 };
 
 const Page = (props) => {
   const { children, visible } = props;
 
-  return (
-    <Wrapper style={{ height: visible ? 600 : 0 }}>
-      {children}
-    </Wrapper>
-  );
+  return <Wrapper style={{ height: visible ? '100%' : 0 }}>{children}</Wrapper>;
 };
 
 Page.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
   visible: PropTypes.bool.isRequired,
-};
-
-Page.defaultProps = {
-  children: [],
 };
 
 export const FlavorBox = (props) => {
@@ -172,9 +190,14 @@ export const FlavorBox = (props) => {
       <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto' }}>
         {children}
       </div>
-      <div style={{
-        display: 'flex', flexDirection: 'row', margin: '15px', width: '100%', justifyContent: 'flex-end',
-      }}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          margin: '15px',
+          width: '100%',
+          justifyContent: 'flex-end',
+        }}
       >
         <Button onClick={onClean}>Limpar</Button>
         <Button onClick={onConfirm}>Confirmar</Button>
@@ -184,13 +207,15 @@ export const FlavorBox = (props) => {
 };
 
 FlavorBox.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
   onClean: PropTypes.func,
   onConfirm: PropTypes.func,
 };
 
 FlavorBox.defaultProps = {
-  children: [],
   onClean: () => {},
   onConfirm: () => {},
 };
@@ -216,24 +241,34 @@ function reducer(state, action) {
 
 const initialState = { data: [] };
 
-
-export const AddEndpoint = () => {
+const AddEndpoint = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { location } = props;
   const [page, setPage] = useState('table');
 
   const [searchItems, setSearchItems] = useState([]);
-  const [query, setQuery] = useState({});
-  const [Item, setItem] = useState({});
+  const [product, setProduct] = useState({
+    quantity: 1,
+    price: 0,
+    owner: 'Geral',
+  });
   const [tables, setTables] = useState([]);
   const [pizzaSizes, setPizzaSizes] = useState([]);
+  const [owners, setOwners] = useState([]);
+  const [additionals, setAdditionals] = useState([]);
+
+
+  const [token, setToken] = useState('');
 
   const [flavors, dispatchFlavors] = useReducer(reducer, initialState);
 
-  const { search } = window.location;
-  const params = new URLSearchParams(search);
-  const token = params.get('access_token');
-
   useEffect(() => {
-    getTables(token)
+    // eslint-disable-next-line react/prop-types
+    const search = location.pathname.substring(location.pathname.indexOf('?'));
+    const params = new URLSearchParams(search);
+    setToken(params.get('access_token'));
+
+    getTables(params.get('access_token'))
       .then((answer) => {
         const T = answer.data;
 
@@ -242,8 +277,8 @@ export const AddEndpoint = () => {
       .catch((error) => {
         window.alert('Erro!', error.message);
       });
-    
-    getPizzaSizes(token)
+
+    getPizzaSizes(params.get('access_token'))
       .then((answer) => {
         const T = answer.data;
 
@@ -261,44 +296,160 @@ export const AddEndpoint = () => {
       <Page visible={getVisible('table')}>
         <h2>Qual a mesa?</h2>
         <div style={{ width: 50 }} />
-        <Select onChange={ e => setQuery({...query, orderId: e.target.value}) } containerStyle={{ maxWidth: 250 }}>
-          <option value={null}>Selecione...</option>
-          {tables.map((table) => <option value={table.orderId}>{table.number}</option>)}
-        </Select>
-        <NextButton onClick={() => {
-          if(query.orderId)
-            setPage('pick');
-          else
-            window.alert('Selecione uma mesa!');
-        }}>
-          <img src={arrow} style={{ objectFit: 'contain', width: 32, height: 32 }} />
+
+        <label htmlFor="table-input">
+          Selecione uma mesa:
+          <br />
+          <input
+            onChange={(e) => {
+              const { orderId } = tables.find(
+                (table) => table.number === e.target.value,
+              );
+              setProduct({ ...product, orderId });
+            }}
+            list="table-list"
+            id="table-input"
+            name="table-input"
+            style={{
+              maxWidth: 250,
+            }}
+          />
+        </label>
+
+        <datalist id="table-list">
+          {tables && tables.map((table) => <option value={table.number}>{table.number}</option>)}
+        </datalist>
+
+        <NextButton
+          onClick={() => {
+            if (product.orderId) {
+              getMembers(product.orderId, token)
+                .then((res) => {
+                  if (!Array.isArray(res.data)) {
+                    window.alert(`Erro (${res.data.error})! Mensagem: ${res.data.error_description}`);
+                  } else {
+                    setOwners(res.data);
+                  }
+                  setPage('owner');
+                })
+                .catch((error) => {
+                  window.alert(`Problema no servidor (${error.message})`);
+                });
+            } else window.alert('Selecione uma mesa!');
+          }}
+        >
+          <img
+            src={arrow}
+            alt=""
+            style={{ objectFit: 'contain', width: 32, height: 32 }}
+          />
+        </NextButton>
+      </Page>
+      <Page visible={getVisible('owner')}>
+        <h2>À quem pertence?</h2>
+        <div style={{ width: 50 }} />
+
+        <label htmlFor="owner-input">
+          Selecione um membro:
+          <br />
+          <input
+            onChange={(e) => {
+              setProduct({ ...product, owner: e.target.value });
+            }}
+            defaultValue="Geral"
+            list="owner-list"
+            id="owner-input"
+            name="owner-input"
+            style={{
+              maxWidth: 250,
+            }}
+          />
+        </label>
+
+        <datalist id="owner-list">
+          {owners && owners.map((owner) => <option value={owner}>{owner}</option>)}
+        </datalist>
+
+        <NextButton
+          onClick={() => {
+            if (product.owner !== '') setPage('pick');
+            else {
+              window.alert(
+                'O nome do integrante não pode estar em branco, caso queria, deixe definido como "Geral"',
+              );
+            }
+          }}
+        >
+          <img
+            src={arrow}
+            alt=""
+            style={{ objectFit: 'contain', width: 32, height: 32 }}
+          />
         </NextButton>
       </Page>
       <Page visible={getVisible('pick')}>
         <h2>Escolha o produto:</h2>
         <div style={{ width: 50 }} />
-        <ProductButton onClick={() => { setPage('pizzasize') ; setItem({...Item, type: 'pizza'}); }}>
-          <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        <ProductButton
+          onClick={() => {
+            setPage('pizzasize');
+            setProduct({ ...product, type: 'pizza' });
+          }}
+        >
+          <img
+            src={addPizza}
+            alt=""
+            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+          />
         </ProductButton>
-        <ProductButton onClick={() => {setPage('product'); setItem({...Item, type: 'product'}); }} >
-        <img src={addOthers} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        <ProductButton
+          onClick={() => {
+            setPage('product');
+            setProduct({ ...product, type: 'product' });
+          }}
+        >
+          <img
+            src={addOthers}
+            alt=""
+            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+          />
         </ProductButton>
       </Page>
       <Page visible={getVisible('pizzasize')}>
         <h2>Tamanho da pizza</h2>
         <div style={{ width: 50 }} />
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {pizzaSizes && pizzaSizes.map(({code, name, description, flavorLimit}) => {
-          return (
-          <ProductButton onClick={() => {setPage('pizzaflavor'); setItem({...Item, code}); }}>
-            <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
-            <p>
-              <div>{name}</div>
-              <div>({description})</div>
-            </p>
-          </ProductButton>
-          )
-        })}
+          {pizzaSizes
+            && pizzaSizes.map(({
+              code, name, ref, description,
+            }) => (
+              <ProductButton
+                onClick={() => {
+                  setPage('pizzaflavor');
+                  setProduct({
+                    ...product, code: `${code}*`, size: ref, name,
+                  });
+                }}
+              >
+                <img
+                  src={addPizza}
+                  alt=""
+                  style={{
+                    objectFit: 'contain',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+                <p>
+                  <div>{name}</div>
+                  <div>
+                    (
+                    {description}
+                    )
+                  </div>
+                </p>
+              </ProductButton>
+            ))}
         </div>
       </Page>
       <Page visible={getVisible('pizzaflavor')}>
@@ -310,29 +461,87 @@ export const AddEndpoint = () => {
             label="Pesquisar"
             onSelect={(item) => {
               if (item.value) {
-                const currentItem = searchItems.find(({ code }) => code === item.value);
+                const currentItem = searchItems.find(
+                  ({ code }) => code === item.value,
+                );
                 dispatchFlavors({ type: 'add', payload: currentItem });
-                setItem({...Item, code: `${Item.code}${item.value}`});
+
+                setProduct({
+                  ...product,
+                  code: `${product.code}${item.value}`,
+                });
               }
             }}
             onChange={(e) => {
-					  getFlavor(token, e.target.value)
-					    .then((result) => {
-					      if (result.status === 200) {266
-					        setSearchItems(result.data);
-					        return;
-					      }
+              getFlavor(token, e.target.value).then((result) => {
+                if (result.status === 200) {
+                  setSearchItems(result.data);
+                  return;
+                }
 
-					      window.alert(`Falhou com o código${result.status}`);
-					    });
+                window.alert(`Falhou com o código${result.status}`);
+              });
             }}
             data={searchItems.map((item) => ({
-              label: `${item.name}${item.variation !== 'UNICO' ? ` (${item.variation})` : ''}`,
+              label: `${item.name}${
+                item.variation !== 'UNICO' ? ` (${item.variation})` : ''
+              }`,
               value: item.code,
             }))}
           />
-          <FlavorBox onClean={() => dispatchFlavors({ type: 'clean' })} onConfirm={() => { setPage('confirm'); }}>
-            {flavors && flavors.data.map((flavor, index) => <FlavorItem onRemove={() => { setItem({...Item, flavors: Item.flavors.filter(flavor), code: Item.code.split(flavor.code).join('')}); dispatchFlavors({ type: 'del', payload: flavor }); }} flavor={flavor} key={index} />)}
+          <FlavorBox
+            onClean={() => dispatchFlavors({ type: 'clean' })}
+            onConfirm={() => {
+              setPage('confirm');
+
+              const prices = flavors.data.map(
+                (flavor, _, arr) => flavor[product.size] / arr.length,
+              ) || 0;
+
+              const adds = [];
+
+              flavors.data.forEach((flavor) => {
+                // @TODO: terminar a iteracao dos adicionais
+              });
+              const final = prices.reduce((sum, currentValue) => sum + currentValue);
+
+              setProduct({
+                ...product,
+                price: final,
+                flavors: flavors.data,
+                additionals: '',
+              });
+            }}
+          >
+            {flavors
+              && flavors.data.map((flavor) => (
+                <FlavorItem
+                  onRemove={() => {
+                    setProduct({
+                      ...product,
+                      flavors: product.flavors.filter(flavor),
+                      code: product.code.split(flavor.code).join(''),
+                    });
+                    dispatchFlavors({ type: 'del', payload: flavor });
+                  }}
+                  onAdditional={(text, { code }) => {
+                    let tmp = additionals;
+
+                    const add = tmp.find((item) => item.startsWith(code));
+
+                    if (!add) { tmp.push(`${code}:${text.split(',').map((item) => item.trim()).join(';')}`); } else {
+                      tmp = tmp.map((item) => {
+                        if (item.startsWith(code)) { return `${code}:${text.split(',').map((item) => item.trim()).join(';')}`; }
+
+                        return item;
+                      });
+                    }
+                    setAdditionals(tmp);
+                  }}
+                  flavor={flavor}
+                  key={flavor.code}
+                />
+              ))}
           </FlavorBox>
         </div>
       </Page>
@@ -346,9 +555,68 @@ export const AddEndpoint = () => {
       <Page visible={getVisible('confirm')}>
         <h2>Confirmar?</h2>
         <div style={{ width: 50 }} />
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <img src={addPizza} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
-          <span>{`Código: ${Item.code}`}</span>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <img
+            src={addPizza}
+            alt=""
+            style={{
+              objectFit: 'contain', width: 128, height: 128, margin: 10,
+            }}
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 420 }}>
+            <h3>{`${product.quantity}x ${product.name} (${product.orderId})`}</h3>
+            <div>{`Código: ${product.code}`}</div>
+            <div>{`Pertencente à: ${product.owner}`}</div>
+            <h4>{`R$ ${product.price.toFixed(2).replace('.', ',')}`}</h4>
+            <span>
+              Sabores:
+              {' '}
+              {flavors.data.map((flavor, index, arr) => {
+                let adds = additionals.find((item) => item.startsWith(flavor.code));
+                if (adds) adds = adds.split(':')[1].split(';').join(', ');
+
+                if (arr.length === 1) return `${flavor.name.toLowerCase()}${adds ? ` (${adds})` : ''}.`;
+
+                if (index + 1 === arr.length) return `e ${flavor.name.toLowerCase()}${adds ? ` (${adds})` : ''}.`;
+
+                return `${flavor.name.toLowerCase()}${adds ? ` (${adds})` : ''},`;
+              })
+                .join(' ')}
+            </span>
+          </div>
+        </div>
+        <div style={{
+          position: 'absolute', right: 15, bottom: 15, height: 30, width: 120,
+        }}
+        >
+          <Button onClick={() => {
+            const body = [
+              {
+                code: product.code,
+                owner: product.owner,
+                quantity: product.quantity,
+                additionals,
+              },
+            ];
+
+            ipcRenderer.invoke('log', body);
+
+            addProduct(body, product.orderId, token)
+              .then((result) => {
+                if (result.status === 201) {
+                  ipcRenderer.invoke('closeAll');
+                } else {
+                  window.alert(`Erro! ${result.data.error_description}`);
+                }
+              })
+              .catch((error) => {
+                window.alert(`Erro interno! ${error.message}`);
+              });
+          }}
+          >
+            Confirmar
+
+          </Button>
         </div>
       </Page>
     </Container>

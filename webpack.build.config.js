@@ -10,12 +10,12 @@ const SRC_DIR = path.resolve(__dirname, 'src');
 const OUTPUT_DIR = path.resolve(__dirname, 'dist');
 
 module.exports = {
-  entry: SRC_DIR + '/index.js',
+  entry: `${SRC_DIR}/index.js`,
   mode: 'production',
   output: {
     path: OUTPUT_DIR,
     publicPath: './',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -23,37 +23,37 @@ module.exports = {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]
+          'css-loader',
+        ],
       },
       {
         test: /\.jsx?$/,
         use: [{ loader: 'babel-loader' }],
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.(jpe?g|png|gif)$/,
-        use: [{ loader: 'file-loader?name=img/[name]__[hash:base64:5].[ext]' }]
+        use: [{ loader: 'file-loader?name=img/[name]__[hash:base64:5].[ext]' }],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: [{ loader: 'file-loader?name=font/[name]__[hash:base64:5].[ext]' }]
-      }
-    ]
+        use: [{ loader: 'file-loader?name=font/[name]__[hash:base64:5].[ext]' }],
+      },
+    ],
   },
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin(),
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    new Dotenv()
+    new Dotenv(),
   ],
   stats: {
     colors: true,
     children: false,
     chunks: false,
-    modules: false
-  }
+    modules: false,
+  },
 };
