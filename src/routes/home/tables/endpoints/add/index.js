@@ -356,7 +356,6 @@ const AddEndpoint = (props) => {
             onChange={(e) => {
               setProduct({ ...product, owner: e.target.value });
             }}
-            defaultValue="Geral"
             list="owner-list"
             id="owner-input"
             name="owner-input"
