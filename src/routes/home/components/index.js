@@ -86,22 +86,25 @@ export const SidebarButtonContainer = styled.button`
 	border: 0.25px solid #dcdcdc;
 `;
 
-export const SidebarButton = props => {
-	const {selected} = props;
-	return (
-		<SidebarButtonContainer style={{
-			color: selected ? '#ffbe5b' : '#fdfdfd',
-			backgroundColor: selected ? '#fdfdfd' : '#ffbe5b',
-		}} {...props} />
-	);
+export const SidebarButton = (props) => {
+  const { selected } = props;
+  return (
+    <SidebarButtonContainer
+      style={{
+        color: selected ? '#ffbe5b' : '#fdfdfd',
+        backgroundColor: selected ? '#fdfdfd' : '#ffbe5b',
+      }}
+      {...props}
+    />
+  );
 };
 
 SidebarButton.propTypes = {
-	selected: PropTypes.bool
+  selected: PropTypes.bool,
 };
 
 SidebarButton.defaultProps = {
-	selected: false
+  selected: false,
 };
 
 export const ServerInfoButton = styled.button`
@@ -116,13 +119,12 @@ export const ServerInfoButton = styled.button`
 `;
 
 
-
 ServerInfoButton.propTypes = {
-	selected: PropTypes.bool
+  selected: PropTypes.bool,
 };
 
 ServerInfoButton.defaultProps = {
-	selected: false
+  selected: false,
 };
 
 export const Container = styled.div`
@@ -201,6 +203,10 @@ const ButtonComponent = styled.button`
     background-color: #ed9140;
 	padding: 0 15px;
 	margin: 5px;
+
+	&:disabled {
+	background-color: gray;
+	}
 `;
 
 const InputComponent = styled.input`
@@ -277,139 +283,135 @@ const ResultsContainer = styled.div`
 
 `;
 
-export const Results = props => {
-	return (
-		<ResultsContainer>
-			<ResultsTable>
-				<tr style={{backgroundColor: '#ed9140', color: 'white'}}>
-					<th>Código</th>
-					<th>Nome</th>
-					<th>Descrição</th>
-					<th>Unidade</th>
-					<th>Preço</th>
-				</tr>
-				{props && props.data.map((item, index) => {
-					return (
-						<tr style={{backgroundColor: index & 1 ? 'whitesmoke': 'white', color: '#444'}} key={index}>
-							<td style={{textAlign: 'center'}}>{item.code}</td>
-							<td style={{textAlign: 'center'}}>{item.name}</td>
-							<td style={{textAlign: 'center'}}>{item.description}</td>
-							<td style={{textAlign: 'center'}}>{item.unity}</td>
-							<td style={{textAlign: 'center'}}>{`R$ ${item.price.toFixed(2).toString().replace('.', ',')}`}</td>
-						</tr>
-					);
-				})}
-			</ResultsTable>
-		</ResultsContainer>
-	);
+export const Results = (props) => (
+  <ResultsContainer>
+    <ResultsTable>
+      <tr style={{ backgroundColor: '#ed9140', color: 'white' }}>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Unidade</th>
+        <th>Preço</th>
+      </tr>
+      {props && props.data.map((item, index) => (
+        <tr style={{ backgroundColor: index & 1 ? 'whitesmoke' : 'white', color: '#444' }} key={index}>
+          <td style={{ textAlign: 'center' }}>{item.code}</td>
+          <td style={{ textAlign: 'center' }}>{item.name}</td>
+          <td style={{ textAlign: 'center' }}>{item.description}</td>
+          <td style={{ textAlign: 'center' }}>{item.unity}</td>
+          <td style={{ textAlign: 'center' }}>{`R$ ${item.price.toFixed(2).toString().replace('.', ',')}`}</td>
+        </tr>
+      ))}
+    </ResultsTable>
+  </ResultsContainer>
+);
+
+export const Input = (props) => {
+  const {
+    label, containerStyle, disabled, proportion, multiline,
+  } = props;
+
+  let currentContainerStyle = containerStyle || {};
+  if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+  if (multiline) currentContainerStyle = { ...currentContainerStyle, minHeight: 100, justifyContent: 'flex-start' };
+
+  return (
+    <InputContainer style={currentContainerStyle}>
+      <InputLabel style={{ backgroundColor: disabled ? '#fff' : null }}>{label}</InputLabel>
+      <InputComponent {...props} />
+    </InputContainer>
+  );
 };
 
-export const Input = props => {
-	const {label, containerStyle, disabled, proportion, multiline} = props;
+export const TextArea = (props) => {
+  const {
+    label, containerStyle, disabled, proportion,
+  } = props;
 
-	let currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
-	if (multiline) currentContainerStyle = {...currentContainerStyle, minHeight: 100, justifyContent: 'flex-start'};
-    
-	return (
-		<InputContainer style={currentContainerStyle}>
-			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
-			<InputComponent {...props} />
-		</InputContainer>
-	);
-};
+  const currentContainerStyle = containerStyle || {};
+  if (proportion > 0) currentContainerStyle.flexGrow = proportion;
 
-export const TextArea = props => {
-	const {label, containerStyle, disabled, proportion} = props;
-
-	let currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
-    
-	return (
-		<TextAreaContainer style={currentContainerStyle}>
-			<InputLabel style={{backgroundColor: disabled ? '#fff': null}}>{label}</InputLabel>
-			<TextAreaComponent draggable={false} {...props} />
-		</TextAreaContainer>
-	);
+  return (
+    <TextAreaContainer style={currentContainerStyle}>
+      <InputLabel style={{ backgroundColor: disabled ? '#fff' : null }}>{label}</InputLabel>
+      <TextAreaComponent draggable={false} {...props} />
+    </TextAreaContainer>
+  );
 };
 
 TextArea.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	proportion: PropTypes.number
+  label: PropTypes.string.isRequired,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  proportion: PropTypes.number,
 };
 
 TextArea.defaultProps = {
-	containerStyle: {},
-	disabled: false,
-	proportion: 1
+  containerStyle: {},
+  disabled: false,
+  proportion: 1,
 };
 
-export const Select = props => {
-	const {label, children, containerStyle, proportion} = props;
+export const Select = (props) => {
+  const {
+    label, children, containerStyle, proportion,
+  } = props;
 
-	const currentContainerStyle = containerStyle ? containerStyle : {};
-	if (proportion > 0) currentContainerStyle.flexGrow = proportion;
-    
-	return (
-		<InputContainer style={currentContainerStyle}>
-			<InputLabel>{label}</InputLabel>
-			<SelectComponent {...props}>{children}</SelectComponent>
-		</InputContainer>
-	);
+  const currentContainerStyle = containerStyle || {};
+  if (proportion > 0) currentContainerStyle.flexGrow = proportion;
+
+  return (
+    <InputContainer style={currentContainerStyle}>
+      <InputLabel>{label}</InputLabel>
+      <SelectComponent {...props}>{children}</SelectComponent>
+    </InputContainer>
+  );
 };
 
-export const Button = props => {
-	return (
-		<ButtonComponent {...props} />
-	);
-};
+export const Button = (props) => (
+  <ButtonComponent {...props} />
+);
 
-export const Overlay = () => {
-	return (
-		<Context.Consumer>
-			{({ context }) => {
-				return (
-					<OverlayBackground
-						style={{ display: context.overlay.visible ? 'flex' : 'none' }}
-					>
-						<OverlayBox>{context.overlay.component}</OverlayBox>
-					</OverlayBackground>
-				);
-			}}
-		</Context.Consumer>
-	);
-};
+export const Overlay = () => (
+  <Context.Consumer>
+    {({ context }) => (
+      <OverlayBackground
+        style={{ display: context.overlay.visible ? 'flex' : 'none' }}
+      >
+        <OverlayBox>{context.overlay.component}</OverlayBox>
+      </OverlayBackground>
+    )}
+  </Context.Consumer>
+);
 
 Results.propTypes = {
-	data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.arrayOf(PropTypes.object),
 };
 
 Input.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	proportion: PropTypes.number,
-	multiline: PropTypes.bool
+  label: PropTypes.string.isRequired,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  proportion: PropTypes.number,
+  multiline: PropTypes.bool,
 };
 
 Input.defaultProps = {
-	proportion: 0,
-	multiline: false,
+  proportion: 0,
+  multiline: false,
 };
 
 Select.propTypes = {
-	label: PropTypes.string.isRequired,
-	containerStyle: PropTypes.object,
-	disabled: PropTypes.bool,
-	children: PropTypes.any,
-	proportion: PropTypes.number
+  label: PropTypes.string.isRequired,
+  containerStyle: PropTypes.object,
+  disabled: PropTypes.bool,
+  children: PropTypes.any,
+  proportion: PropTypes.number,
 };
 
 Select.defaultProps = {
-	proportion: 1,
-	disabled: false,
-	containerStyle: {},
-	children: []
+  proportion: 1,
+  disabled: false,
+  containerStyle: {},
+  children: [],
 };

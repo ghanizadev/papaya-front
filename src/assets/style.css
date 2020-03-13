@@ -10,3 +10,7 @@ body {
 a {
   color: #fff;
 }
+
+a, button, input {
+  outline: none;
+}

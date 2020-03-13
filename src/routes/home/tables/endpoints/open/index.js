@@ -5,9 +5,17 @@ import { openTable } from './functions';
 
 const { dialog } = window.require('electron').remote;
 
-const openFlow = (access_token, body, id) => {
+const removeWaitingList = (token, id) => axios.delete(`${process.env.REACT_APP_API}/api/v1/waitinglist/${id}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+const openFlow = (token, body, id) => {
   try {
-    openTable(access_token, body)
+    openTable(token, body)
       .then((result) => {
         if (result.status === 201) {
           dialog.showMessageBox({
@@ -20,9 +28,9 @@ const openFlow = (access_token, body, id) => {
             detail: `A ordem do pedido é o ${result.data.order.orderId}`,
           }).then(() => {
             if (id !== '') {
-              removeWaitingList(access_token, id)
-                .then((result) => {
-                  if (result.status === 200) window.close();
+              removeWaitingList(token, id)
+                .then((res) => {
+                  if (res.status === 200) window.close();
                   else window.alert(`Erro ao tentar atualizar lista! (${result.status})`);
                   window.close();
                 })
@@ -84,34 +92,26 @@ const openFlow = (access_token, body, id) => {
   }
 };
 
-const removeWaitingList = (token, id) => axios.delete(`${process.env.REACT_APP_API}/api/v1/waitinglist/${id}`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
 const OpenTableEndpoint = (props) => {
   const { location } = props;
   const [body, setBody] = useState({ tableNumber: 1 });
 
   const search = location.pathname.substring(location.pathname.indexOf('?'));
   const params = new URLSearchParams(search);
-  const accessToken = params.get('access_token');
+  const token = params.get('access_token');
 
   const name = params.get('name') || '';
   const id = params.get('id') || '';
 
   return (
     <div style={{
-      width: 300, height: 120, display: 'flex', alignContent: 'space-between', alignItems: 'center', flexDirection: 'column',
+      width: 350, height: 170, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',
     }}
     >
       <Input containerStyle={{ width: 270 }} label="Mesa" type="number" defaultValue={1} onChange={(e) => setBody({ ...body, tableNumber: e.target.value })} />
       <Input containerStyle={{ width: 270 }} label="Usuário" defaultValue={name !== '' ? name : null} placeholder="Visitante" onChange={(e) => setBody({ ...body, customer: e.target.value })} />
       <Button onClick={() => {
-        openFlow(accessToken, body, id);
+        openFlow(token, body, id);
       }}
       >
         Abrir Mesa

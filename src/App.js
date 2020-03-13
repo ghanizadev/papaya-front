@@ -6,6 +6,7 @@ import Home from './routes/home';
 import WaitingListEndpoint from './routes/home/tables/endpoints/waitinglist';
 import OpenTableEndpoint from './routes/home/tables/endpoints/open';
 import AddEndpoint from './routes/home/tables/endpoints/add';
+import PayEndpoint from './routes/home/tables/endpoints/pay';
 import { Checkout } from './routes/components/overlay';
 import { Provider } from './context';
 
@@ -25,6 +26,7 @@ const App = () => (
           <WaitingListEndpoint path="/list" />
           <OpenTableEndpoint path="/open" />
           <AddEndpoint path="/add" />
+          <PayEndpoint path="/pay" />
           <Checkout path="/test" />
         </Router>
       </LocationProvider>

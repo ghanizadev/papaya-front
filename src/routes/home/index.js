@@ -181,8 +181,8 @@ const Home = (props) => {
               <Button onClick={() => ipcRenderer.invoke('openModal', {
                 title: 'Abrir mesa',
                 size: {
-                  width: 300,
-                  height: 120,
+                  width: 350,
+                  height: 200,
                 },
                 modal: true,
                 url: `open?access_token=${state.context.auth.access_token}`,
@@ -223,8 +223,22 @@ const Home = (props) => {
                 Adicionar produto (F4)
 
               </Button>
-              <Button onClick={() => ipcRenderer.invoke('refresh', {})}>
+              <Button disabled onClick={() => ipcRenderer.invoke('refresh', {})}>
                 Atualizar mesas (F5)
+              </Button>
+              <Button onClick={() => ipcRenderer.invoke('openModal', {
+                title: 'Novo pagamento',
+                size: {
+                  width: 800,
+                  height: 630,
+                },
+                modal: true,
+                url: `pay?access_token=${state.context.auth.access_token}`,
+                resizable: false,
+                fulscreenable: false,
+              })}
+              >
+                Novo pagamento (F6)
 
               </Button>
             </>
