@@ -1,11 +1,9 @@
 import React from 'react';
 
-const SettingsInterface = () => {
-	return (
-		<div>
-			<h1>Clientes</h1>
-		</div>
-	);
-};
+const SettingsInterface = () => (
+  <div>
+    <h1>Configurações</h1>
+  </div>
+);
 
 export default SettingsInterface;
