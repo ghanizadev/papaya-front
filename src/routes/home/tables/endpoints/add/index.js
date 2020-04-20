@@ -323,60 +323,8 @@ const AddEndpoint = (props) => {
         <NextButton
           onClick={() => {
             if (product.orderId) {
-              getMembers(product.orderId, token)
-                .then((res) => {
-                  if (!Array.isArray(res.data)) {
-                    window.alert(`Erro (${res.data.error})! Mensagem: ${res.data.error_description}`);
-                  } else {
-                    setOwners(res.data);
-                  }
-                  setPage('owner');
-                })
-                .catch((error) => {
-                  window.alert(`Problema no servidor (${error.message})`);
-                });
+              setPage('pick');
             } else window.alert('Selecione uma mesa!');
-          }}
-        >
-          <img
-            src={arrow}
-            alt=""
-            style={{ objectFit: 'contain', width: 32, height: 32 }}
-          />
-        </NextButton>
-      </Page>
-      <Page visible={getVisible('owner')}>
-        <h2>À quem pertence?</h2>
-        <div style={{ width: 50 }} />
-
-        <label htmlFor="owner-input">
-          Selecione um membro:
-          <br />
-          <input
-            onChange={(e) => {
-              setProduct({ ...product, owner: e.target.value });
-            }}
-            list="owner-list"
-            id="owner-input"
-            name="owner-input"
-            style={{
-              maxWidth: 250,
-            }}
-          />
-        </label>
-
-        <datalist id="owner-list">
-          {owners && owners.map((owner) => <option value={owner}>{owner}</option>)}
-        </datalist>
-
-        <NextButton
-          onClick={() => {
-            if (product.owner !== '') setPage('pick');
-            else {
-              window.alert(
-                'O nome do integrante não pode estar em branco, caso queria, deixe definido como "Geral"',
-              );
-            }
           }}
         >
           <img

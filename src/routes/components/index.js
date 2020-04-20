@@ -9,72 +9,72 @@ import { findFlavor, addProduct } from './functions';
 import logo from '../../assets/logo.png';
 
 export const MessageBox = styled.div`
-	width: 30%;
-	height: min-content;
-	border-radius: 7px;
-	background-color: #fff;
-	border: none;
-	padding: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
+  width: 30%;
+  height: min-content;
+  border-radius: 7px;
+  background-color: #fff;
+  border: none;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 export const Loading = styled.div`
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.35);
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const LoadingMessage = styled.span`
-	font-size: 14pt;
-	color: #333;
+  font-size: 14pt;
+  color: #333;
 `;
 
 export const LoadingTitle = styled.span`
-	font-size: 11pt;
-	color: #444;
+  font-size: 11pt;
+  color: #444;
 `;
 
 
 export const LoginHolder = styled.div`
-	height: 45vh;
-	width: 45vh;
-	background-color: #ffffff;
-	border-radius: 15px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	padding: 15px;
-	opacity: 1;
+  height: 45vh;
+  width: 45vh;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 15px;
+  opacity: 1;
 `;
 
 export const Tables = styled.div`
-	padding: 25px;
-	position: relative;
-	height: 100%;
-	width: 100%;
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: column;
+  padding: 25px;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 `;
 
 const TableContainer = styled.div`
-	border-radius: 5px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
-	margin: 25px 15px;
-	padding: 15px;
-	min-width: 16vw;
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+  margin: 25px 15px;
+  padding: 15px;
+  min-width: 16vw;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 export const ScrollView = styled.div`    display: flex;
@@ -88,285 +88,285 @@ flex-direction: column;
 `;
 
 const WaitingPaymentTableContainer = styled.div`
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
-	color: #666;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: #666;
 `;
 
 const FreeTableContainer = styled.div`
-	min-height: 75%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  min-height: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const FreeTableButtom = styled.button`
-	height: min-content;
-	font-weight: bold;
-	background-color: transparent;
-	border: none;
-	color: #40bd63;
-	border-bottom: 1px solid lightgreen;
-	font-size: 18pt;
+  height: min-content;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  color: #40bd63;
+  border-bottom: 1px solid lightgreen;
+  font-size: 18pt;
 `;
 
 const WaitingPaymentTableButtom = styled.button`
-	height: min-content;
-	font-weight: bold;
-	background-color: transparent;
-	border: none;
-	color: #666;
-	border-bottom: 1px solid #666;
-	font-size: 16pt;
+  height: min-content;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  color: #666;
+  border-bottom: 1px solid #666;
+  font-size: 16pt;
 `;
 
 const BusyTableProductContainer = styled.div`
-	height: min-content;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden scroll;
-	flex: 1;
+  height: min-content;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden scroll;
+  flex: 1;
 `;
 
 const BusyTableProductButton = styled.button`
-	height: min-content;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #888;
-	border-bottom: 1px solid #aaa;
-	font-size: 11pt;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: unset;
-	padding: 5px;
+  height: min-content;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #888;
+  border-bottom: 1px solid #aaa;
+  font-size: 11pt;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: unset;
+  padding: 5px;
 `;
 
 const BusyTableAddProduct = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #40bd63;
-	border-bottom: 1px solid #40bd63;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #40bd63;
+  border-bottom: 1px solid #40bd63;
+  font-size: 14pt;
 `;
 
 const BusyTableCheckout = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: tomato;
-	border-bottom: 1px solid tomato;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: tomato;
+  border-bottom: 1px solid tomato;
+  font-size: 14pt;
 `;
 
 const BusyTableDetails = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #d9c31c;
-	border-bottom: 1px solid #d9c31c;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #d9c31c;
+  border-bottom: 1px solid #d9c31c;
+  font-size: 14pt;
 `;
 
 const AddProductClose = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: tomato;
-	border-bottom: 1px solid tomato;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: tomato;
+  border-bottom: 1px solid tomato;
+  font-size: 14pt;
 `;
 
 const AddProductSubmit = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #5cd191;
-	border-bottom: 1px solid #5cd191;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #5cd191;
+  border-bottom: 1px solid #5cd191;
+  font-size: 14pt;
 `;
 const AddProductFlavor = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #666;
-	border-bottom: 1px solid #666;
-	font-size: 12pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #666;
+  border-bottom: 1px solid #666;
+  font-size: 12pt;
 `;
 
 const AddProductFlavorSubmit = styled.button`
-	height: 30px;
-	background-color: #fdfdfd;
-	width: 100%;
-	border: none;
-	color: #ffbe5b;
-	border-bottom: 1px solid #ffbe5b;
-	font-size: 14pt;
+  height: 30px;
+  background-color: #fdfdfd;
+  width: 100%;
+  border: none;
+  color: #ffbe5b;
+  border-bottom: 1px solid #ffbe5b;
+  font-size: 14pt;
 `;
 
 
 const AddPizza = styled.button`
-	height: 100px;
-	width: 100px;
-	background-color: #ddd;
-	border: none;
-	color: #ffbe5b;
-	margin: 15px;
+  height: 100px;
+  width: 100px;
+  background-color: #ddd;
+  border: none;
+  color: #ffbe5b;
+  margin: 15px;
 `;
 
 
 const AddProduct = styled.button`
-	height: 100px;
-	width: 100px;
-	background-color: #ddd;
-	border: none;
-	color: #ffbe5b;
-	margin: 15px;
+  height: 100px;
+  width: 100px;
+  background-color: #ddd;
+  border: none;
+  color: #ffbe5b;
+  margin: 15px;
 `;
 
 const CloseButton = styled.button`
-	height: 24px;
-	width: 24px;
-	border-radius: 12px;
-	font-size: 14pt;
-	background-color: tomato;
-	border: none;
-	color: #fdfdfd;
-	position: absolute;
-	top: 0;
-	right: 0;
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  font-size: 14pt;
+  background-color: tomato;
+  border: none;
+  color: #fdfdfd;
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
 export const Background = styled.div`
-	height: 100vh;
-	width: 100vw;
-	display: flex;
-	flex-direction: column;
-	padding: calc(5.25vw + 45px) 45px 45px calc(18vw + 45px);
-	box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  padding: calc(5.25vw + 45px) 45px 45px calc(18vw + 45px);
+  box-sizing: border-box;
 `;
 
 export const Logo = styled.div`
-	background-image: url(${logo});
-	background-size: 75%;
-	background-position: center;
-	background-repeat: no-repeat;
-	padding: 25px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 12vw;
-	width: 18vw;
-	box-sizing: border-box;
+  background-image: url(${logo});
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12vw;
+  width: 18vw;
+  box-sizing: border-box;
 `;
 
 export const Header = styled.div`
-	height: 3.5vw;
-	color: #fff;
-	background-color: #ffbe5b;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	padding: 0 25px;
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin: 0 0 0 18vw;
-	justify-content: space-between;
+  height: 3.5vw;
+  color: #fff;
+  background-color: #ffbe5b;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 25px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 0 0 18vw;
+  justify-content: space-between;
 `;
 
 export const SubHeader = styled.div`
-	height: 1.75vw;
-	color: #fff;
-	background-color: #f1f1f1;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	padding: 0 25px;
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	margin: 3.5vw 0 0 18vw;
-	justify-content: flex-start;
+  height: 1.75vw;
+  color: #fff;
+  background-color: #f1f1f1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 25px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 3.5vw 0 0 18vw;
+  justify-content: flex-start;
 `;
 
 export const SideBar = styled.div`
-	width: 18vw;
-	padding: calc(12vw + 25px) 0 25px 0;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	box-sizing: border-box;
-	background-color: #fff;
+  width: 18vw;
+  padding: calc(12vw + 25px) 0 25px 0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  background-color: #fff;
 `;
 
 export const SidebarButton = styled.button`
-	width: 100%;
-	height: 58px;
-	font-size: 18pt;
-	color: #fdfdfd;
-	background-color: #ffbe5b;
-	text-align: center;
-	padding: 5px;
-	border: 0.25px solid #dcdcdc;
+  width: 100%;
+  height: 58px;
+  font-size: 18pt;
+  color: #fdfdfd;
+  background-color: #ffbe5b;
+  text-align: center;
+  padding: 5px;
+  border: 0.25px solid #dcdcdc;
 `;
 
 export const Container = styled.div`
-	height: 100%;
-	width: 100%;
-	border-radius: 5px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.12);
 `;
 
 const OverlayBackground = styled.div`
-	position: absolute;
-	top: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.35);
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const OverlayBox = styled.div`
-	min-width: 50%;
-	width: 50%;
-	height: min-content;
-	border-radius: 7px;
-	background-color: #fff;
-	border: none;
-	padding: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
+  min-width: 50%;
+  width: 50%;
+  height: min-content;
+  border-radius: 7px;
+  background-color: #fff;
+  border: none;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const InputContainer = styled.div`
-	max-height: 30px;
-	min-height: 30px;
-	width: 100%;
-	border: .5px solid lightgray;
-	box-sizing: border-box;
+  max-height: 30px;
+  min-height: 30px;
+  width: 100%;
+  border: .5px solid lightgray;
+  box-sizing: border-box;
     border-radius: 5px;
     padding: 3px 5px;
     flex: 1;
@@ -374,8 +374,8 @@ const InputContainer = styled.div`
     align-items: center;
     justify-content: flex-start;
     flex-direction: row;
-	margin: 5px;
-	position: relative;
+  margin: 5px;
+  position: relative;
 `;
 
 const TextAreaContainer = styled.div`
@@ -397,35 +397,35 @@ const InputLabel = styled.span`
 `;
 
 const InputItemContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	right: 0;
-	left: 0;
-	top: 0;
-	margin: 36px 0 0 0;
-	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 4px 10px 0 rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  margin: 36px 0 0 0;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 4px 10px 0 rgba(0,0,0,0.12);
 `;
 
 const InputItem = styled.button`
-	width: 100%;
-	height: 30px;
-	color: #444;
-	align-items: center;
-	justify-content: center;
-	display: flex;
-	background-color: #fbfbfb;
-	border: .25px solid whitesmoke;
-	padding: 5px;
-	box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  color: #444;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background-color: #fbfbfb;
+  border: .25px solid whitesmoke;
+  padding: 5px;
+  box-sizing: border-box;
 
-	&:hover{
-		background-color: #ffbe5b;
-		color: #fbfbfb;
-	}
+  &:hover{
+    background-color: #ffbe5b;
+    color: #fbfbfb;
+  }
 `;
 
-const ButtonComponent = styled.button`
+export const Button = styled.button`
     height: 30px;
     border: none;
     width: 120px;
@@ -434,6 +434,16 @@ const ButtonComponent = styled.button`
     color: white;
     font-weight: bold;
     background-color: #ed9140;
+    transition: all 0.15s ease-out;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      background-color: #ebebeb;
+      color: #333;
+    }
 `;
 
 const InputComponent = styled.input`
@@ -449,9 +459,9 @@ const TextAreaComponent = styled.textarea`
     border: none;
     width: 100%;
     margin: 0 0 0 5px;
-	background-color: transparent;
-	padding: 3px;
-	resize: none;
+  background-color: transparent;
+  padding: 3px;
+  resize: none;
 `;
 
 const SelectComponent = styled.select`
@@ -463,22 +473,22 @@ const SelectComponent = styled.select`
 `;
 
 export const ContentHeader = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	height: 40px;
-	max-height: 40px;
-	background-color: #ffbe5b;
-	box-sizing: border-box;
-	padding: 0 15px;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	font-size: 14pt;
-	border-radius: 5px 5px 0 0;
-	color: #fdfdfd;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 40px;
+  max-height: 40px;
+  background-color: #ffbe5b;
+  box-sizing: border-box;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 14pt;
+  border-radius: 5px 5px 0 0;
+  color: #fdfdfd;
 `;
 
 export const ContentContainer = styled.div`
@@ -492,14 +502,14 @@ export const ContentContainer = styled.div`
 `;
 
 const ResultsTable = styled.div`
-	box-sizing: border-box;
+  box-sizing: border-box;
     width: 100%;
-	height: 100%;
-	overflow: auto;
+  height: 100%;
+  overflow: auto;
 `;
 
 const ResultsContainer = styled.div`
-	width: 100%;
+  width: 100%;
     flex: 1;
     border: 1px solid gray;
     border-radius: 5px;
@@ -546,19 +556,19 @@ export const Results = (props) => {
     <ResultsContainer ref={parent}>
       <div
         style={{
-				  backgroundColor: '#ed9140',
-				  color: 'white',
-				  position: 'absolute',
-				  textAlign: 'center',
-				  alignItems: 'center',
-				  justifyContent: 'space-between',
-				  top: 0,
-				  right: 0,
-				  left: 0,
-				  height: 42,
-				  display: 'flex',
-				  flexDirection: 'row',
-				  padding: '0 25px',
+          backgroundColor: '#ed9140',
+          color: 'white',
+          position: 'absolute',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          top: 0,
+          right: 0,
+          left: 0,
+          height: 42,
+          display: 'flex',
+          flexDirection: 'row',
+          padding: '0 25px',
         }}
       >
         <h3>{title}</h3>
@@ -570,18 +580,18 @@ export const Results = (props) => {
 
       </div>
       <div style={{
-			  backgroundColor: 'whitesmoke',
-			  color: '#444',
-			  position: 'absolute',
-			  textAlign: 'center',
-			  alignItems: 'center',
-			  justifyContent: 'flex-end',
-			  top: 42,
-			  right: 0,
-			  left: 0,
-			  height: 30,
-			  display: headerButtons.length > 0 ? 'flex' : 'none',
-			  flexDirection: 'row',
+        backgroundColor: 'whitesmoke',
+        color: '#444',
+        position: 'absolute',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        top: 42,
+        right: 0,
+        left: 0,
+        height: 30,
+        display: headerButtons.length > 0 ? 'flex' : 'none',
+        flexDirection: 'row',
       }}
       >
         {headerItems && headerItems.map((item, index) => <div key={index} style={{ width: item.width }}>{item.label}</div>)}
@@ -591,12 +601,12 @@ export const Results = (props) => {
         {data && data.map((item, index) => (
           <div
             style={{
-						  backgroundColor: index & 1 ? 'whitesmoke' : 'white',
-						  color: '#444',
-						  display: 'flex',
-						  flexDirection: 'row',
-						  alignItems: 'center',
-						  height: 30,
+              backgroundColor: index & 1 ? 'whitesmoke' : 'white',
+              color: '#444',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: 30,
             }}
             key={index}
           >
@@ -663,9 +673,9 @@ export const Search = (props) => {
 
   function handleClickOutside(event) {
     if (ref.current
-			&& inputRef.current
-			&& (!ref.current.contains(event.target)
-			&& !inputRef.current.contains(event.target))) {
+      && inputRef.current
+      && (!ref.current.contains(event.target)
+      && !inputRef.current.contains(event.target))) {
       setVisible(false);
     }
   }
@@ -769,11 +779,6 @@ Select.defaultProps = {
   children: [],
   proportion: 1,
 };
-
-
-export const Button = (props) => (
-  <ButtonComponent {...props} />
-);
 
 export const Overlay = () => (
   <Context.Consumer>
@@ -879,10 +884,10 @@ const ProductDescriptionCustomer = (props) => {
           <div
             key={index}
             style={{
-						  border: '1px solid whitesmoke',
-						  margin: 8,
-						  borderRadius: 5,
-						  padding: 15,
+              border: '1px solid whitesmoke',
+              margin: 8,
+              borderRadius: 5,
+              padding: 15,
             }}
           >
             <span style={{
@@ -1026,51 +1031,51 @@ const AddProductComponent = (props) => {
           style={{ width: '100%', boxSizing: 'border-box' }}
           onClick={() => { searchField.current.value = ''; }}
           onChange={() => {
-					  if (searchField.current.value === '') {
-					    return setProducts([]);
-					  }
-					  findFlavor(
-					    state.context.auth.token,
-					    searchField.current.value,
-					  ).then((result) => {
-					    setProducts(result.data);
-					  });
+            if (searchField.current.value === '') {
+              return setProducts([]);
+            }
+            findFlavor(
+              state.context.auth.token,
+              searchField.current.value,
+            ).then((result) => {
+              setProducts(result.data);
+            });
           }}
         />
         <div
           style={{
-					  position: 'absolute',
-					  top: 30,
-					  width: 'calc(100% - 20px)',
-					  boxSizing: 'border-box',
-					  display: products.length > 0 ? 'flex' : 'none',
-					  flexDirection: 'column',
-					  height: 'min-content',
-					  maxHeight: 200,
-					  overflowY: 'auto',
-					  backgroundColor: '#fdfdfd',
-					  boxShadow: '3px 3px 8px 3px #888888aa',
-					  border: '.5px solid #ddd',
-					  padding: 8,
+            position: 'absolute',
+            top: 30,
+            width: 'calc(100% - 20px)',
+            boxSizing: 'border-box',
+            display: products.length > 0 ? 'flex' : 'none',
+            flexDirection: 'column',
+            height: 'min-content',
+            maxHeight: 200,
+            overflowY: 'auto',
+            backgroundColor: '#fdfdfd',
+            boxShadow: '3px 3px 8px 3px #888888aa',
+            border: '.5px solid #ddd',
+            padding: 8,
           }}
         >
           {products && products.map(
-					  (product, index) => (
-  <button
-    style={{
-								  backgroundColor: 'transparent',
-								  width: '100%',
-								  border: 'none',
-    }}
-    onClick={() => {
-								  setSelectedProducts(product.code);
-								  setProducts([]);
-								  searchField.current.value = `${product.code} - ${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`;
-    }}
-    key={index}
-  >
-    {`${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`}
-  </button>
+            (product, index) => (
+              <button
+                style={{
+                  backgroundColor: 'transparent',
+                  width: '100%',
+                  border: 'none',
+                }}
+                onClick={() => {
+                  setSelectedProducts(product.code);
+                  setProducts([]);
+                  searchField.current.value = `${product.code} - ${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`;
+                }}
+                key={index}
+              >
+                {`${product.name}${product.variation != 'UNICO' ? ` (${product.variation})` : ''}`}
+              </button>
             ),
           )}
         </div>
@@ -1078,11 +1083,11 @@ const AddProductComponent = (props) => {
       <button
         type="submit"
         style={{
-				  backgroundColor: '#ffbe5b',
-				  border: 'none',
-				  height: 30,
-				  borderRadius: 5,
-				  color: '#fdfdfd',
+          backgroundColor: '#ffbe5b',
+          border: 'none',
+          height: 30,
+          borderRadius: 5,
+          color: '#fdfdfd',
         }}
       >
         Adicionar
@@ -1154,13 +1159,13 @@ const AddPizzaComponent = (props) => {
   return (
     <div
       style={{
-			  display: 'inherited',
-			  height: 'auto',
-			  alignItems: 'center',
-			  justifyContent: 'center',
-			  width: '100%',
-			  borderSizing: 'border-box',
-			  position: 'relative',
+        display: 'inherited',
+        height: 'auto',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        borderSizing: 'border-box',
+        position: 'relative',
       }}
     >
       <CloseButton onClick={() => state.setContext({ ...state.context, overlay: { visible: false } })}>&times;</CloseButton>
@@ -1171,34 +1176,34 @@ const AddPizzaComponent = (props) => {
         >
           <div
             style={{
-						  display: 'flex',
-						  flexDirection: 'row',
-						  width: '100%',
-						  justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
             }}
           >
             <button
               style={{
-							  display: 'flex',
-							  flexDirection: 'column',
-							  justifyContent: 'center',
-							  alignItems: 'center',
-							  margin: 15,
-							  width: 150,
-							  height: 200,
-							  border: pizzaSize === '12' ? '1px solid #d2d2d2' : 'none',
-							  backgroundColor: 'transparent',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 15,
+                width: 150,
+                height: 200,
+                border: pizzaSize === '12' ? '1px solid #d2d2d2' : 'none',
+                backgroundColor: 'transparent',
               }}
               onClick={() => {
-							  setPizzaSize('12');
+                setPizzaSize('12');
               }}
             >
               <div
                 className="pizzaImageHolder"
                 style={{
-								  height: '100px',
-								  width: '100px',
-								  backgroundColor: 'gray',
+                  height: '100px',
+                  width: '100px',
+                  backgroundColor: 'gray',
                 }}
               />
               <span>Grande</span>
@@ -1208,26 +1213,26 @@ const AddPizzaComponent = (props) => {
             </button>
             <button
               style={{
-							  display: 'flex',
-							  flexDirection: 'column',
-							  justifyContent: 'center',
-							  alignItems: 'center',
-							  margin: 15,
-							  width: 150,
-							  height: 200,
-							  border: pizzaSize === '11' ? '1px solid #d2d2d2' : 'none',
-							  backgroundColor: 'transparent',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 15,
+                width: 150,
+                height: 200,
+                border: pizzaSize === '11' ? '1px solid #d2d2d2' : 'none',
+                backgroundColor: 'transparent',
               }}
               onClick={() => {
-							  setPizzaSize('11');
+                setPizzaSize('11');
               }}
             >
               <div
                 className="pizzaImageHolder"
                 style={{
-								  height: '85px',
-								  width: '85px',
-								  backgroundColor: 'gray',
+                  height: '85px',
+                  width: '85px',
+                  backgroundColor: 'gray',
                 }}
               />
               <span>Média</span>
@@ -1237,26 +1242,26 @@ const AddPizzaComponent = (props) => {
             </button>
             <button
               style={{
-							  display: 'flex',
-							  flexDirection: 'column',
-							  justifyContent: 'center',
-							  alignItems: 'center',
-							  margin: 15,
-							  width: 150,
-							  height: 200,
-							  border: pizzaSize === '10' ? '1px solid #d2d2d2' : 'none',
-							  backgroundColor: 'transparent',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 15,
+                width: 150,
+                height: 200,
+                border: pizzaSize === '10' ? '1px solid #d2d2d2' : 'none',
+                backgroundColor: 'transparent',
               }}
               onClick={() => {
-							  setPizzaSize('10');
+                setPizzaSize('10');
               }}
             >
               <div
                 className="pizzaImageHolder"
                 style={{
-								  height: '60px',
-								  width: '60px',
-								  backgroundColor: 'gray',
+                  height: '60px',
+                  width: '60px',
+                  backgroundColor: 'gray',
                 }}
               />
               <span>Pequena</span>
@@ -1270,28 +1275,28 @@ const AddPizzaComponent = (props) => {
 
         <div
           style={{
-					  height: 60,
-					  width: '100%',
-					  padding: 15,
-					  border: '.25px solid #d2d2d2',
-					  boxSizing: 'border-box',
-					  display: 'flex',
-					  flexDirection: 'row',
+            height: 60,
+            width: '100%',
+            padding: 15,
+            border: '.25px solid #d2d2d2',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'row',
           }}
         >
           {pizzaFlavors.map((flavor, index) => (
             <div
               key={index}
               style={{
-							  height: 30,
-							  color: '#333',
-							  fontSize: '11pt',
-							  border: '1px solid #ddd',
-							  borderRadius: 3,
-							  display: 'flex',
-							  alignItems: 'center',
-							  justifyContent: 'center',
-							  margin: '0 5px',
+                height: 30,
+                color: '#333',
+                fontSize: '11pt',
+                border: '1px solid #ddd',
+                borderRadius: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 5px',
               }}
             >
               <span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{flavor.name}</span>
@@ -1299,7 +1304,7 @@ const AddPizzaComponent = (props) => {
                 type="button"
                 style={{ border: 'none', backgroundColor: 'transparent' }}
                 onClick={() => {
-								  setPizzaFlavors(pizzaFlavors.filter((item) => item !== flavor));
+                  setPizzaFlavors(pizzaFlavors.filter((item) => item !== flavor));
                 }}
               >
                 &times;
@@ -1317,215 +1322,215 @@ const AddPizzaComponent = (props) => {
               defaultValue=""
               placeholder="Digite sua pesquisa aqui"
               style={{
-							  width: '100%',
-							  boxSizing: 'border-box',
-							  margin: '15px 0',
+                width: '100%',
+                boxSizing: 'border-box',
+                margin: '15px 0',
               }}
               onChange={() => {
-							  setOpenFlavors('');
-							  findFlavor(
-							    state.context.auth.token,
-							    code.current.value,
-							  ).then((result) => {
-							    setFlavors(result.data);
-							  });
+                setOpenFlavors('');
+                findFlavor(
+                  state.context.auth.token,
+                  code.current.value,
+                ).then((result) => {
+                  setFlavors(result.data);
+                });
               }}
             />
             <div
               style={{
-							  height: '300px',
-							  overflow: 'hidden scroll',
-							  display: 'flex',
-							  flexDirection: 'column',
-							  width: '100%',
-							  padding: '0 25px',
-							  boxSizing: 'border-box',
+                height: '300px',
+                overflow: 'hidden scroll',
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+                padding: '0 25px',
+                boxSizing: 'border-box',
               }}
             >
               {flavors
-								&& flavors.map((flavor) => (
-  <div
-    key={flavors.indexOf(flavor)}
-    style={{
-										  height: 'min-content',
-										  width: '100%',
-										  margin: '5px 0',
-    }}
-  >
-    <AddProductFlavor
-      type="button"
-      onClick={() => {
-											  setOpenFlavors(
-											    openFlavor === flavor.code ? '' : flavor.code,
-											  );
-      }}
-    >
-      {`${flavor.name}${
-											  flavor.variation === 'UNICO'
-											    ? ''
-											    : ` (${flavor.variation})`
-      }`}
-    </AddProductFlavor>
-    <div
-      style={{
-											  display: openFlavor === flavor.code ? 'block' : 'none',
-											  boxSizing: 'border-box',
-											  border: '0.25px solid #d2d2d2',
-											  color: '#333',
-											  height: 'min-content',
-											  overflow: 'hidden',
-											  width: '90%',
-											  padding: 15,
-											  margin: 'auto',
-      }}
-    >
-      <span>
-        grupo:
-        <span style={{ color: '#666' }}>{flavor.group}</span>
-      </span>
-      <br />
-      <span>
-        código:
-        <span style={{ color: '#666' }}>{flavor.code}</span>
-      </span>
-      <br />
-      <span>
-        variação:
-        <span style={{ color: '#666' }}>
-          {flavor.variation}
-        </span>
-      </span>
-      <br />
-      <span>
-        ingredientes:
-        <span style={{ color: '#666' }}>
-          {flavor.description.map((ingredient, index, arr) => {
-													  if (index === arr.length - 1) {
-													    return `E ${ingredient}.`;
-													  }
-													  return `${ingredient}, `;
-          })}
-        </span>
-      </span>
-      <br />
-      <span>adicionais: </span>
-      <div
-        style={{
-												  height: 60,
-												  width: '100%',
-												  border: '0.25px solid #d2d2d2',
-												  display: 'flex',
-												  padding: 5,
-												  flexWrap: 'wrap',
-												  overflow: 'hidden scroll',
-        }}
-      >
-        {aditionalsItems.map((aditional, index) => (
-          <div
-            key={index}
-            style={{
-															  height: 30,
-															  color: '#333',
-															  fontSize: '11pt',
-															  border: '1px solid #ddd',
-															  borderRadius: 3,
-															  display: 'flex',
-															  alignItems: 'center',
-															  justifyContent: 'center',
-															  margin: '0 0 0 5px',
-            }}
-          >
-            <span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{aditional}</span>
-            <button
-              type="button"
-              style={{ border: 'none', backgroundColor: 'transparent' }}
-              onClick={() => {
-																  setAditionalsItems(aditionalsItems.filter((item) => item !== aditional));
-              }}
-            >
-              &times;
-            </button>
-          </div>
-        ))}
-        <input
-          onChange={(e) => {
-													  setCurrentAditional(e.target.value);
-													  if (e.target.value == ',') e.target.value = '';
-          }}
-          type="text"
-          value={currentAditional}
-          style={{
-            border: 'none', padding: '0 0 0 6px', margin: 0, flex: 1, outline: 'none',
-          }}
-          onKeyPress={(e) => {
-													  if (e.key == 'Enter') {
-													    const temp = aditionalsItems;
-													    temp.push(currentAditional.replace(',', '').trim().toLocaleUpperCase());
-													    setAditionalsItems(temp);
-													    setCurrentAditional('');
-													  }
-          }}
-        />
-      </div>
+                && flavors.map((flavor) => (
+                  <div
+                    key={flavors.indexOf(flavor)}
+                    style={{
+                      height: 'min-content',
+                      width: '100%',
+                      margin: '5px 0',
+                    }}
+                  >
+                    <AddProductFlavor
+                      type="button"
+                      onClick={() => {
+                        setOpenFlavors(
+                          openFlavor === flavor.code ? '' : flavor.code,
+                        );
+                      }}
+                    >
+                      {`${flavor.name}${
+                        flavor.variation === 'UNICO'
+                          ? ''
+                          : ` (${flavor.variation})`
+                      }`}
+                    </AddProductFlavor>
+                    <div
+                      style={{
+                        display: openFlavor === flavor.code ? 'block' : 'none',
+                        boxSizing: 'border-box',
+                        border: '0.25px solid #d2d2d2',
+                        color: '#333',
+                        height: 'min-content',
+                        overflow: 'hidden',
+                        width: '90%',
+                        padding: 15,
+                        margin: 'auto',
+                      }}
+                    >
+                      <span>
+                        grupo:
+                        <span style={{ color: '#666' }}>{flavor.group}</span>
+                      </span>
+                      <br />
+                      <span>
+                        código:
+                        <span style={{ color: '#666' }}>{flavor.code}</span>
+                      </span>
+                      <br />
+                      <span>
+                        variação:
+                        <span style={{ color: '#666' }}>
+                          {flavor.variation}
+                        </span>
+                      </span>
+                      <br />
+                      <span>
+                        ingredientes:
+                        <span style={{ color: '#666' }}>
+                          {flavor.description.map((ingredient, index, arr) => {
+                            if (index === arr.length - 1) {
+                              return `E ${ingredient}.`;
+                            }
+                            return `${ingredient}, `;
+                          })}
+                        </span>
+                      </span>
+                      <br />
+                      <span>adicionais: </span>
+                      <div
+                        style={{
+                          height: 60,
+                          width: '100%',
+                          border: '0.25px solid #d2d2d2',
+                          display: 'flex',
+                          padding: 5,
+                          flexWrap: 'wrap',
+                          overflow: 'hidden scroll',
+                        }}
+                      >
+                        {aditionalsItems.map((aditional, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              height: 30,
+                              color: '#333',
+                              fontSize: '11pt',
+                              border: '1px solid #ddd',
+                              borderRadius: 3,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              margin: '0 0 0 5px',
+                            }}
+                          >
+                            <span style={{ paddingLeft: 6, whiteSpace: 'nowrap' }}>{aditional}</span>
+                            <button
+                              type="button"
+                              style={{ border: 'none', backgroundColor: 'transparent' }}
+                              onClick={() => {
+                                setAditionalsItems(aditionalsItems.filter((item) => item !== aditional));
+                              }}
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                        <input
+                          onChange={(e) => {
+                            setCurrentAditional(e.target.value);
+                            if (e.target.value == ',') e.target.value = '';
+                          }}
+                          type="text"
+                          value={currentAditional}
+                          style={{
+                            border: 'none', padding: '0 0 0 6px', margin: 0, flex: 1, outline: 'none',
+                          }}
+                          onKeyPress={(e) => {
+                            if (e.key == 'Enter') {
+                              const temp = aditionalsItems;
+                              temp.push(currentAditional.replace(',', '').trim().toLocaleUpperCase());
+                              setAditionalsItems(temp);
+                              setCurrentAditional('');
+                            }
+                          }}
+                        />
+                      </div>
 
-      <AddProductFlavorSubmit
-        onClick={() => {
-												  switch (pizzaSize) {
-												    case '10':
-												      if (pizzaFlavors.length === 2) return window.alert('Máximo de 2 sabores para pizza pequena');
-												      break;
-												    case '11':
-												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza média');
-												      break;
-												    case '12':
-												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
-												      break;
-												    default:
-												      if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
-												      break;
-												  }
+                      <AddProductFlavorSubmit
+                        onClick={() => {
+                          switch (pizzaSize) {
+                            case '10':
+                              if (pizzaFlavors.length === 2) return window.alert('Máximo de 2 sabores para pizza pequena');
+                              break;
+                            case '11':
+                              if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza média');
+                              break;
+                            case '12':
+                              if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
+                              break;
+                            default:
+                              if (pizzaFlavors.length === 3) return window.alert('Máximo de 3 sabores para pizza grande');
+                              break;
+                          }
 
-												  const f = pizzaFlavors;
-												  f.push(flavor);
-												  setPizzaFlavors(f);
+                          const f = pizzaFlavors;
+                          f.push(flavor);
+                          setPizzaFlavors(f);
 
-												  if (aditionalsItems.length !== 0) {
-												    const a = pizzaAditionals;
+                          if (aditionalsItems.length !== 0) {
+                            const a = pizzaAditionals;
 
-												    aditionalsItems.forEach((item) => {
-												      const add = `${flavor.code}:${item}`;
-												      pizzaAditionals.push(add);
-												    });
+                            aditionalsItems.forEach((item) => {
+                              const add = `${flavor.code}:${item}`;
+                              pizzaAditionals.push(add);
+                            });
 
-												    setPizzaAditionals(a);
-												  }
+                            setPizzaAditionals(a);
+                          }
 
-												  setOpenFlavors('');
-												  setAditionalsItems([]);
-												  code.current.value = '';
-												  setCurrentAditional('');
-        }}
-      >
-        Adicionar
+                          setOpenFlavors('');
+                          setAditionalsItems([]);
+                          code.current.value = '';
+                          setCurrentAditional('');
+                        }}
+                      >
+                        Adicionar
 
-      </AddProductFlavorSubmit>
-    </div>
-  </div>
-								))}
+                      </AddProductFlavorSubmit>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
       </div>
       <AddProductSubmit
         onClick={() => {
-				  callback();
+          callback();
         }}
       >
         Adicionar
       </AddProductSubmit>
       <AddProductClose
         onClick={() => {
-				  state.setContext({ ...state.context, overlay: { visible: false } });
+          state.setContext({ ...state.context, overlay: { visible: false } });
         }}
       >
         Fechar
@@ -1550,33 +1555,33 @@ const BusyTableProduct = (props) => {
     <BusyTableProductButton
       style={{ backgroundColor: minus ? '#ffe8e4' : 'transparent' }}
       onClick={() => {
-			  state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescription {...props} /> } });
+        state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescription {...props} /> } });
       }}
     >
       <span
         style={{
-				  textAlign: 'start',
-				  color: minus ? 'tomato' : '#333',
-				  marginVertical: 3,
+          textAlign: 'start',
+          color: minus ? 'tomato' : '#333',
+          marginVertical: 3,
         }}
       >
         {`${quantity}x ${title}`}
       </span>
       <span
         style={{
-				  textAlign: 'end',
-				  marginVertical: 3,
-				  color: minus ? '#ff745b' : '#aaa',
+          textAlign: 'end',
+          marginVertical: 3,
+          color: minus ? '#ff745b' : '#aaa',
         }}
       >
         {`un R$ ${price
-				  .toFixed(2)
-				  .toString()
-				  .replace('.', ',')}
+          .toFixed(2)
+          .toString()
+          .replace('.', ',')}
              => sub R$ ${subtotal
-				  .toFixed(2)
-				  .toString()
-				  .replace('.', ',')}`}
+          .toFixed(2)
+          .toString()
+          .replace('.', ',')}`}
       </span>
     </BusyTableProductButton>
   );
@@ -1594,14 +1599,14 @@ const BusyTableProductCustomer = (props) => {
   return (
     <BusyTableProductButton
       onClick={() => {
-			  state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} /> } });
+        state.setContext({ ...state.context, overlay: { visible: true, component: <ProductDescriptionCustomer customer={props.customer} /> } });
       }}
     >
       <span
         style={{
-				  textAlign: 'start',
-				  color: '#444',
-				  marginVertical: 3,
+          textAlign: 'start',
+          color: '#444',
+          marginVertical: 3,
         }}
       >
         {name}
@@ -1612,10 +1617,10 @@ const BusyTableProductCustomer = (props) => {
         <div key={index} style={{ width: '100%', backgroundColor: /(REMOVIDO)/gi.test(title) ? '#ffe8e4' : 'transparent' }}>
           <span
             style={{
-						  textAlign: 'end',
-						  marginVertical: 3,
-						  color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
-						  fontSize: '12pt',
+              textAlign: 'end',
+              marginVertical: 3,
+              color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#666',
+              fontSize: '12pt',
             }}
           >
             {`${quantity}x ${title}`}
@@ -1623,19 +1628,19 @@ const BusyTableProductCustomer = (props) => {
           <br />
           <span
             style={{
-						  textAlign: 'end',
-						  marginVertical: 3,
-						  color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888',
+              textAlign: 'end',
+              marginVertical: 3,
+              color: /(REMOVIDO)/gi.test(title) ? '#ff745b' : '#888',
             }}
           >
             {`un R$ ${price
-						  .toFixed(2)
-						  .toString()
-						  .replace('.', ',')}
-				=> sub R$ ${subtotal
-						  .toFixed(2)
-						  .toString()
-						  .replace('.', ',')}`}
+              .toFixed(2)
+              .toString()
+              .replace('.', ',')}
+        => sub R$ ${subtotal
+              .toFixed(2)
+              .toString()
+              .replace('.', ',')}`}
           </span>
         </div>
       ))}
@@ -1651,8 +1656,6 @@ const BusyTable = (props) => {
   const { load } = props;
 
   const state = useContext(Context);
-  const [owners, setOwners] = useState(false);
-
   const customers = {};
   load.order.items.forEach((item) => {
     const keys = Object.keys(customers);
@@ -1667,12 +1670,12 @@ const BusyTable = (props) => {
   return (
     <div
       style={{
-			  boxSizing: 'border-box',
-			  width: '100%',
-			  display: 'flex',
-			  flexDirection: 'column',
-			  flexGrow: 1,
-			  maxHeight: '100%',
+        boxSizing: 'border-box',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        maxHeight: '100%',
       }}
     >
       <h2 style={{ color: '#888', height: 'min-content' }}>
@@ -1680,70 +1683,58 @@ const BusyTable = (props) => {
         .
         {load.customer}
       </h2>
-      <span>
-        <input type="checkbox" checked={owners} onClick={() => setOwners(!owners)} />
-        {' '}
-        Mostar integrantes
-      </span>
       <BusyTableProductContainer>
-        {owners
-          ? Object.keys(customers).map((customer, index) => (
-            <BusyTableProductCustomer
-              key={index}
-              customer={{ items: customers[customer], name: customer }}
-            />
-				  ))
-          :					load.order.items.map((product, index) => (
-            <BusyTableProduct
-              key={index}
-              product={product}
-            />
-				  ))}
+        {load.order.items.map((product, index) => (
+          <BusyTableProduct
+            key={index}
+            product={product}
+          />
+        ))}
       </BusyTableProductContainer>
       <div
         style={{
-				  display: 'flex',
-				  flexDirection: 'column',
-				  height: 'min-content',
-				  textAlign: 'right',
-				  padding: '10px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          height: 'min-content',
+          textAlign: 'right',
+          padding: '10px 0',
         }}
       >
         <span style={{ fontSize: '10pt', color: '#888' }}>
           Total de produtos R$
           {' '}
           {load.order.total
-					  .toFixed(2)
-					  .toString()
-					  .replace('.', ',')}
+            .toFixed(2)
+            .toString()
+            .replace('.', ',')}
         </span>
         <span style={{ fontSize: '10pt', color: '#888' }}>
           Taxa de Serviço R$
           {' '}
           {load.order.serviceTax
-					  .toFixed(2)
-					  .toString()
-					  .replace('.', ',')}
+            .toFixed(2)
+            .toString()
+            .replace('.', ',')}
         </span>
         <span style={{ fontSize: '14pt', color: '#666' }}>
           Final R$
           {' '}
           {load.order.final
-					  .toFixed(2)
-					  .toString()
-					  .replace('.', ',')}
+            .toFixed(2)
+            .toString()
+            .replace('.', ',')}
         </span>
       </div>
       <div style={{ minWidth: '100%', height: 'min-content' }}>
         <BusyTableAddProduct
           onClick={() => {
-					  state.setContext({
-					    ...state.context,
-					    overlay: {
-					      visible: true,
-					      component: <AddComponent order={load.order} />,
-					    },
-					  });
+            state.setContext({
+              ...state.context,
+              overlay: {
+                visible: true,
+                component: <AddComponent order={load.order} />,
+              },
+            });
           }}
         >
           Adicionar
@@ -1787,6 +1778,7 @@ const WaitingListTable = (props) => {
       </h2>
       <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
         <img
+          alt=""
           src={require('../../assets/hourglass.png')}
           style={{
             height: 80, width: 80, objectFit: 'contain', marginBottom: 15,
